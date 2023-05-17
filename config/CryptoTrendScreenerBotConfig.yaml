@@ -2,4 +2,3 @@ bybitApi:
     testnet: True
     apiKey:
     secretKey:
-    instrumentInfoEndpoint: https://api-testnet.bybit.com/derivatives/v3/public/instruments-info?category=linear
