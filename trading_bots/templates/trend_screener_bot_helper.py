@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+import pandas as pd
 
 class TrendScreenerBotHelper(ABC):
 
@@ -20,8 +20,8 @@ class TrendScreenerBotHelper(ABC):
 
         for ticker in tickers:
             ohlc_daily = self.get_ohlc(ticker, "D")
-            ohlc_weekly = self.get_ohlc(ticker, "W")
-            ohlc_monthly = self.get_ohlc(ticker, "M")
+            ohlc_weekly = self.convert_daily_ohlc_to_weekly_ohlc(ohlc_daily)
+            ohlc_monthly = self.convert_daily_ohlc_to_monthly_ohlc(ohlc_daily)
 
             ohlc_cache["daily"][ticker] = ohlc_daily
             ohlc_cache["weekly"][ticker] = ohlc_weekly
@@ -65,3 +65,27 @@ class TrendScreenerBotHelper(ABC):
             return "Start rotation after down-trend"
 
         return "Rotation"
+
+    @staticmethod
+    def convert_daily_ohlc_to_weekly_ohlc(ohlc):
+        df = ohlc.copy()
+        df['startTime'] = pd.to_datetime(df['startTime'])
+        df.set_index('startTime', inplace=True)
+
+        weekly_df = df.resample('W').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'})
+        weekly_df = weekly_df[::-1].reset_index()
+        weekly_df.columns = ['startTime', 'open', 'high', 'low', 'close']
+
+        return weekly_df
+
+    @staticmethod
+    def convert_daily_ohlc_to_monthly_ohlc(ohlc):
+        df = ohlc.copy()
+        df['startTime'] = pd.to_datetime(df['startTime'])
+        df.set_index('startTime', inplace=True)
+
+        monthly_df = df.resample('M').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'})
+        monthly_df = monthly_df[::-1].reset_index()
+        monthly_df.columns = ['startTime', 'open', 'high', 'low', 'close']
+
+        return monthly_df
