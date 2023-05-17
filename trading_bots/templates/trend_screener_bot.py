@@ -1,11 +1,16 @@
-from datetime import datetime
-
 import pandas as pd
 
 from trading_bots.templates.bot import Bot
+from trading_bots.templates.trend_screener_bot_helper import TrendScreenerBotHelper
 
 
 class TrendScreenerBot(Bot):
+
+    def __init__(self, config: dict, helper: TrendScreenerBotHelper):
+        super().__init__(config)
+
+    def run(self):
+        pass
 
     def find_intraday_daily_trends(self, tickers, ohlc_cache):
         intraday_daily_trends = []
@@ -48,13 +53,12 @@ class TrendScreenerBot(Bot):
         return pd.DataFrame(swing_monthly_trends)
 
     @staticmethod
-    def save_result_to_excel(intraday_daily_trends, swing_weekly_trends, swing_monthly_trends, excel_path: str):
-        now = datetime.now().strftime("%Y%m%d")
+    def save_result_to_excel(intraday_daily_trends, swing_weekly_trends, swing_monthly_trends, excel_path: str, ticker_names_intraday_d: str, ticker_names_swing_w: str, ticker_names_swing_m: str):
         writer = pd.ExcelWriter(excel_path, engine="openpyxl")
 
-        intraday_daily_trends["ticker"] = "BYBIT:" + intraday_daily_trends["ticker"] + ".P"
-        swing_weekly_trends["ticker"] = "BYBIT:" + swing_weekly_trends["ticker"] + ".P"
-        swing_monthly_trends["ticker"] = "BYBIT:" + swing_monthly_trends["ticker"] + ".P"
+        intraday_daily_trends["ticker"] = ticker_names_intraday_d
+        swing_weekly_trends["ticker"] = ticker_names_swing_w
+        swing_monthly_trends["ticker"] = ticker_names_swing_m
 
         intraday_daily_trends.to_excel(writer, sheet_name="Intraday D trends", index=False)
         swing_weekly_trends.to_excel(writer, sheet_name="Swing W trends", index=False)
