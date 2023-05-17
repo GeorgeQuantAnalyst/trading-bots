@@ -8,8 +8,6 @@ PYTHON = python3.11
 # Defining an array variable
 FILES = input output
 
-APP_LOG_FOLDER="${HOME}/log/bybit-place-trailing-stops-job"
-
 # Defines the default target that `make` will to try to make, or in the case of a phony target, execute the specified commands
 # This target is executed whenever we just type `make`
 .DEFAULT_GOAL = help
