@@ -1,0 +1,7 @@
+include requirements.txt
+include config/*
+include doc/*
+
+include *.md
+include *.sh
+include Makefile
