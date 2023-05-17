@@ -47,3 +47,7 @@ clean:
 bybitExampleBot:
 	@echo "Run bot..."
 	. venv/bin/activate && ${PYTHON} -m trading_bots BybitExampleBot
+
+CryptoTrendScreenerBot:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots CryptoTrendScreenerBot

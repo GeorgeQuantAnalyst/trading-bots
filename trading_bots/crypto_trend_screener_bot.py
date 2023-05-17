@@ -1,6 +1,8 @@
 from trading_bots.helpers.crypto_trend_screener_bot_helper import CryptoTrendScreenerBotHelper
 from trading_bots.templates.trend_screener_bot import TrendScreenerBot
 
+import logging
+
 
 class CryptoTrendScreenerBot(TrendScreenerBot):
 
@@ -11,5 +13,10 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
         pass
 
     def run(self):
+        logging.info("Start CryptoTrendScreenerBot")
+
         # TODO: @Lucka migrate crypto-trend-screener-job (https://github.com/GeorgeQuantAnalyst/crypto-trend-screener-job)
-        pass
+
+        logging.info("Finished CryptoTrendScreenerBot")
+
+
