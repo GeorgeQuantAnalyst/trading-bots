@@ -19,10 +19,6 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
         self.ticker_suffix = ".P"
 
     def run(self):
-        now = datetime.now().strftime("%Y%m%d")
-        reports_folder = self.config["base"]["reportsFolder"]
-        excel_path = "{}/CryptoTrendScreener_{}.xlsx".format(reports_folder, now)
-
         logging.info("Start CryptoTrendScreenerBot")
 
         logging.info("Loading data")
@@ -39,7 +35,9 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
         swing_monthly_trends = self.find_swing_monthly_trends(tickers, ohlc_cache)
 
         logging.info("Save result to excel file")
-
+        now = datetime.now().strftime("%Y%m%d")
+        reports_folder = self.config["base"]["reportsFolder"]
+        excel_path = "{}/CryptoTrendScreener_{}.xlsx".format(reports_folder, now)
         self.save_result_to_excel(intraday_daily_trends, swing_weekly_trends, swing_monthly_trends, excel_path)
 
         logging.info("Finished CryptoTrendScreenerBot")

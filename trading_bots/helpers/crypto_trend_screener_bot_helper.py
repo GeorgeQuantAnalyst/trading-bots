@@ -7,7 +7,7 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
 
     def __init__(self, pybit_client):
         self.pybit_client = pybit_client
-        self.category = constants.BYBIT_CATEGORY
+        self.category = constants.BYBIT_LINEAR_CATEGORY
 
     def get_available_tickers(self):
         response = self.pybit_client.get_instruments_info(category=self.category)

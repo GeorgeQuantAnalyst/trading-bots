@@ -4,4 +4,4 @@ __logo__ = """
 ---------------------------------------------------------------------
 """
 
-BYBIT_CATEGORY = "linear"
+BYBIT_LINEAR_CATEGORY = "linear"
