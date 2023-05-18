@@ -9,7 +9,7 @@ from trading_bots.utils import load_config, create_bot
 bot_names = ["BybitExampleBot", "CryptoTrendScreenerBot"]
 
 if __name__ == "__main__":
-    bot_name = sys.argv[1];
+    bot_name = sys.argv[1]
 
     if bot_name not in bot_names:
         raise ValueError("Not supported bot with name: {}".format(bot_name))
