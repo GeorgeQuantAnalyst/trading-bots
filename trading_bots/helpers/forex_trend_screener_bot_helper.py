@@ -10,7 +10,6 @@ class ForexTrendScreenerBotHelper(TrendScreenerBotHelper):
     API_CALL_LIMIT_EXCEPTION_MSG = "Our standard API call frequency is 5 calls per minute and 500 calls per day."
     API_CALL_LIMIT_WARNING_MSG = "The request per minute limit has just been exceeded, the application will wait a minute before retrying the data download."
     API_CALL_LIMIT_SLEEP_INTERVAL_SECONDS = 60
-    CATEGORY = "linear"
 
     def __init__(self, foreign_exchange, tickers_csv_path):
         self.foreign_exchange = foreign_exchange
