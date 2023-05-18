@@ -49,3 +49,7 @@ bybitExampleBot:
 cryptoTrendScreenerBot:
 	@echo "Run bot..."
 	. venv/bin/activate && ${PYTHON} -m trading_bots CryptoTrendScreenerBot
+
+forexTrendScreenerBot:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots ForexTrendScreenerBot

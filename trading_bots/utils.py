@@ -2,6 +2,7 @@ import yaml
 
 from trading_bots.bybit_example_bot import BybitExampleBot
 from trading_bots.crypto_trend_screener_bot import CryptoTrendScreenerBot
+from trading_bots.forex_trend_screener_bot import ForexTrendScreenerBot
 from trading_bots.templates.bot import Bot
 
 
@@ -20,5 +21,7 @@ def create_bot(bot_name: str, config: dict) -> Bot:
             return BybitExampleBot(config)
         case "CryptoTrendScreenerBot":
             return CryptoTrendScreenerBot(config)
+        case "ForexTrendScreenerBot":
+            return ForexTrendScreenerBot(config)
         case _:
             raise ValueError("Not supported bot_name: {}".format(bot_name))
