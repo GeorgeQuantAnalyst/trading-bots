@@ -1,9 +1,9 @@
 # TODOs
 
 -- high priority
-* [] Migrate CryptoTrendScreenerJob to CryptoTrendScreenerBot
-* [] Migrate ForexTrendScreenerJob to ForexTrendScreenerBot
-* [] Migrate bybit-place-trailing-stops-job to BybitPlaceTrailingStopBot
+* [x] Migrate CryptoTrendScreenerJob to CryptoTrendScreenerBot
+* [] Migrate ForexTrendScreenerJob to ForexTrendScreenerBot @Lucka
+* [] Migrate bybit-place-trailing-stops-job to BybitPlaceTrailingStopBot @Lucka
 * [] Create BybitEarlyReactionBot
 * [] Release version 1.0.0
 
