@@ -10,4 +10,4 @@ pandas==1.5.1
 pybit==5.2.0
 
 # Tests
-mock==5.0.2
+timeout-decorator==0.5.0
