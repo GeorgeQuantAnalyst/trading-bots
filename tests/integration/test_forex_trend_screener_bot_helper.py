@@ -4,6 +4,9 @@ from alpha_vantage.foreignexchange import ForeignExchange
 
 from trading_bots.helpers.forex_trend_screener_bot_helper import ForexTrendScreenerBotHelper
 
+import pandas as pd
+
+
 class ForexTrendScreenerBotHelperTest(unittest.TestCase):
 
     def setUp(self):
@@ -49,30 +52,26 @@ class ForexTrendScreenerBotHelperTest(unittest.TestCase):
         self.assertTrue(len(cache["monthly"]) == 3)
 
     def test_calculate_percentage_change(self):
-        # TODO Lucka
-        pass
-        ohlc = self.helper.get_ohlc(ticker="EURUSD", time_frame="D")
-        ohlc.to_csv("eurusd.csv", index=False)
-        # btc_ohlc = pd.read_csv("fixtures/btc_ohlc.csv")
-        # eth_ohlc = pd.read_csv("fixtures/eth_ohlc.csv")
-        # bnb_ohlc = pd.read_csv("fixtures/bnb_ohlc.csv")
-        #
-        # self.assertEqual(self.helper.calculate_percentage_change(ohlc=btc_ohlc, days=7), -3.1)
-        # self.assertEqual(self.helper.calculate_percentage_change(ohlc=eth_ohlc, days=7), 4.84)
-        # self.assertEqual(self.helper.calculate_percentage_change(ohlc=bnb_ohlc, days=7), 0.93)
+        eurusd_ohlc = pd.read_csv("fixtures/eurusd_ohlc.csv")
+        eurcad_ohlc = pd.read_csv("fixtures/eurcad_ohlc.csv")
+        nzdchf_ohlc = pd.read_csv("fixtures/nzdchf_ohlc.csv")
+
+        self.assertEqual(self.helper.calculate_percentage_change(ohlc=eurusd_ohlc, days=7), -1.95)
+        self.assertEqual(self.helper.calculate_percentage_change(ohlc=eurcad_ohlc, days=7), -1.15)
+        self.assertEqual(self.helper.calculate_percentage_change(ohlc=nzdchf_ohlc, days=7), -0.6)
 
     def test_calculate_context(self):
-        # TODO Lucka
-        pass
+        # ohlc = self.helper.get_ohlc(ticker="EURNZD", time_frame="W")
+        # ohlc.to_csv("fixtures/eurnzd_ohlc_w.csv", index=False)
+        eurusd_ohlc = pd.read_csv("fixtures/eurusd_ohlc.csv")
+        nzdchf_ohlc = pd.read_csv("fixtures/nzdchf_ohlc.csv")
+        chfjpy_ohlc = pd.read_csv("fixtures/chfjpy_ohlc.csv")
+        cadchf_ohlc = pd.read_csv("fixtures/cadchf_ohlc_w.csv")
+        eurnzd_ohlc = pd.read_csv("fixtures/eurnzd_ohlc_w.csv")
 
-        # alice_ohlc = pd.read_csv("fixtures/alice_ohlc.csv")
-        # ankr_ohlc = pd.read_csv("fixtures/ankr_ohcl.csv")
-        # cream_ohlc = pd.read_csv("fixtures/cream_ohlc.csv")
-        # inj_ohlc = pd.read_csv("fixtures/inj_ohlc.csv")
-        # lina_ohlc = pd.read_csv("fixtures/lina_ohlc.csv")
-        #
-        # self.assertEqual(self.helper.calculate_context(alice_ohlc), "Rotation")
-        # self.assertEqual(self.helper.calculate_context(ankr_ohlc), "Start rotation after down-trend")
-        # self.assertEqual(self.helper.calculate_context(cream_ohlc), "Up-trend")
-        # self.assertEqual(self.helper.calculate_context(inj_ohlc), "Down-trend")
-        # self.assertEqual(self.helper.calculate_context(lina_ohlc), "Start rotation after up-trend")
+        self.assertEqual(self.helper.calculate_context(eurusd_ohlc), "Down-trend")
+        self.assertEqual(self.helper.calculate_context(nzdchf_ohlc), "Rotation")
+        self.assertEqual(self.helper.calculate_context(chfjpy_ohlc), "Up-trend")
+        self.assertEqual(self.helper.calculate_context(cadchf_ohlc), "Start rotation after up-trend")
+        self.assertEqual(self.helper.calculate_context(eurnzd_ohlc), "Start rotation after down-trend")
+
