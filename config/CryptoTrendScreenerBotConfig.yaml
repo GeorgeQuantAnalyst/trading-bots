@@ -1,7 +1,2 @@
 base:
     reportsFolder: reports/cryptoTrendScreener
-
-bybitApi:
-    testnet: True
-    apiKey:
-    secretKey:
