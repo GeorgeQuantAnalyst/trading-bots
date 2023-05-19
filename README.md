@@ -5,6 +5,9 @@ and Risk management (Trading bots can incorporate risk management techniques, su
 All trading bots are written in Python programming language.
 
 ## Developed bots
+* CryptoTrendScreenerBot
+* ForexTrendScreenerBot
+* PlaceTrailingStopsBotBybit
 
 ## Development
 Application is actively maintenance and develop.
@@ -15,6 +18,7 @@ Application is actively maintenance and develop.
 ## Python base tutorials
 
 ## Exchange api documentation
+* [Bybit rest api v5 documentation](https://bybit-exchange.github.io/docs/v5/intro)
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->

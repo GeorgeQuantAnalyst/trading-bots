@@ -9,7 +9,7 @@ class BybitExampleBot(BybitBot):
     def __init__(self, config: dict):
         super().__init__(config)
 
-        self.helper = BybitExampleBotHelper(self.exchange)
+        self.helper = BybitExampleBotHelper(self.pybit_client)
 
     def run(self):
         logging.info("Start BybitExampleBot")
