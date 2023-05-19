@@ -2,8 +2,8 @@
 
 -- high priority
 * [x] Migrate CryptoTrendScreenerJob to CryptoTrendScreenerBot
-* [] Migrate ForexTrendScreenerJob to ForexTrendScreenerBot @Lucka
-* [] Migrate bybit-place-trailing-stops-job to BybitPlaceTrailingStopBot @Lucka
+* [x] Migrate ForexTrendScreenerJob to ForexTrendScreenerBot @Lucka
+* [] Migrate bybit-place-trailing-stops-job to BybitPlaceTrailingStopBot @Jirka (prepare and test) @Lucka (api call)
 * [] Create BybitEarlyReactionBot
 * [] Release version 1.0.0
 
