@@ -1,0 +1,4 @@
+bybitApi:
+    testnet: True
+    apiKey:
+    secretKey:

@@ -53,3 +53,15 @@ cryptoTrendScreenerBot:
 forexTrendScreenerBot:
 	@echo "Run bot..."
 	. venv/bin/activate && ${PYTHON} -m trading_bots ForexTrendScreenerBot
+
+placeTrailingStopsBotBybitIntraday:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots PlaceTrailingStopsBotBybitIntraday
+
+placeTrailingStopsBotBybitSwing:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots PlaceTrailingStopsBotBybitSwing
+
+placeTrailingStopsBotBybitPosition:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots PlaceTrailingStopsBotBybitPosition
