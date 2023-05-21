@@ -7,7 +7,8 @@ from trading_bots.utils import load_config, create_bot
 
 bot_names = ["BybitExampleBot", "CryptoTrendScreenerBot", "ForexTrendScreenerBot",
              "PlaceTrailingStopsBotBybitIntraday", "PlaceTrailingStopsBotBybitSwing",
-             "PlaceTrailingStopsBotBybitPosition"]
+             "PlaceTrailingStopsBotBybitPosition", "EarlyReactionBotBybitIntraday", "EarlyReactionBotBybitSwing",
+             "EarlyReactionBotBybitPosition"]
 
 if __name__ == "__main__":
     bot_name = sys.argv[1]
