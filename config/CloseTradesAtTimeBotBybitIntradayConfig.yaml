@@ -1,0 +1,7 @@
+base:
+  hours: 19
+  minutes: 0
+bybitApi:
+  testnet: True
+  apiKey:
+  secretKey:

@@ -65,3 +65,15 @@ placeTrailingStopsBotBybitSwing:
 placeTrailingStopsBotBybitPosition:
 	@echo "Run bot..."
 	. venv/bin/activate && ${PYTHON} -m trading_bots PlaceTrailingStopsBotBybitPosition
+
+closeTradesAtTimeBotBybitIntraday:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots CloseTradesAtTimeBotBybitIntraday
+
+closeTradesAtTimeBotBybitSwing:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots CloseTradesAtTimeBotBybitSwing
+
+closeTradesAtTimeBotBybitPosition:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots CloseTradesAtTimeBotBybitPosition
