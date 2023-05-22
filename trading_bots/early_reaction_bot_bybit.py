@@ -48,15 +48,15 @@ class EarlyReactionBotBybit(BybitBot):
                     self.before_entry_ids.append(order_id)
             else:
                 if (order_side == "Buy" and take_profit <= last_bar["highPrice"]) or (
-                        order_side == "Sell" and take_profit <= last_bar["lowPrice"]):
+                        order_side == "Sell" and take_profit >= last_bar["lowPrice"]):
                     logging.info(
-                        "Price arrived to Take Profit early after arrived before entry price,"
-                        "pending order will be canceled: [Order Id: {}, Take Profit: {}, last bar low: {},"
-                        "last bar high: {}]"
-                        .format(order_id, take_profit, last_bar, last_bar["lowPrice"], last_bar["highPrice"]))
+                        "Price arrived to TakeProfit price early after arrived BeforeEntryPrice,"
+                        "pending order will be cancel. : [Order Id: {}, Take Profit: {}, Last Bar Low: {},"
+                        "Last Bar High: {}]"
+                        .format(order_id, take_profit, last_bar["lowPrice"], last_bar["highPrice"]))
+
                     self.helper.cancel_trades_with_early_reaction(symbol)
+
                     self.before_entry_ids.remove(order_id)
 
                 logging.info("Finished EarlyReactionBotBybit")
-
-
