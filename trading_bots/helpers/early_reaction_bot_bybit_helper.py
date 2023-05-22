@@ -31,13 +31,13 @@ class EarlyReactionBotBybitHelper:
         last_bar = response["result"]["list"][1]
 
         return {
-            "startTime": last_bar[0],
-            "openPrice": last_bar[1],
-            "highPrice": last_bar[2],
-            "lowPrice": last_bar[3],
-            "closePrice": last_bar[4],
-            "volume": last_bar[5],
-            "turnover": last_bar[6]
+            "startTime": float(last_bar[0]),
+            "openPrice": float(last_bar[1]),
+            "highPrice": float(last_bar[2]),
+            "lowPrice": float(last_bar[3]),
+            "closePrice": float(last_bar[4]),
+            "volume": float(last_bar[5]),
+            "turnover": float(last_bar[6])
         }
 
     def cancel_pending_order(self, order_id, symbol):
