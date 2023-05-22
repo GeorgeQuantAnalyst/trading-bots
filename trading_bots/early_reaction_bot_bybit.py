@@ -32,6 +32,7 @@ class EarlyReactionBotBybit(BybitBot):
             if take_profit == 0 or stop_loss == 0:
                 logging.warning("Order {} does not have bracked orders (profit target and stop loss), "
                                 "continue to next order.".format(order_id))
+                continue
 
             before_entry_price = entry_price + ((entry_price - stop_loss) * percentage_before_entry)
             logging.info("Before entry price: {}".format(before_entry_price))
@@ -56,9 +57,9 @@ class EarlyReactionBotBybit(BybitBot):
                         "Last Bar High: {}]"
                         .format(order_id, take_profit, last_bar["lowPrice"], last_bar["highPrice"]))
 
-                    self.helper.cancel_pending_orders(symbol)
-                    self.before_entry_ids.remove(order_id)
+                    self.helper.cancel_pending_order(order)
+                    self.before_entry_ids.remove(order_id, symbol)
 
-        self.helper.remove_not_exists_ids(self.before_entry_ids)
+        self.helper.remove_not_exists_ids(self.before_entry_ids, pending_orders)
         self.helper.save_before_entry_ids_list(self.before_entry_ids)
         logging.info("Finished EarlyReactionBotBybit")

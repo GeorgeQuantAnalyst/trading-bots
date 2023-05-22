@@ -45,11 +45,15 @@ class EarlyReactionBotBybitHelper:
                                                                      symbol=symbol)
         logging.debug("Cancel orders response: {}".format(cancel_orders_response))
 
-    def remove_not_exists_ids(self, before_entry_ids: list) -> None:
+    def cancel_pending_order(self, order):
+        # TODO @Lucka: https://bybit-exchange.github.io/docs/v5/order/cancel-order
+        pass
+
+    def remove_not_exists_ids(self, before_entry_ids: list, pending_orders: list) -> None:
         ids = []
         not_exists_ids = []
 
-        for order in self.get_pending_orders():
+        for order in pending_orders:
             ids.append(order["orderId"])
 
         for before_entry_id in before_entry_ids:
