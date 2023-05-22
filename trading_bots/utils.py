@@ -1,6 +1,7 @@
 import yaml
 
 from trading_bots.bybit_example_bot import BybitExampleBot
+from trading_bots.close_trades_at_time_bot_bybit import CloseTradesAtTimeBotBybit
 from trading_bots.crypto_trend_screener_bot import CryptoTrendScreenerBot
 from trading_bots.early_reaction_bot_bybit import EarlyReactionBotBybit
 from trading_bots.place_trailing_stops_bot_bybit import PlaceTrailingStopsBotBybit
@@ -38,5 +39,11 @@ def create_bot(bot_name: str, config: dict) -> Bot:
             return EarlyReactionBotBybit(config)
         case "EarlyReactionBotBybitPosition":
             return EarlyReactionBotBybit(config)
+        case "CloseTradesAtTimeBotBybitIntraday":
+            return CloseTradesAtTimeBotBybit(config)
+        case "CloseTradesAtTimeBotBybitSwing":
+            return CloseTradesAtTimeBotBybit(config)
+        case "CloseTradesAtTimeBotBybitPosition":
+            return CloseTradesAtTimeBotBybit(config)
         case _:
             raise ValueError("Not supported bot_name: {}".format(bot_name))
