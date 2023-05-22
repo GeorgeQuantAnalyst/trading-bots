@@ -8,6 +8,7 @@ All trading bots are written in Python programming language.
 * CryptoTrendScreenerBot
 * ForexTrendScreenerBot
 * PlaceTrailingStopsBotBybit
+* EarlyReactionBotBybit
 * CloseTradesAtTimeBot
 
 ## Development

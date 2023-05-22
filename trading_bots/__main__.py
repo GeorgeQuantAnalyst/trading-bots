@@ -7,6 +7,8 @@ from trading_bots.utils import load_config, create_bot
 
 bot_names = ["BybitExampleBot", "CryptoTrendScreenerBot", "ForexTrendScreenerBot",
              "PlaceTrailingStopsBotBybitIntraday", "PlaceTrailingStopsBotBybitSwing",
+             "PlaceTrailingStopsBotBybitPosition", "EarlyReactionBotBybitIntraday",
+             "EarlyReactionBotBybitSwing", "EarlyReactionBotBybitPosition",
              "PlaceTrailingStopsBotBybitPosition", "CloseTradesAtTimeBotBybitIntraday",
              "CloseTradesAtTimeBotBybitSwing", "CloseTradesAtTimeBotBybitPosition"]
 
