@@ -39,15 +39,11 @@ class EarlyReactionBotBybitHelper:
             "turnover": last_bar[6]
         }
 
-    def cancel_pending_orders(self, symbol):
-        logging.info("Cancel all pending orders")
-        cancel_orders_response = self.pybit_client.cancel_all_orders(category=constants.BYBIT_LINEAR_CATEGORY,
-                                                                     symbol=symbol)
+    def cancel_pending_order(self, order_id, symbol):
+        logging.info("Cancel pending order with early reaction")
+        cancel_orders_response = self.pybit_client.cancel_order(category=constants.BYBIT_LINEAR_CATEGORY,
+                                                                symbol=symbol, orderId=order_id)
         logging.debug("Cancel orders response: {}".format(cancel_orders_response))
-
-    def cancel_pending_order(self, order):
-        # TODO @Lucka: https://bybit-exchange.github.io/docs/v5/order/cancel-order
-        pass
 
     def remove_not_exists_ids(self, before_entry_ids: list, pending_orders: list) -> None:
         ids = []
@@ -58,19 +54,19 @@ class EarlyReactionBotBybitHelper:
 
         for before_entry_id in before_entry_ids:
             if before_entry_id not in ids:
+                logging.info("Start removing not existing ids")
                 not_exists_ids.append(before_entry_id)
 
         for not_exists_id in not_exists_ids:
             before_entry_ids.remove(not_exists_id)
+            logging.info("Removing not existing id: {}".format(not_exists_id))
 
     def load_before_entry_ids_list(self):
-        # TODO: Lucka https://stackoverflow.com/questions/49221429/how-to-load-a-list-from-a-json-file#49221604
         with open(self.BEFORE_ENTRY_IDS_JSON_PATH) as f:
             content = f.read()
             if content:
                 return json.loads(content)
 
     def save_before_entry_ids_list(self, before_entry_ids):
-        # TODO: Lucka https://stackoverflow.com/questions/59327547/write-a-json-file-from-list#59328005
         with open(self.BEFORE_ENTRY_IDS_JSON_PATH, 'w') as f:
             json.dump(before_entry_ids, f, indent=4)
