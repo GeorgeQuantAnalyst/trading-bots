@@ -22,11 +22,8 @@ class EarlyReactionBotBybit(BybitBot):
             logging.info("Process order {}".format(order["orderId"]))
 
             take_profit = float(order["takeProfit"])
-            logging.debug("Take profit: {}".format(take_profit))
             stop_loss = float(order["stopLoss"])
-            logging.debug("Stop loss: {}".format(stop_loss))
             entry_price = float(order["price"])
-            logging.debug("Entry price: {}".format(entry_price))
             percentage_before_entry = self.config["base"]["percentageBeforeEntry"]
             symbol = order["symbol"]
             order_side = order["side"]
