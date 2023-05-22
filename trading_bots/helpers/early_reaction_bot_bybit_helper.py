@@ -6,6 +6,7 @@ from trading_bots import constants
 
 
 class EarlyReactionBotBybitHelper:
+    BEFORE_ENTRY_IDS_JSON_PATH = "before_entry_ids.json"
 
     def __init__(self, pybit_client):
         self.pybit_client = pybit_client
@@ -18,30 +19,6 @@ class EarlyReactionBotBybitHelper:
         logging.debug("Pending orders response: {}".format(response))
 
         return response["result"]["list"]
-
-    # def check_if_position_has_tp_and_sl(self, pending_orders) -> bool:
-    #
-    #     is_set_stop_loss = pending_orders["isSetStopLoss"] = pending_orders["stopLoss"] > 0
-    #     is_set_take_profit = pending_orders["isSetTakeProfit"] = pending_orders["takeProfit"] > 0
-    #
-    #     if is_set_stop_loss is True & is_set_take_profit is True:
-    #         return True
-
-    def get_actual_price(self):
-        # print("Start test_get_btc_current_price")
-        #
-        # response = self.pybit_client.get_orderbook(
-        #     category=constants.BYBIT_LINEAR_CATEGORY,
-        #     symbol="BTCUSDT"
-        # )
-        #
-        # print("Response: {}".format(response))
-        # result = response["result"]
-        # bid = float(result["b"][0][0])
-        # ask = float(result["a"][0][0])
-
-        # return
-        pass
 
     def get_last_bar(self, ticker: str, interval: int = 1) -> dict:
         response = self.pybit_client.get_kline(
@@ -62,31 +39,36 @@ class EarlyReactionBotBybitHelper:
             "turnover": last_bar[6]
         }
 
-    def get_before_entry_ids(self):
-        pass
-
-    def check_early_reaction(self):
-
-        pass
-
-    def cancel_trades_with_early_reaction(self, symbol):
-        logging.info("Get pending orders")
-        pending_orders = self.pybit_client.get_open_orders(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
-        logging.debug("Pending response orders: {}".format(pending_orders))
-
+    def cancel_pending_orders(self, symbol):
         logging.info("Cancel all pending orders")
         cancel_orders_response = self.pybit_client.cancel_all_orders(category=constants.BYBIT_LINEAR_CATEGORY,
                                                                      symbol=symbol)
         logging.debug("Cancel orders response: {}".format(cancel_orders_response))
 
-    # def remove_not_exists_ids(self):
-    #     ids = []
-    #     notExistsIds = []
-    #
-    #     for order in PendingOrders:
-    #         ids.append(order["orderId"])
-    #     for id in BeforeEntryIds:
-    #         if (!ids in id)
-    #             notExistsIds.append(id)
-    #     for id in notExistsIds:
-    #         BeforeEntryIds.Remove(id)
+    def remove_not_exists_ids(self, before_entry_ids: list) -> None:
+        ids = []
+        not_exists_ids = []
+
+        for order in self.get_pending_orders():
+            ids.append(order["orderId"])
+
+        for before_entry_id in before_entry_ids:
+            if before_entry_id not in ids:
+                not_exists_ids.append(before_entry_id)
+
+        for not_exists_id in not_exists_ids:
+            before_entry_ids.remove(not_exists_id)
+
+    def load_before_entry_ids_list(self):
+        # TODO: Lucka https://stackoverflow.com/questions/49221429/how-to-load-a-list-from-a-json-file#49221604
+        # with open('movies.txt') as f:
+        #     content = f.read()
+        #     if content:
+        #         movies = json.loads(content)
+        pass
+
+    def save_before_entry_ids_list(self, before_entry_ids):
+        # TODO: Lucka https://stackoverflow.com/questions/59327547/write-a-json-file-from-list#59328005
+        # with open('data.json', 'w') as f:
+        #     json.dump(data, f, indent=4)
+        pass

@@ -8,7 +8,7 @@ class EarlyReactionBotBybit(BybitBot):
     def __init__(self, config: dict):
         super().__init__(config)
         self.helper = EarlyReactionBotBybitHelper(self.pybit_client)
-        self.before_entry_ids = []
+        self.before_entry_ids = self.helper.load_before_entry_ids_list()
 
     def run(self):
         logging.info("Start EarlyReactionBotBybit")
@@ -55,8 +55,9 @@ class EarlyReactionBotBybit(BybitBot):
                         "Last Bar High: {}]"
                         .format(order_id, take_profit, last_bar["lowPrice"], last_bar["highPrice"]))
 
-                    self.helper.cancel_trades_with_early_reaction(symbol)
-
+                    self.helper.cancel_pending_orders(symbol)
                     self.before_entry_ids.remove(order_id)
 
-                logging.info("Finished EarlyReactionBotBybit")
+        self.helper.remove_not_exists_ids(self.before_entry_ids)
+        self.helper.save_before_entry_ids_list(self.before_entry_ids)
+        logging.info("Finished EarlyReactionBotBybit")
