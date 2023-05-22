@@ -1,12 +1,12 @@
 import logging
 
-import pandas as pd
+import json
 
 from trading_bots import constants
 
 
 class EarlyReactionBotBybitHelper:
-    BEFORE_ENTRY_IDS_JSON_PATH = "before_entry_ids.json"
+    BEFORE_ENTRY_IDS_JSON_PATH = "trading_bots/data/before_entry_ids.json"
 
     def __init__(self, pybit_client):
         self.pybit_client = pybit_client
@@ -61,14 +61,12 @@ class EarlyReactionBotBybitHelper:
 
     def load_before_entry_ids_list(self):
         # TODO: Lucka https://stackoverflow.com/questions/49221429/how-to-load-a-list-from-a-json-file#49221604
-        # with open('movies.txt') as f:
-        #     content = f.read()
-        #     if content:
-        #         movies = json.loads(content)
-        pass
+        with open(self.BEFORE_ENTRY_IDS_JSON_PATH) as f:
+            content = f.read()
+            if content:
+                return json.loads(content)
 
     def save_before_entry_ids_list(self, before_entry_ids):
         # TODO: Lucka https://stackoverflow.com/questions/59327547/write-a-json-file-from-list#59328005
-        # with open('data.json', 'w') as f:
-        #     json.dump(data, f, indent=4)
-        pass
+        with open(self.BEFORE_ENTRY_IDS_JSON_PATH, 'w') as f:
+            json.dump(before_entry_ids, f, indent=4)

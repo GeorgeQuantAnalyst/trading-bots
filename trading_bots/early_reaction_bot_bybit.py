@@ -39,16 +39,16 @@ class EarlyReactionBotBybit(BybitBot):
             logging.info("Last bar: {}".format(last_bar))
 
             if order_id not in self.before_entry_ids:
-                if (order_side == "Buy" and before_entry_price >= last_bar["lowPrice"]) or (
-                        order_side == "Sell" and before_entry_price <= last_bar["highPrice"]):
+                if (order_side == "Buy" and before_entry_price >= float(last_bar["lowPrice"])) or (
+                        order_side == "Sell" and before_entry_price <= float(last_bar["highPrice"])):
                     logging.info("Price arrived before entry: [Order Id: {}, Before Entry Price: {},"
                                  "Last Bar Low: {}, last Bar High: {}]".format(order_id, before_entry_price,
                                                                                last_bar["lowPrice"],
                                                                                last_bar["highPrice"]))
-                    self.before_entry_ids.append(order_id)
+                self.before_entry_ids.append(order_id)
             else:
-                if (order_side == "Buy" and take_profit <= last_bar["highPrice"]) or (
-                        order_side == "Sell" and take_profit >= last_bar["lowPrice"]):
+                if (order_side == "Buy" and take_profit <= float(last_bar["highPrice"])) or (
+                        order_side == "Sell" and take_profit >= float(last_bar["lowPrice"])):
                     logging.info(
                         "Price arrived to TakeProfit price early after arrived BeforeEntryPrice,"
                         "pending order will be cancel. : [Order Id: {}, Take Profit: {}, Last Bar Low: {},"
