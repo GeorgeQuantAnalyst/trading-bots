@@ -20,15 +20,16 @@ class EarlyReactionBotBybitHelper:
 
         return response["result"]["list"]
 
-    def get_last_bar(self, ticker: str, interval: int = 1) -> dict:
+    def get_last_closed_bar(self, ticker: str, interval: int = 1) -> dict:
         response = self.pybit_client.get_kline(
             symbol=ticker,
             category=constants.BYBIT_LINEAR_CATEGORY,
             interval=interval,
-            limit=1
+            limit=2
         )
 
-        last_bar = response["result"]["list"][0]
+        last_bar = response["result"]["list"][1]
+
         return {
             "startTime": last_bar[0],
             "openPrice": last_bar[1],
