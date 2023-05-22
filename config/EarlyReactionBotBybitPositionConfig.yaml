@@ -1,0 +1,7 @@
+base:
+  percentageBeforeEntry: 0.33
+
+bybitApi:
+  testnet: True
+  apiKey:
+  secretKey:
