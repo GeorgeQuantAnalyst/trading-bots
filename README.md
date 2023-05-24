@@ -5,19 +5,17 @@ and Risk management (Trading bots can incorporate risk management techniques, su
 All trading bots are written in Python programming language.
 
 ## Developed bots
-* CryptoTrendScreenerBot
-* ForexTrendScreenerBot
-* PlaceTrailingStopsBotBybit
-* EarlyReactionBotBybit
-* CloseTradesAtTimeBotBybit
+* **CryptoTrendScreenerBot**:  trading bot for searching the intraday, swing trends on the USDT perpetual futures markets of the Bybit exchange.
+* **ForexTrendScreenerBot**:  trading bot for searching the intraday, swing trends on the most traded forex pairs (majors, minors and cross).
+* **PlaceTrailingStopsBotBybit**: trading bot for entering a trailing stop loss based on open futures positions on the Bybit exchange.
+* **EarlyReactionBotBybit**: trading bot for close early reaction trades (A trade where the price reaches 33% before entry and then the market turns to profit).
+* **CloseTradesAtTimeBotBybit**: trading bot closing pending orders and position at defined time.
 
 ## Development
 Application is actively maintenance and develop.
 
 ## Prerequisites
 * Python 3.11 and higher
-
-## Python base tutorials
 
 ## Exchange api documentation
 * [Bybit rest api v5 documentation](https://bybit-exchange.github.io/docs/v5/intro)
