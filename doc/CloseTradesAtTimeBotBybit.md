@@ -1,7 +1,5 @@
 # CloseTradesAtTimeBotBybit documentation
 Trading bot closing pending orders and position at defined time. 
-You can set close for all or specific currency pairs.
-
 
 ## Configuration
 -- Intraday
