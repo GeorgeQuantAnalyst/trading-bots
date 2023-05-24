@@ -1,6 +1,6 @@
 from statistics import mean
 
-from trading_bots.constants import BYBIT_CATEGORY
+from trading_bots.constants import BYBIT_LINEAR_CATEGORY
 
 
 class BybitExampleBotHelper:
@@ -10,7 +10,7 @@ class BybitExampleBotHelper:
 
     def get_btc_current_price(self):
         response = self.exchange.get_orderbook(
-            category=BYBIT_CATEGORY,
+            category=BYBIT_LINEAR_CATEGORY,
             symbol="BTCUSDT"
         )
         result = response["result"]

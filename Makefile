@@ -8,8 +8,6 @@ PYTHON = python3.11
 # Defining an array variable
 FILES = input output
 
-APP_LOG_FOLDER="${HOME}/log/bybit-place-trailing-stops-job"
-
 # Defines the default target that `make` will to try to make, or in the case of a phony target, execute the specified commands
 # This target is executed whenever we just type `make`
 .DEFAULT_GOAL = help
@@ -47,3 +45,47 @@ clean:
 bybitExampleBot:
 	@echo "Run bot..."
 	. venv/bin/activate && ${PYTHON} -m trading_bots BybitExampleBot
+
+cryptoTrendScreenerBot:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots CryptoTrendScreenerBot
+
+forexTrendScreenerBot:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots ForexTrendScreenerBot
+
+placeTrailingStopsBotBybitIntraday:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots PlaceTrailingStopsBotBybitIntraday
+
+placeTrailingStopsBotBybitSwing:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots PlaceTrailingStopsBotBybitSwing
+
+placeTrailingStopsBotBybitPosition:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots PlaceTrailingStopsBotBybitPosition
+
+earlyReactionBotBybitIntraday:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots EarlyReactionBotBybitIntraday
+
+earlyReactionBotBybitSwing:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots EarlyReactionBotBybitSwing
+
+earlyReactionBotBybitPosition:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots EarlyReactionBotBybitPosition
+
+closeTradesAtTimeBotBybitIntraday:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots CloseTradesAtTimeBotBybitIntraday
+
+closeTradesAtTimeBotBybitSwing:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots CloseTradesAtTimeBotBybitSwing
+
+closeTradesAtTimeBotBybitPosition:
+	@echo "Run bot..."
+	. venv/bin/activate && ${PYTHON} -m trading_bots CloseTradesAtTimeBotBybitPosition
