@@ -39,6 +39,7 @@ class CheckFuturesMarginLevelBotBybitHelper:
             return False
 
         last_funding_date = self.funding_dates[-1]
+        logging.info("LastFundingDate: {}".format(last_funding_date))
         now = datetime.now()
         return last_funding_date.year == now.year and last_funding_date.month == now.month and last_funding_date.day == now.day
 
@@ -54,7 +55,7 @@ class CheckFuturesMarginLevelBotBybitHelper:
     def funding_futures_account(self, margin_level: float, available_balance: float):
         funding_amount = round(margin_level - available_balance, 2)
         logging.debug("Start funding futures account from spot with amount: {} USDT".format(funding_amount))
-        response = self.pybit_client.create_internal_transfer(transferId=uuid.uuid4(),
+        response = self.pybit_client.create_internal_transfer(transferId=str(uuid.uuid4()),
                                                               coin="USDT",
                                                               amount=str(funding_amount),
                                                               fromAccountType="SPOT",
@@ -67,8 +68,9 @@ class CheckFuturesMarginLevelBotBybitHelper:
         with open(self.funding_dates_json_path) as f:
             content = f.read()
             if content:
-                return json.loads(content)
+                string_list = json.loads(content)
+        return [datetime.strptime(dt_str, '%Y-%m-%d %H:%M:%S') for dt_str in string_list]
 
     def save_funding_dates_list(self, funding_dates):
         with open(self.funding_dates_json_path, 'w') as f:
-            json.dump(funding_dates, f, indent=4)
+            json.dump([dt.strftime('%Y-%m-%d %H:%M:%S') for dt in funding_dates], f, indent=4)

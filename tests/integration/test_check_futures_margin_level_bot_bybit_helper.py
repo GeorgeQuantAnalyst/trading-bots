@@ -11,8 +11,8 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
     def setUp(self) -> None:
         print("Start SetUp")
 
-        api_key = ""
-        secret_key = ""
+        api_key = "PUNOObtxYlBcSidcQ1"
+        secret_key = "mETSll3uO7eR1z4LfOCP7lYpbevdUg8xhNqX"
 
         print("Init pybit client client")
         self.pybit_client = HTTP(
@@ -22,7 +22,8 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
         )
         print("Finished SetUp")
 
-        self.helper = CheckFuturesMarginLevelBotBybitHelper(self.pybit_client, "../../trading_bots/data/funding_dates.json")
+        self.helper = CheckFuturesMarginLevelBotBybitHelper(self.pybit_client,
+                                                            "../../trading_bots/data/funding_dates_intraday.json")
 
     def test_get_available_balance_on_futures_account(self):
         available_balance = self.helper.get_available_balance_on_futures_account()
@@ -34,12 +35,14 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
 
     def test_get_last_position_close_date(self):
         close_date = self.helper.get_last_position_close_date()
+        print("Close date: {}".format(close_date))
         self.assertTrue(isinstance(close_date, datetime.datetime))
 
     def test_was_funding_account_today(self):
         self.assertFalse(self.helper.was_funding_account_today())
 
     def test_funding_futures_account(self):
+        self.helper.funding_futures_account(110, 109)
         pass
 
 
