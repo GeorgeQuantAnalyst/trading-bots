@@ -6,12 +6,12 @@ from trading_bots import constants
 
 
 class EarlyReactionBotBybitHelper:
-    BEFORE_ENTRY_IDS_JSON_PATH = "trading_bots/data/before_entry_ids.json"
 
-    def __init__(self, pybit_client):
+    def __init__(self, pybit_client, before_entry_ids_json_path):
         self.pybit_client = pybit_client
         self.instruments_info = pybit_client.get_instruments_info(category=constants.BYBIT_LINEAR_CATEGORY)["result"][
             "list"]
+        self.before_entry_ids_json_path = before_entry_ids_json_path
 
     def get_pending_orders(self) -> list:
         logging.info("Get pending orders")
@@ -63,11 +63,11 @@ class EarlyReactionBotBybitHelper:
             logging.info("Removing not existing id: {}".format(not_exists_id))
 
     def load_before_entry_ids_list(self):
-        with open(self.BEFORE_ENTRY_IDS_JSON_PATH) as f:
+        with open(self.before_entry_ids_json_path) as f:
             content = f.read()
             if content:
                 return json.loads(content)
 
     def save_before_entry_ids_list(self, before_entry_ids):
-        with open(self.BEFORE_ENTRY_IDS_JSON_PATH, 'w') as f:
+        with open(self.before_entry_ids_json_path, 'w') as f:
             json.dump(before_entry_ids, f, indent=4)

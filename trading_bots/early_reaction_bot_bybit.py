@@ -7,7 +7,7 @@ class EarlyReactionBotBybit(BybitBot):
 
     def __init__(self, config: dict):
         super().__init__(config)
-        self.helper = EarlyReactionBotBybitHelper(self.pybit_client)
+        self.helper = EarlyReactionBotBybitHelper(self.pybit_client, self.config["base"]["beforeEntryIdsJsonPath"])
         self.before_entry_ids = self.helper.load_before_entry_ids_list()
         logging.debug("Before entry ids: {}".format(self.before_entry_ids))
 
