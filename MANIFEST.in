@@ -1,6 +1,7 @@
 include requirements.txt
 include config/*
 include doc/*
+include trading_bots/data/*
 
 include *.md
 include *.sh
