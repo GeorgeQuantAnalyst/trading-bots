@@ -11,8 +11,8 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
     def setUp(self) -> None:
         print("Start SetUp")
 
-        api_key = ""
-        secret_key = ""
+        api_key = "PUNOObtxYlBcSidcQ1"
+        secret_key = "mETSll3uO7eR1z4LfOCP7lYpbevdUg8xhNqX"
 
         print("Init pybit client client")
         self.pybit_client = HTTP(

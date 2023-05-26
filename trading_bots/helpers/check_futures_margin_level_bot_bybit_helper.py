@@ -45,7 +45,11 @@ class CheckFuturesMarginLevelBotBybitHelper:
     def get_last_position_close_date(self) -> datetime:
         response = self.pybit_client.get_closed_pnl(category=constants.BYBIT_LINEAR_CATEGORY, limit=2)
         logging.info("Response: {}".format(response))
-        return response["result"]["list"][0]["createdTime"]
+
+        last_position_closed_unix_time = float(response["result"]["list"][0]["createdTime"])
+        dt = datetime.fromtimestamp(last_position_closed_unix_time / 1000)
+
+        return dt
 
     def funding_futures_account(self, margin_level: float, available_balance: float):
         funding_amount = round(margin_level - available_balance, 2)
