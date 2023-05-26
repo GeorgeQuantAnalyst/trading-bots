@@ -22,7 +22,7 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
         )
         print("Finished SetUp")
 
-        self.helper = CheckFuturesMarginLevelBotBybitHelper(self.pybit_client, "trading_bots/data/funding_dates.json")
+        self.helper = CheckFuturesMarginLevelBotBybitHelper(self.pybit_client, "../../trading_bots/data/funding_dates.json")
 
     def test_get_available_balance_on_futures_account(self):
         available_balance = self.helper.get_available_balance_on_futures_account()
