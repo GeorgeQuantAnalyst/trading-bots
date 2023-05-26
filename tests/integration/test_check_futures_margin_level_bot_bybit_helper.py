@@ -11,8 +11,8 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
     def setUp(self) -> None:
         print("Start SetUp")
 
-        api_key = "PUNOObtxYlBcSidcQ1"
-        secret_key = "mETSll3uO7eR1z4LfOCP7lYpbevdUg8xhNqX"
+        api_key = ""
+        secret_key = ""
 
         print("Init pybit client client")
         self.pybit_client = HTTP(
@@ -37,8 +37,7 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
         self.assertTrue(isinstance(close_date, datetime.datetime))
 
     def test_was_funding_account_today(self):
-        funding_account_date = self.helper.was_funding_account_today()
-        self.assertTrue(funding_account_date, False)
+        self.assertFalse(self.helper.was_funding_account_today())
 
     def test_funding_futures_account(self):
         pass
