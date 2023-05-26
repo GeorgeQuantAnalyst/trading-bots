@@ -36,6 +36,13 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
         close_date = self.helper.get_last_position_close_date()
         self.assertTrue(isinstance(close_date, datetime.datetime))
 
+    def test_was_funding_account_today(self):
+        funding_account_date = self.helper.was_funding_account_today()
+        self.assertTrue(funding_account_date, False)
+
+    def test_funding_futures_account(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
