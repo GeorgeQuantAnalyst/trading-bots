@@ -55,6 +55,8 @@ class CheckFuturesMarginLevelBotBybitHelper:
                                                               amount=str(funding_amount),
                                                               fromAccountType="SPOT",
                                                               toAccountType="CONTRACT")
+        self.funding_dates.append(datetime.now())
+        self.save_funding_dates_list(self.funding_dates)
         logging.info("Response: {}".format(response))
 
     def load_funding_dates_list(self) -> list:
