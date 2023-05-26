@@ -1,4 +1,7 @@
+import json
 import logging
+import uuid
+
 from datetime import datetime
 
 from trading_bots import constants
@@ -6,8 +9,10 @@ from trading_bots import constants
 
 class CheckFuturesMarginLevelBotBybitHelper:
 
-    def __init__(self, pybit_client):
+    def __init__(self, pybit_client, funding_dates_json_path):
         self.pybit_client = pybit_client
+        self.funding_dates_json_path = funding_dates_json_path
+        self.funding_dates = self.load_funding_dates_list()
 
     def get_available_balance_on_futures_account(self) -> float:
         response = self.pybit_client.get_wallet_balance(
@@ -19,7 +24,8 @@ class CheckFuturesMarginLevelBotBybitHelper:
         free_balance = float(response["result"]["list"][0]["coin"][0]["availableToWithdraw"])
 
         logging.info(
-            "Total balance: {} USDT, Available balance to withdraw: {} USDT".format(round(total_balance, 2), round(free_balance, 2)))
+            "Total balance: {} USDT, Available balance to withdraw: {} USDT".format(round(total_balance, 2),
+                                                                                    round(free_balance, 2)))
 
         return total_balance
 
@@ -29,8 +35,12 @@ class CheckFuturesMarginLevelBotBybitHelper:
         return len(response["result"]["list"]) > 0
 
     def was_funding_account_today(self) -> bool:
-        #TODO: @Jirka
-        return False
+        if len(self.funding_dates) == 0:
+            return False
+
+        last_funding_date = self.funding_dates[-1]
+        now = datetime.now()
+        return last_funding_date.year == now.year and last_funding_date.month == now.month and last_funding_date.day == now.day
 
     def get_last_position_close_date(self) -> datetime:
         response = self.pybit_client.get_closed_pnl(category=constants.BYBIT_LINEAR_CATEGORY, limit=2)
@@ -38,5 +48,21 @@ class CheckFuturesMarginLevelBotBybitHelper:
         return response["result"]["list"][0]["createdTime"]
 
     def funding_futures_account(self, margin_level: float, available_balance: float):
-        # TODO: @Jirka
-        pass
+        funding_amount = round(margin_level - available_balance, 2)
+        logging.debug("Start funding futures account from spot with amount: {} USDT".format(funding_amount))
+        response = self.pybit_client.create_internal_transfer(transferId=uuid.uuid4(),
+                                                              coin="USDT",
+                                                              amount=str(funding_amount),
+                                                              fromAccountType="SPOT",
+                                                              toAccountType="CONTRACT")
+        logging.info("Response: {}".format(response))
+
+    def load_funding_dates_list(self) -> list:
+        with open(self.funding_dates_json_path) as f:
+            content = f.read()
+            if content:
+                return json.loads(content)
+
+    def save_funding_dates_list(self, funding_dates):
+        with open(self.funding_dates_json_path, 'w') as f:
+            json.dump(funding_dates, f, indent=4)

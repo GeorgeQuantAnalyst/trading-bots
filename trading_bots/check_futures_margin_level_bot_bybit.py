@@ -10,7 +10,7 @@ class CheckFuturesMarginLevelBotBybit(BybitBot):
 
     def __init__(self, config: dict):
         super().__init__(config)
-        self.helper = CheckFuturesMarginLevelBotBybitHelper(self.pybit_client)
+        self.helper = CheckFuturesMarginLevelBotBybitHelper(self.pybit_client, config["base"]["fundingDatesJsonPath"])
         self.margin_level = config["base"]["marginLevel"]
         self.funding_interval_in_minutes = config["base"]["fundingIntervalInMinutes"]
 
