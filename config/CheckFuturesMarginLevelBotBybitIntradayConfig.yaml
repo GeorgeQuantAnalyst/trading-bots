@@ -1,0 +1,3 @@
+base:
+  marginLevel: 10
+  fundingIntervalInMinutes: 120

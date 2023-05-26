@@ -9,10 +9,10 @@ class CheckFuturesMarginLevelBotBybit(BybitBot):
     ONE_MINUTE_SECONDS = 60
 
     def __init__(self, config: dict):
-        super.__init__(config)
+        super().__init__(config)
         self.helper = CheckFuturesMarginLevelBotBybitHelper(self.pybit_client)
-        self.margin_level = 10  # TODO @Lucka load from config [base][marginLevel]
-        self.funding_interval_in_minutes = 120  # TODO @Lucka load from config [base][fundingIntervalInMinutes]
+        self.margin_level = config["base"]["marginLevel"]
+        self.funding_interval_in_minutes = config["base"]["fundingIntervalInMinutes"]
 
     def run(self):
         print("Start CheckFuturesMarginLevelBotBybit")
