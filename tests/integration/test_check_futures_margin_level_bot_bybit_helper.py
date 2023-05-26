@@ -26,6 +26,7 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
 
     def test_get_available_balance_on_futures_account(self):
         available_balance = self.helper.get_available_balance_on_futures_account()
+        self.assertTrue(isinstance(available_balance, float))
         self.assertTrue(available_balance >= 0)
 
     def test_is_open_positions(self):
