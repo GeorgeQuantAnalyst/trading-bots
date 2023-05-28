@@ -40,8 +40,8 @@ class CheckFuturesMarginLevelBotBybit(BybitBot):
         last_trade_close_date = self.helper.get_last_position_close_date()
         minutes_after_last_trade = (datetime.now() - last_trade_close_date).seconds / self.ONE_MINUTE_SECONDS
         if minutes_after_last_trade < self.funding_interval_in_minutes:
-            msg = "The futures account was funding after defined funding interval. [FundingIntervalInMinutes: {}, minutesAfterLastTrade: {}]"
-            logging.info(msg.format(self.funding_interval_in_minutes, minutes_after_last_trade))
+            msg = "The futures account was funding after defined funding interval. [fundingIntervalInMinutes: {}, minutesAfterLastTrade: {}]"
+            logging.info(msg.format(self.funding_interval_in_minutes, round(minutes_after_last_trade, 2)))
             return
 
         logging.info("Funding futures account to margin level")

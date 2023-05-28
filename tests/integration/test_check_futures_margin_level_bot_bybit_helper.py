@@ -11,8 +11,8 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
     def setUp(self) -> None:
         print("Start SetUp")
 
-        api_key = "PUNOObtxYlBcSidcQ1"
-        secret_key = "mETSll3uO7eR1z4LfOCP7lYpbevdUg8xhNqX"
+        api_key = ""
+        secret_key = ""
 
         print("Init pybit client client")
         self.pybit_client = HTTP(
@@ -27,6 +27,7 @@ class CheckFuturesMarginLevelBotBybitHelperTest(unittest.TestCase):
 
     def test_get_available_balance_on_futures_account(self):
         available_balance = self.helper.get_available_balance_on_futures_account()
+        print("Available balance: {}".format(available_balance))
         self.assertTrue(isinstance(available_balance, float))
         self.assertTrue(available_balance >= 0)
 
