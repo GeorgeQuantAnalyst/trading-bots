@@ -23,6 +23,9 @@ class CheckFuturesMarginLevelBotBybit(BybitBot):
             msg = "Available balance on futures account is under margin level. [availableBalance: {}, marginLevel: {}]"
             logging.info(msg.format(available_balance, self.margin_level))
             self.funding_futures_account(available_balance)
+        else:
+            msg = "Available balance on futures account is OK. [availableBalance: {}, marginLevel: {}]"
+            logging.info(msg.format(available_balance, self.margin_level))
 
         print("Finished CheckFuturesMarginLevelBotBybit")
 

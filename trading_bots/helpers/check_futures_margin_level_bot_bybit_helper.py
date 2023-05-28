@@ -53,7 +53,7 @@ class CheckFuturesMarginLevelBotBybitHelper:
         return dt
 
     def funding_futures_account(self, margin_level: float, available_balance: float):
-        funding_amount = round(margin_level - available_balance, 2)
+        funding_amount = round(margin_level - available_balance, 2) + 0.1
         logging.debug("Start funding futures account from spot with amount: {} USDT".format(funding_amount))
         response = self.pybit_client.create_internal_transfer(transferId=str(uuid.uuid4()),
                                                               coin="USDT",
