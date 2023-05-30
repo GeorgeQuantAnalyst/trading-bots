@@ -18,7 +18,7 @@ class CheckFuturesMarginLevelBotBybitHelper:
         response = self.pybit_client.get_wallet_balance(
             accountType="CONTRACT",
             coin="USDT")
-        logging.info("Response: {}".format(response))
+        logging.debug("Response get_wallet_balance: {}".format(response))
 
         total_balance = float(response["result"]["list"][0]["coin"][0]["walletBalance"])
         free_balance = float(response["result"]["list"][0]["coin"][0]["availableToWithdraw"])
@@ -31,7 +31,7 @@ class CheckFuturesMarginLevelBotBybitHelper:
 
     def is_open_positions(self) -> bool:
         response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
-        logging.info("Response: {}".format(response))
+        logging.debug("Response get_positions: {}".format(response))
         return len(response["result"]["list"]) > 0
 
     def was_funding_account_today(self) -> bool:
@@ -45,7 +45,7 @@ class CheckFuturesMarginLevelBotBybitHelper:
 
     def get_last_position_close_date(self) -> datetime:
         response = self.pybit_client.get_closed_pnl(category=constants.BYBIT_LINEAR_CATEGORY, limit=2)
-        logging.info("Response: {}".format(response))
+        logging.debug("Response get_closed_pnl: {}".format(response))
 
         last_position_closed_unix_time = float(response["result"]["list"][0]["createdTime"])
         dt = datetime.fromtimestamp(last_position_closed_unix_time / 1000)
@@ -62,7 +62,7 @@ class CheckFuturesMarginLevelBotBybitHelper:
                                                               toAccountType="CONTRACT")
         self.funding_dates.append(datetime.now())
         self.save_funding_dates_list(self.funding_dates)
-        logging.info("Response: {}".format(response))
+        logging.debug("Response create_internal_transfer: {}".format(response))
 
     def load_funding_dates_list(self) -> list:
         with open(self.funding_dates_json_path) as f:
