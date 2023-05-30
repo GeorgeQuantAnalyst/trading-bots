@@ -9,6 +9,7 @@
 
 -- medium priority
 * [x] Create BybitCloseTradesAtTimeBot: Bot closing pending orders and position at defined time. You can set close for all or specific currency pairs.
+* [] Logging rest response as DEBUG level
 
 -- low priority
 * [] Create BybitMaxOpenPositionsBot: Bot controlling the maximum number of open positions, if more than allowed limit, the newer positions will be closed.
