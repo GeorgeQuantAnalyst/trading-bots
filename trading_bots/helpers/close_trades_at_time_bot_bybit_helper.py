@@ -10,12 +10,12 @@ class CloseTradesAtTimeBotBybitHelper():
 
     def close_all_pending_orders_and_open_positions(self):
         logging.info("Get positions")
-        positions_response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY,
+        response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY,
                                                              settleCoin="USDT")
-        logging.info("Open positions response: {}".format(positions_response))
+        logging.debug("Response get_positions: {}".format(response))
 
         logging.info("Cancel all open positions")
-        for position in positions_response["result"]["list"]:
+        for position in response["result"]["list"]:
             self.pybit_client.place_order(
                 category=constants.BYBIT_LINEAR_CATEGORY,
                 symbol=position["symbol"],

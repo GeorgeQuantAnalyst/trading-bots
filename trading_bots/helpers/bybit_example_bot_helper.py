@@ -1,5 +1,7 @@
 from statistics import mean
 
+import logging
+
 from trading_bots.constants import BYBIT_LINEAR_CATEGORY
 
 
@@ -13,6 +15,9 @@ class BybitExampleBotHelper:
             category=BYBIT_LINEAR_CATEGORY,
             symbol="BTCUSDT"
         )
+
+        logging.debug("Response get_orderbook: {}".format(response))
+
         result = response["result"]
         bid = float(result["b"][0][0])
         ask = float(result["a"][0][0])

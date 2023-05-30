@@ -2,6 +2,8 @@ from trading_bots.templates.trend_screener_bot_helper import TrendScreenerBotHel
 from trading_bots import constants
 import pandas as pd
 
+import logging
+
 
 class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
 
@@ -11,6 +13,9 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
 
     def get_available_tickers(self):
         response = self.pybit_client.get_instruments_info(category=self.category)
+
+        logging.debug("Response get_instruments_info: {}".format(response))
+
         return [x["symbol"] for x in
                 response["result"]["list"] if "USDT" in x["symbol"]]
 
@@ -18,6 +23,8 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
         response = self.pybit_client.get_kline(category=self.category, symbol=ticker, interval=time_frame)
         ohlc = pd.DataFrame(response["result"]["list"],
                             columns=["startTime", "open", "high", "low", "close", "volume", "turnover"])
+
+        logging.debug("Response get_kline: {}".format(response))
 
         ohlc["open"] = pd.to_numeric(ohlc["open"])
         ohlc["high"] = pd.to_numeric(ohlc["high"])
