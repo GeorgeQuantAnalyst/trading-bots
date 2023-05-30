@@ -1,0 +1,8 @@
+base:
+  marginLevel: 10
+  fundingIntervalInMinutes: 120
+  fundingDatesJsonPath: trading_bots/data/funding_dates_intraday.json
+bybitApi:
+  testnet: True
+  apiKey:
+  secretKey:

@@ -5,6 +5,7 @@ from trading_bots.close_trades_at_time_bot_bybit import CloseTradesAtTimeBotBybi
 from trading_bots.crypto_trend_screener_bot import CryptoTrendScreenerBot
 from trading_bots.early_reaction_bot_bybit import EarlyReactionBotBybit
 from trading_bots.place_trailing_stops_bot_bybit import PlaceTrailingStopsBotBybit
+from trading_bots.check_futures_margin_level_bot_bybit import CheckFuturesMarginLevelBotBybit
 
 from trading_bots.forex_trend_screener_bot import ForexTrendScreenerBot
 from trading_bots.templates.bot import Bot
@@ -45,5 +46,7 @@ def create_bot(bot_name: str, config: dict) -> Bot:
             return CloseTradesAtTimeBotBybit(config)
         case "CloseTradesAtTimeBotBybitPosition":
             return CloseTradesAtTimeBotBybit(config)
+        case "CheckFuturesMarginLevelBotBybitIntraday":
+            return CheckFuturesMarginLevelBotBybit(config)
         case _:
             raise ValueError("Not supported bot_name: {}".format(bot_name))
