@@ -17,7 +17,7 @@ def load_config(config_file: str) -> dict:
             parsed_yaml = yaml.safe_load(stream)
             return parsed_yaml
         except yaml.YAMLError as exc:
-            print(exc)
+            raise exc
 
 
 def create_bot(bot_name: str, config: dict) -> Bot:
