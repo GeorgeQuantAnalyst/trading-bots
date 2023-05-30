@@ -16,7 +16,7 @@ class EarlyReactionBotBybitHelper:
     def get_pending_orders(self) -> list:
         logging.info("Get pending orders")
         response = self.pybit_client.get_open_orders(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
-        logging.debug("Pending orders response: {}".format(response))
+        logging.debug("Response get_open_orders: {}".format(response))
 
         return response["result"]["list"]
 
@@ -27,6 +27,8 @@ class EarlyReactionBotBybitHelper:
             interval=interval,
             limit=2
         )
+
+        logging.debug("Response get_kline: {}".format(response))
 
         last_bar = response["result"]["list"][1]
 
@@ -42,9 +44,9 @@ class EarlyReactionBotBybitHelper:
 
     def cancel_pending_order(self, order_id, symbol):
         logging.info("Cancel pending order with early reaction")
-        cancel_orders_response = self.pybit_client.cancel_order(category=constants.BYBIT_LINEAR_CATEGORY,
+        response = self.pybit_client.cancel_order(category=constants.BYBIT_LINEAR_CATEGORY,
                                                                 symbol=symbol, orderId=order_id)
-        logging.debug("Cancel orders response: {}".format(cancel_orders_response))
+        logging.debug("Response cancel_order: {}".format(response))
 
     def remove_not_exists_ids(self, before_entry_ids: list, pending_orders: list) -> None:
         ids = []

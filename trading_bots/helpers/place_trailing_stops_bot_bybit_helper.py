@@ -16,6 +16,9 @@ class PlaceTrailingStopsBotBybitHelper:
     def get_open_positions(self):
         response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
         positions = pd.DataFrame(response["result"]["list"])
+
+        logging.debug("Response get_positions: {}".format(response))
+
         return positions
 
     def calculate_trailing_stops(self, positions: pd.DataFrame):
