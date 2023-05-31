@@ -3,15 +3,15 @@ import logging
 from trading_bots import constants
 
 
-class CloseTradesAtTimeBotBybitHelper():
+class CloseTradesAtTimeBotBybitHelper:
 
     def __init__(self, pybit_client):
         self.pybit_client = pybit_client
 
-    def close_all_pending_orders_and_open_positions(self):
+    def close_all_pending_orders_and_open_positions(self) -> None:
         logging.info("Get positions")
         response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY,
-                                                             settleCoin="USDT")
+                                                   settleCoin="USDT")
         logging.debug("Response get_positions: {}".format(response))
 
         logging.info("Cancel all open positions")

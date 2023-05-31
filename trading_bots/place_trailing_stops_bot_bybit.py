@@ -10,7 +10,7 @@ class PlaceTrailingStopsBotBybit(BybitBot):
         super().__init__(config)
         self.helper = PlaceTrailingStopsBotBybitHelper(self.pybit_client)
 
-    def run(self):
+    def run(self) -> None:
         logging.info("Start PlaceTrailingStopsBotBybit")
 
         open_positions = self.helper.get_open_positions()

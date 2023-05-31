@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 
+
 class TrendScreenerBotHelper(ABC):
 
     @abstractmethod
@@ -8,10 +9,10 @@ class TrendScreenerBotHelper(ABC):
         pass
 
     @abstractmethod
-    def get_ohlc(self, ticker, time_frame):
+    def get_ohlc(self, ticker: str, time_frame: str) -> pd.DataFrame:
         pass
 
-    def load_ohlc_cache(self, tickers):
+    def load_ohlc_cache(self, tickers: list) -> dict:
         ohlc_cache = {
             "daily": {},
             "weekly": {},
@@ -30,7 +31,7 @@ class TrendScreenerBotHelper(ABC):
         return ohlc_cache
 
     @staticmethod
-    def calculate_percentage_change(ohlc, days):
+    def calculate_percentage_change(ohlc: pd.DataFrame, days: int) -> float:
         count_days = ohlc.shape[0] - 1
 
         actual_price = ohlc.loc[0]["close"]
@@ -39,7 +40,7 @@ class TrendScreenerBotHelper(ABC):
         return round(((actual_price - old_price) / old_price) * 100, 2)
 
     @staticmethod
-    def calculate_context(ohlc):
+    def calculate_context(ohlc: pd.DataFrame) -> str:
         ohlc_filtered = ohlc.head(4)
 
         if ohlc_filtered.shape[0] < 4:
@@ -67,7 +68,7 @@ class TrendScreenerBotHelper(ABC):
         return "Rotation"
 
     @staticmethod
-    def convert_daily_ohlc_to_weekly_ohlc(ohlc):
+    def convert_daily_ohlc_to_weekly_ohlc(ohlc: pd.DataFrame) -> pd.DataFrame:
         df = ohlc.copy()
         df['startTime'] = pd.to_datetime(df['startTime'])
         df.set_index('startTime', inplace=True)
@@ -79,7 +80,7 @@ class TrendScreenerBotHelper(ABC):
         return weekly_df
 
     @staticmethod
-    def convert_daily_ohlc_to_monthly_ohlc(ohlc):
+    def convert_daily_ohlc_to_monthly_ohlc(ohlc: pd.DataFrame) -> pd.DataFrame:
         df = ohlc.copy()
         df['startTime'] = pd.to_datetime(df['startTime'])
         df.set_index('startTime', inplace=True)

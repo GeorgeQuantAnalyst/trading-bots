@@ -12,10 +12,10 @@ class TrendScreenerBot(Bot):
         self.ticker_prefix = ""
         self.ticker_suffix = ""
 
-    def run(self):
+    def run(self) -> None:
         pass
 
-    def find_intraday_daily_trends(self, tickers, ohlc_cache):
+    def find_intraday_daily_trends(self, tickers: list, ohlc_cache: dict) -> pd.DataFrame:
         intraday_daily_trends = []
 
         for ticker in tickers:
@@ -29,7 +29,7 @@ class TrendScreenerBot(Bot):
 
         return pd.DataFrame(intraday_daily_trends)
 
-    def find_swing_weekly_trends(self, tickers, ohlc_cache):
+    def find_swing_weekly_trends(self, tickers: list, ohlc_cache: dict) -> pd.DataFrame:
         swing_weekly_trends = []
         for ticker in tickers:
             ohlc_daily = ohlc_cache["daily"][ticker]
@@ -42,7 +42,7 @@ class TrendScreenerBot(Bot):
             })
         return pd.DataFrame(swing_weekly_trends)
 
-    def find_swing_monthly_trends(self, tickers, ohlc_cache):
+    def find_swing_monthly_trends(self, tickers: list, ohlc_cache: dict) -> pd.DataFrame:
         swing_monthly_trends = []
         for ticker in tickers:
             ohlc_daily = ohlc_cache["daily"][ticker]
@@ -55,7 +55,11 @@ class TrendScreenerBot(Bot):
             })
         return pd.DataFrame(swing_monthly_trends)
 
-    def save_result_to_excel(self, intraday_daily_trends, swing_weekly_trends, swing_monthly_trends, excel_path: str):
+    def save_result_to_excel(self,
+                             intraday_daily_trends: pd.DataFrame,
+                             swing_weekly_trends: pd.DataFrame,
+                             swing_monthly_trends: pd.DataFrame,
+                             excel_path: str) -> None:
         writer = pd.ExcelWriter(excel_path, engine="openpyxl")
 
         intraday_daily_trends["ticker"] = self.ticker_prefix + intraday_daily_trends["ticker"] + self.ticker_suffix

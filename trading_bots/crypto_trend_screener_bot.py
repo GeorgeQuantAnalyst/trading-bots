@@ -18,7 +18,7 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
         self.ticker_prefix = "BYBIT:"
         self.ticker_suffix = ".P"
 
-    def run(self):
+    def run(self) -> None:
         logging.info("Start CryptoTrendScreenerBot")
 
         logging.info("Loading data")
