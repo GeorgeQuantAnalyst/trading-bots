@@ -66,8 +66,6 @@ class CheckFuturesMarginLevelBotBybitHelper:
 
         if response["retMsg"] == 'success':
             logging.info("Finished funding futures account from spot with amount: {} USDT".format(funding_amount))
-        else:
-            logging.info("Error in funding futures account from spot with amount: {} USDT".format(funding_amount))
 
     def load_funding_dates_list(self) -> list:
         with open(self.funding_dates_json_path) as f:
