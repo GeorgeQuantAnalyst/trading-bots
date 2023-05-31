@@ -13,7 +13,7 @@ class PlaceTrailingStopsBotBybitHelper:
         self.instruments_info = pybit_client.get_instruments_info(category=constants.BYBIT_LINEAR_CATEGORY)["result"][
             "list"]
 
-    def get_open_positions(self):
+    def get_open_positions(self) -> pd.DataFrame:
         response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
         positions = pd.DataFrame(response["result"]["list"])
 
@@ -21,7 +21,7 @@ class PlaceTrailingStopsBotBybitHelper:
 
         return positions
 
-    def calculate_trailing_stops(self, positions: pd.DataFrame):
+    def calculate_trailing_stops(self, positions: pd.DataFrame) -> None:
         positions["avgPrice"] = pd.to_numeric(positions["avgPrice"])
         positions["stopLoss"] = pd.to_numeric(positions["stopLoss"])
 
@@ -63,5 +63,5 @@ class PlaceTrailingStopsBotBybitHelper:
         return int(price_scale[0]) if any(price_scale) else self.DEFAULT_PRICE_SCALE
 
     @staticmethod
-    def _is_active_trailing_stop(position) -> bool:
+    def _is_active_trailing_stop(position: pd.Series) -> bool:
         return float(position["trailingStop"]) > 0

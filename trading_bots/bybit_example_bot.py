@@ -11,7 +11,7 @@ class BybitExampleBot(BybitBot):
 
         self.helper = BybitExampleBotHelper(self.pybit_client)
 
-    def run(self):
+    def run(self) -> None:
         logging.info("Start BybitExampleBot")
 
         logging.info("Get BTCUSDT current price from exchange")

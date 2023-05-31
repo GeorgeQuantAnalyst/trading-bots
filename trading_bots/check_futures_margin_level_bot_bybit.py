@@ -14,8 +14,8 @@ class CheckFuturesMarginLevelBotBybit(BybitBot):
         self.margin_level = config["base"]["marginLevel"]
         self.funding_interval_in_minutes = config["base"]["fundingIntervalInMinutes"]
 
-    def run(self):
-        print("Start CheckFuturesMarginLevelBotBybit")
+    def run(self) -> None:
+        logging.info("Start CheckFuturesMarginLevelBotBybit")
 
         available_balance = self.helper.get_available_balance_on_futures_account()
 
@@ -27,7 +27,7 @@ class CheckFuturesMarginLevelBotBybit(BybitBot):
             msg = "Available balance on futures account is OK. [availableBalance: {}, marginLevel: {}]"
             logging.info(msg.format(available_balance, self.margin_level))
 
-        print("Finished CheckFuturesMarginLevelBotBybit")
+        logging.info("Finished CheckFuturesMarginLevelBotBybit")
 
     def funding_futures_account(self, available_balance: float) -> None:
         if self.helper.is_open_positions():

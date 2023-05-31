@@ -15,11 +15,11 @@ class ForexTrendScreenerBotHelper(TrendScreenerBotHelper):
         self.foreign_exchange = foreign_exchange
         self.tickers_csv_path = tickers_csv_path
 
-    def get_available_tickers(self):
+    def get_available_tickers(self) -> list:
         df = pd.read_csv(self.tickers_csv_path)
         return df["Ticker"].tolist()
 
-    def get_ohlc(self, ticker, time_frame):
+    def get_ohlc(self, ticker: str, time_frame: str) -> pd.DataFrame:
         try:
             from_symbol = ticker[0:3]
             to_symbol = ticker[3:6]

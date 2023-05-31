@@ -42,13 +42,14 @@ class EarlyReactionBotBybitHelper:
             "turnover": float(last_bar[6])
         }
 
-    def cancel_pending_order(self, order_id, symbol):
+    def cancel_pending_order(self, order_id: str, symbol: str) -> None:
         logging.info("Cancel pending order with early reaction")
         response = self.pybit_client.cancel_order(category=constants.BYBIT_LINEAR_CATEGORY,
-                                                                symbol=symbol, orderId=order_id)
+                                                  symbol=symbol, orderId=order_id)
         logging.debug("Response cancel_order: {}".format(response))
 
-    def remove_not_exists_ids(self, before_entry_ids: list, pending_orders: list) -> None:
+    @staticmethod
+    def remove_not_exists_ids(before_entry_ids: list, pending_orders: list) -> None:
         ids = []
         not_exists_ids = []
 
@@ -64,12 +65,12 @@ class EarlyReactionBotBybitHelper:
             before_entry_ids.remove(not_exists_id)
             logging.info("Removing not existing id: {}".format(not_exists_id))
 
-    def load_before_entry_ids_list(self):
+    def load_before_entry_ids_list(self) -> list:
         with open(self.before_entry_ids_json_path) as f:
             content = f.read()
             if content:
                 return json.loads(content)
 
-    def save_before_entry_ids_list(self, before_entry_ids):
+    def save_before_entry_ids_list(self, before_entry_ids: list) -> None:
         with open(self.before_entry_ids_json_path, 'w') as f:
             json.dump(before_entry_ids, f, indent=4)

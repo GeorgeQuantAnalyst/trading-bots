@@ -11,7 +11,7 @@ class EarlyReactionBotBybit(BybitBot):
         self.before_entry_ids = self.helper.load_before_entry_ids_list()
         logging.info("Before entry ids: {}".format(self.before_entry_ids))
 
-    def run(self):
+    def run(self) -> None:
         logging.info("Start EarlyReactionBotBybit")
 
         pending_orders = self.helper.get_pending_orders()

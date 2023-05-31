@@ -7,5 +7,5 @@ class Bot(ABC):
         self.config = config
 
     @abstractmethod
-    def run(self):
+    def run(self) -> None:
         pass

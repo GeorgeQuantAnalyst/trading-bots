@@ -10,7 +10,7 @@ class BybitExampleBotHelper:
     def __init__(self, exchange):
         self.exchange = exchange
 
-    def get_btc_current_price(self):
+    def get_btc_current_price(self) -> float:
         response = self.exchange.get_orderbook(
             category=BYBIT_LINEAR_CATEGORY,
             symbol="BTCUSDT"

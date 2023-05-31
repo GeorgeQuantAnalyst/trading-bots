@@ -1,8 +1,9 @@
-from trading_bots.templates.trend_screener_bot_helper import TrendScreenerBotHelper
-from trading_bots import constants
+import logging
+
 import pandas as pd
 
-import logging
+from trading_bots import constants
+from trading_bots.templates.trend_screener_bot_helper import TrendScreenerBotHelper
 
 
 class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
@@ -11,7 +12,7 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
         self.pybit_client = pybit_client
         self.category = constants.BYBIT_LINEAR_CATEGORY
 
-    def get_available_tickers(self):
+    def get_available_tickers(self) -> list:
         response = self.pybit_client.get_instruments_info(category=self.category)
 
         logging.debug("Response get_instruments_info: {}".format(response))
@@ -19,7 +20,7 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
         return [x["symbol"] for x in
                 response["result"]["list"] if "USDT" in x["symbol"]]
 
-    def get_ohlc(self, ticker, time_frame):
+    def get_ohlc(self, ticker: str, time_frame: str) -> pd.DataFrame:
         response = self.pybit_client.get_kline(category=self.category, symbol=ticker, interval=time_frame)
         ohlc = pd.DataFrame(response["result"]["list"],
                             columns=["startTime", "open", "high", "low", "close", "volume", "turnover"])
@@ -35,5 +36,3 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
         ohlc["startTime"] = pd.to_numeric(ohlc["startTime"])
         ohlc['startTime'] = pd.to_datetime(ohlc["startTime"], unit='ms')
         return ohlc
-
-

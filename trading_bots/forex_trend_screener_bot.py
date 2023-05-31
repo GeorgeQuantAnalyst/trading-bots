@@ -16,7 +16,7 @@ class ForexTrendScreenerBot(TrendScreenerBot):
 
         self.ticker_prefix = "FX_IDC:"
 
-    def run(self):
+    def run(self) -> None:
         logging.info("Start ForexTrendScreenerBot")
 
         logging.info("Loading data")

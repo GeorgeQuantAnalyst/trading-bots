@@ -13,7 +13,7 @@ class CloseTradesAtTimeBotBybit(BybitBot):
         super().__init__(config)
         self.helper = CloseTradesAtTimeBotBybitHelper(self.pybit_client)
 
-    def run(self):
+    def run(self) -> None:
         logging.info("Start CloseTradesAtTimeBotBybit")
 
         hours = self.config["base"]["hours"]
