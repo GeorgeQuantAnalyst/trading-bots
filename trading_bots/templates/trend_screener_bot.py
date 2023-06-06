@@ -72,15 +72,19 @@ class TrendScreenerBot(Bot):
                              intraday_daily_trends: pd.DataFrame,
                              swing_weekly_trends: pd.DataFrame,
                              swing_monthly_trends: pd.DataFrame,
+                             position_quarterly_trends: pd.DataFrame,
                              excel_path: str) -> None:
         writer = pd.ExcelWriter(excel_path, engine="openpyxl")
 
         intraday_daily_trends["ticker"] = self.ticker_prefix + intraday_daily_trends["ticker"] + self.ticker_suffix
         swing_weekly_trends["ticker"] = self.ticker_prefix + swing_weekly_trends["ticker"] + self.ticker_suffix
         swing_monthly_trends["ticker"] = self.ticker_prefix + swing_monthly_trends["ticker"] + self.ticker_suffix
+        position_quarterly_trends["ticker"] = self.ticker_prefix + position_quarterly_trends[
+            "ticker"] + self.ticker_suffix
 
         intraday_daily_trends.to_excel(writer, sheet_name="Intraday D trends", index=False)
         swing_weekly_trends.to_excel(writer, sheet_name="Swing W trends", index=False)
         swing_monthly_trends.to_excel(writer, sheet_name="Swing M trends", index=False)
+        position_quarterly_trends.to_excel(writer, sheet_name="Position 3M trends", index=False)
 
         writer.close()

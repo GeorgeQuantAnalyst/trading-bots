@@ -59,13 +59,20 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
         now = datetime.now().strftime("%Y%m%d")
         reports_folder = self.config["base"]["reportsFolder"]
         excel_path = "{}/CryptoTrendScreener_{}.xlsx".format(reports_folder, now)
-        self.save_result_to_excel(intraday_daily_trends, swing_weekly_trends, swing_monthly_trends, excel_path) #TODO add quarterly Lucka
+        self.save_result_to_excel(intraday_daily_trends, swing_weekly_trends, swing_monthly_trends,
+                                  position_quarterly_trends, excel_path)
 
         logging.info("Create TradingView trends report")
         swing_weekly_trends_report_path = "{}/CryptoSwingWeeklyTrends_{}.txt".format(reports_folder, now)
         swing_weekly_trends_report = self.helper.create_tw_report_weekly_trends(swing_weekly_trends)
         self.helper.save_tw_report(swing_weekly_trends_report, swing_weekly_trends_report_path)
 
-        # TODO: @Lucka M, 3M trends for TW report
+        swing_monthly_trends_report_path = "{}/CryptoSwingMonthlyTrends_{}.txt".format(reports_folder, now)
+        swing_monthly_trends_report = self.helper.create_tw_report_monthly_trends(swing_monthly_trends)
+        self.helper.save_tw_report(swing_monthly_trends_report, swing_monthly_trends_report_path)
+
+        position_quarterly_trends_report_path = "{}/CryptoPositionQuarterlyTrends_{}.txt".format(reports_folder, now)
+        position_quarterly_trends_report = self.helper.create_tw_report_quarterly_trends(position_quarterly_trends)
+        self.helper.save_tw_report(position_quarterly_trends_report, position_quarterly_trends_report_path)
 
         logging.info("Finished CryptoTrendScreenerBot")
