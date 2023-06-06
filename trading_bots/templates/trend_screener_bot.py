@@ -55,6 +55,19 @@ class TrendScreenerBot(Bot):
             })
         return pd.DataFrame(swing_monthly_trends)
 
+    def find_position_quarterly_trends(self, tickers: list, ohlc_cache: dict) -> pd.DataFrame:
+        position_quarterly_trends = []
+        for ticker in tickers:
+            ohlc_daily = ohlc_cache["daily"][ticker]
+            ohlc_quarterly = ohlc_cache["quarterly"][ticker]
+
+            position_quarterly_trends.append({
+                "ticker": ticker,
+                "Change 90 days, %": self.helper.calculate_percentage_change(ohlc=ohlc_daily, days=90),
+                "Context 3M": self.helper.calculate_context(ohlc_quarterly)
+            })
+        return pd.DataFrame(position_quarterly_trends)
+
     def save_result_to_excel(self,
                              intraday_daily_trends: pd.DataFrame,
                              swing_weekly_trends: pd.DataFrame,

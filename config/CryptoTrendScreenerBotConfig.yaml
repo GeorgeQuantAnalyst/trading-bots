@@ -1,2 +1,5 @@
 base:
+    dailyVolumeInUsdAboveFilterIntraday: 5000000
+    dailyVolumeInUsdAboveFilterSwing: 2000000
+    dailyVolumeInUsdAboveFilterPosition: 2000000
     reportsFolder: reports/cryptoTrendScreener
