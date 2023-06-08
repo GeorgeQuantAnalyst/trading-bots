@@ -100,7 +100,7 @@ class TrendScreenerBotHelper(ABC):
         df['startTime'] = pd.to_datetime(df['startTime'])
         df.set_index('startTime', inplace=True)
 
-        quarterly_df = df.resample('3M').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'})
+        quarterly_df = df.resample('Q').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'})
         quarterly_df = quarterly_df[::-1].reset_index()
         quarterly_df.columns = ['startTime', 'open', 'high', 'low', 'close']
 
