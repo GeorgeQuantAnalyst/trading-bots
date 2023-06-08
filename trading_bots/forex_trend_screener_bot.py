@@ -33,10 +33,14 @@ class ForexTrendScreenerBot(TrendScreenerBot):
         logging.info("Find swing monthly trends")
         swing_monthly_trends = self.find_swing_monthly_trends(tickers, ohlc_cache)
 
+        logging.info("FInd position quarterly trends")
+        position_quarterly_trends = self.find_position_quarterly_trends(tickers, ohlc_cache)
+
         logging.info("Save result to excel file")
         now = datetime.now().strftime("%Y%m%d")
         reports_folder = self.config["base"]["reportsFolder"]
         excel_path = "{}/ForexTrendScreener_{}.xlsx".format(reports_folder, now)
-        self.save_result_to_excel(intraday_daily_trends, swing_weekly_trends, swing_monthly_trends, excel_path)
+        self.save_result_to_excel(intraday_daily_trends, swing_weekly_trends, swing_monthly_trends,
+                                  position_quarterly_trends, excel_path)
 
         logging.info("Finished ForexTrendScreenerBot")

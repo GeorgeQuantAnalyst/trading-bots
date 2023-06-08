@@ -16,17 +16,20 @@ class TrendScreenerBotHelper(ABC):
         ohlc_cache = {
             "daily": {},
             "weekly": {},
-            "monthly": {}
+            "monthly": {},
+            "quarterly": {}
         }
 
         for ticker in tickers:
             ohlc_daily = self.get_ohlc(ticker, "D")
             ohlc_weekly = self.convert_daily_ohlc_to_weekly_ohlc(ohlc_daily)
-            ohlc_monthly = self.convert_daily_ohlc_to_monthly_ohlc(ohlc_daily)
+            ohlc_monthly = self.get_ohlc(ticker, "M")
+            ohlc_quarterly = self.convert_monthly_ohlc_to_quarterly_ohlc(ohlc_monthly)
 
             ohlc_cache["daily"][ticker] = ohlc_daily
             ohlc_cache["weekly"][ticker] = ohlc_weekly
             ohlc_cache["monthly"][ticker] = ohlc_monthly
+            ohlc_cache["quarterly"][ticker] = ohlc_quarterly
 
         return ohlc_cache
 
@@ -90,3 +93,15 @@ class TrendScreenerBotHelper(ABC):
         monthly_df.columns = ['startTime', 'open', 'high', 'low', 'close']
 
         return monthly_df
+
+    @staticmethod
+    def convert_monthly_ohlc_to_quarterly_ohlc(ohlc: pd.DataFrame) -> pd.DataFrame:
+        df = ohlc.copy()
+        df['startTime'] = pd.to_datetime(df['startTime'])
+        df.set_index('startTime', inplace=True)
+
+        quarterly_df = df.resample('Q').agg({'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last'})
+        quarterly_df = quarterly_df[::-1].reset_index()
+        quarterly_df.columns = ['startTime', 'open', 'high', 'low', 'close']
+
+        return quarterly_df
