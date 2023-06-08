@@ -1,8 +1,7 @@
 # Trading bots
 
 This repository contains trading bots for Automate trading (Trading bots can execute trades automatically based on predefined rules and strategies) 
-and Risk management (Trading bots can incorporate risk management techniques, such as setting stop-loss orders or position sizing, to manage potential losses).
-All trading bots are written in Python programming language.
+and Risk management (Trading bots can incorporate risk management techniques, such as setting stop-loss orders or position sizing, to manage potential losses) in crypto futures market. All trading bots are written in Python programming language.
 
 ## Developed bots
 * **CryptoTrendScreenerBot**:  trading bot for searching the intraday, swing trends on the USDT perpetual futures markets of the Bybit exchange.
