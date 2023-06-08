@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 from pybit.unified_trading import HTTP
 
@@ -12,13 +11,8 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
     def __init__(self, config: dict):
         self.pybit_client = HTTP()
         self.helper = CryptoTrendScreenerBotHelper(self.pybit_client)
-
         super().__init__(config, self.helper)
 
-        self.ticker_prefix = "BYBIT:"
-        self.ticker_suffix = ".P"
-
-        self.daily_volume_in_usd_above_filter_intraday = self.config["base"]["dailyVolumeInUsdAboveFilterIntraday"]
         self.daily_volume_in_usd_above_filter_swing = self.config["base"]["dailyVolumeInUsdAboveFilterSwing"]
         self.daily_volume_in_usd_above_filter_position = self.config["base"]["dailyVolumeInUsdAboveFilterPosition"]
 
@@ -26,12 +20,11 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
         logging.info("Start CryptoTrendScreenerBot")
 
         logging.info("Loading data")
+        logging.info("Loading tickers")
         tickers = self.helper.get_available_tickers()
+        logging.info("Loading OHLC cache")
         ohlc_cache = self.helper.load_ohlc_cache(tickers)
 
-        tickers_intraday = self.helper.filter_tickers(tickers,
-                                                      self.daily_volume_in_usd_above_filter_intraday,
-                                                      ohlc_cache)
         tickers_swing = self.helper.filter_tickers(tickers,
                                                    self.daily_volume_in_usd_above_filter_swing,
                                                    ohlc_cache)
@@ -39,12 +32,10 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
                                                       self.daily_volume_in_usd_above_filter_position,
                                                       ohlc_cache)
 
-        logging.debug("Tickers intraday: {}".format(tickers_intraday))
-        logging.debug("Tickers swing: {}".format(tickers_swing))
-        logging.debug("Tickers position: {}".format(tickers_position))
-
-        logging.info("Find intraday daily trends")
-        intraday_daily_trends = self.find_intraday_daily_trends(tickers_intraday, ohlc_cache)
+        logging.debug("Swing filter - above {} daily volume in usd is {} tickers.".format(
+            self.daily_volume_in_usd_above_filter_swing, len(tickers_swing)))
+        logging.debug("Position filter - above {} daily volume in usd is {} tickers.".format(
+            self.daily_volume_in_usd_above_filter_position, len(tickers_position)))
 
         logging.info("Find swing weekly trends")
         swing_weekly_trends = self.find_swing_weekly_trends(tickers_swing, ohlc_cache)
@@ -55,24 +46,9 @@ class CryptoTrendScreenerBot(TrendScreenerBot):
         logging.info("Find position quarterly trends")
         position_quarterly_trends = self.find_position_quarterly_trends(tickers_position, ohlc_cache)
 
-        logging.info("Save result to excel file")
-        now = datetime.now().strftime("%Y%m%d")
-        reports_folder = self.config["base"]["reportsFolder"]
-        excel_path = "{}/CryptoTrendScreener_{}.xlsx".format(reports_folder, now)
-        self.save_result_to_excel(intraday_daily_trends, swing_weekly_trends, swing_monthly_trends,
-                                  position_quarterly_trends, excel_path)
-
         logging.info("Create TradingView trends report")
-        swing_weekly_trends_report_path = "{}/CryptoSwingWeeklyTrends_{}.txt".format(reports_folder, now)
-        swing_weekly_trends_report = self.helper.create_tw_report_weekly_trends(swing_weekly_trends)
-        self.helper.save_tw_report(swing_weekly_trends_report, swing_weekly_trends_report_path)
-
-        swing_monthly_trends_report_path = "{}/CryptoSwingMonthlyTrends_{}.txt".format(reports_folder, now)
-        swing_monthly_trends_report = self.helper.create_tw_report_monthly_trends(swing_monthly_trends)
-        self.helper.save_tw_report(swing_monthly_trends_report, swing_monthly_trends_report_path)
-
-        position_quarterly_trends_report_path = "{}/CryptoPositionQuarterlyTrends_{}.txt".format(reports_folder, now)
-        position_quarterly_trends_report = self.helper.create_tw_report_quarterly_trends(position_quarterly_trends)
-        self.helper.save_tw_report(position_quarterly_trends_report, position_quarterly_trends_report_path)
+        reports_folder = self.config["base"]["reportsFolder"]
+        self.helper.create_tw_trends_report(swing_weekly_trends, swing_monthly_trends, position_quarterly_trends,
+                                            reports_folder)
 
         logging.info("Finished CryptoTrendScreenerBot")

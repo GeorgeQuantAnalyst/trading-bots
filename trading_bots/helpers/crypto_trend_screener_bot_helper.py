@@ -52,6 +52,26 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
 
         return filtered_tickers
 
+    def create_tw_trends_report(self, swing_weekly_trends: pd.DataFrame,
+                                swing_monthly_trends: pd.DataFrame,
+                                position_quarterly_trends: pd.DataFrame,
+                                reports_folder: str) -> None:
+        swing_weekly_trends["ticker"] = "BYBIT:" + swing_weekly_trends["ticker"] + ".P"
+        swing_monthly_trends["ticker"] = "BYBIT:" + swing_monthly_trends["ticker"] + ".P"
+        position_quarterly_trends["ticker"] = "BYBIT:" + position_quarterly_trends["ticker"] + ".P"
+
+        swing_weekly_trends_report_path = "{}/Crypto swing W trends.txt".format(reports_folder)
+        swing_weekly_trends_report = self.create_tw_report_weekly_trends(swing_weekly_trends)
+        self.save_tw_report(swing_weekly_trends_report, swing_weekly_trends_report_path)
+
+        swing_monthly_trends_report_path = "{}/Crypto swing M trends.txt".format(reports_folder)
+        swing_monthly_trends_report = self.create_tw_report_monthly_trends(swing_monthly_trends)
+        self.save_tw_report(swing_monthly_trends_report, swing_monthly_trends_report_path)
+
+        position_quarterly_trends_report_path = "{}/Crypto position 3M trends.txt".format(reports_folder)
+        position_quarterly_trends_report = self.create_tw_report_quarterly_trends(position_quarterly_trends)
+        self.save_tw_report(position_quarterly_trends_report, position_quarterly_trends_report_path)
+
     @staticmethod
     def create_tw_report_weekly_trends(trends: pd.DataFrame) -> str:
         report = []
