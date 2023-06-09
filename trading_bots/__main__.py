@@ -29,5 +29,7 @@ if __name__ == "__main__":
         config = load_config(config_file_path)
         bot = create_bot(bot_name, config)
         bot.run()
-    except:
+    except SystemExit as e:
+        logging.warning("Close application with code: {}".format(str(e)))
+    except Exception as e:
         logging.exception("Error in app: ")

@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import pandas as pd
 
@@ -14,7 +15,12 @@ class PlaceTrailingStopsBotBybitHelper:
             "list"]
 
     def get_open_positions(self) -> pd.DataFrame:
-        response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
+        try:
+            response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
+        except Exception as e:
+            logging.error("Failed call method get_positions on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
         positions = pd.DataFrame(response["result"]["list"])
 
         logging.debug("Response get_positions: {}".format(response))
@@ -38,7 +44,7 @@ class PlaceTrailingStopsBotBybitHelper:
                     position["symbol"], position["side"]))
                 continue
 
-            if position["isSetStopLoss"] == False:
+            if position["isSetStopLoss"] is False:
                 logging.error(
                     "The Position {}-{} does not have a hard stop loss set. Job cannot set traling stop loss.".format(
                         position["symbol"], position["side"]))
@@ -55,8 +61,10 @@ class PlaceTrailingStopsBotBybitHelper:
                 logging.info("Successfull place trailing stop for position {}-{}".format(
                     position["symbol"], position["side"]))
             except Exception as e:
-                logging.exception("Problem with place trailing stop for {}-{} on exchange Bybit".format(
+                logging.error("Failed call method set_trading_stop on pybit client: {}".format(str(e)))
+                logging.error("Problem with place trailing stop for {}-{} on exchange Bybit".format(
                     position["symbol"], position["side"]))
+                sys.exit(-1)
 
     def _get_price_scale(self, ticker: str) -> float:
         price_scale = [x["priceScale"] for x in self.instruments_info if x["symbol"] == ticker]

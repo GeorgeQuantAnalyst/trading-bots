@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import json
 
@@ -15,18 +16,27 @@ class EarlyReactionBotBybitHelper:
 
     def get_pending_orders(self) -> list:
         logging.info("Get pending orders")
-        response = self.pybit_client.get_open_orders(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
+        try:
+            response = self.pybit_client.get_open_orders(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
+        except Exception as e:
+            logging.error("Failed call method get_open_orders on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
         logging.debug("Response get_open_orders: {}".format(response))
 
         return response["result"]["list"]
 
     def get_last_closed_bar(self, ticker: str, interval: int = 1) -> dict:
-        response = self.pybit_client.get_kline(
-            symbol=ticker,
-            category=constants.BYBIT_LINEAR_CATEGORY,
-            interval=interval,
-            limit=2
-        )
+        try:
+            response = self.pybit_client.get_kline(
+                symbol=ticker,
+                category=constants.BYBIT_LINEAR_CATEGORY,
+                interval=interval,
+                limit=2
+            )
+        except Exception as e:
+            logging.error("Failed call method get_kline on pybit client: {}".format(str(e)))
+            sys.exit(-1)
 
         logging.debug("Response get_kline: {}".format(response))
 
@@ -44,8 +54,13 @@ class EarlyReactionBotBybitHelper:
 
     def cancel_pending_order(self, order_id: str, symbol: str) -> None:
         logging.info("Cancel pending order with early reaction")
-        response = self.pybit_client.cancel_order(category=constants.BYBIT_LINEAR_CATEGORY,
+        try:
+            response = self.pybit_client.cancel_order(category=constants.BYBIT_LINEAR_CATEGORY,
                                                   symbol=symbol, orderId=order_id)
+        except Exception as e:
+            logging.error("Failed call method cancel_order on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
         logging.debug("Response cancel_order: {}".format(response))
 
     @staticmethod
