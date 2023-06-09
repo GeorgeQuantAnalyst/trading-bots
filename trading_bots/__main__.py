@@ -31,6 +31,5 @@ if __name__ == "__main__":
         bot.run()
     except SystemExit as e:
         logging.warning("Close application with code: {}".format(str(e)))
-        pass
     except Exception as e:
         logging.exception("Error in app: ")
