@@ -38,7 +38,7 @@ class PlaceTrailingStopsBotBybitHelper:
                     position["symbol"], position["side"]))
                 continue
 
-            if position["isSetStopLoss"] == False:
+            if position["isSetStopLoss"] is False:
                 logging.error(
                     "The Position {}-{} does not have a hard stop loss set. Job cannot set traling stop loss.".format(
                         position["symbol"], position["side"]))
@@ -54,7 +54,7 @@ class PlaceTrailingStopsBotBybitHelper:
                 )
                 logging.info("Successfull place trailing stop for position {}-{}".format(
                     position["symbol"], position["side"]))
-            except Exception as e:
+            except Exception:
                 logging.exception("Problem with place trailing stop for {}-{} on exchange Bybit".format(
                     position["symbol"], position["side"]))
 

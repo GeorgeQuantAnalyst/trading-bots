@@ -9,7 +9,7 @@ and Risk management (Trading bots can incorporate risk management techniques, su
 * **PlaceTrailingStopsBotBybit**: trading bot for entering a trailing stop loss based on open futures positions on the Bybit exchange.
 * **EarlyReactionBotBybit**: trading bot for close early reaction trades (A trade where the price reaches 33% before entry and then the market turns to profit).
 * **CloseTradesAtTimeBotBybit**: trading bot closing pending orders and position at defined time.
-* **CheckFuturesMarginLevelBotBybit**: trading bot checking sufficient margin on the futures exchange, if the margin is below the specified limit, then after the expiration of a defined time intervalthe bot fund futures account on defined level.
+* **CheckFuturesMarginLevelBotBybit**: trading bot checking sufficient margin on the futures exchange, if the margin is below the specified limit, then after the expiration of a defined time interval the bot fund futures account on defined level.
 
 ## Development
 Application is actively maintenance and develop.

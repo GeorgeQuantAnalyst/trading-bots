@@ -1,6 +1,7 @@
 import json
 import logging
 import uuid
+import sys
 
 from datetime import datetime
 
@@ -15,11 +16,16 @@ class CheckFuturesMarginLevelBotBybitHelper:
         self.funding_dates = self.load_funding_dates_list()
 
     def get_available_balance_on_futures_account(self) -> float:
-        response = self.pybit_client.get_wallet_balance(
-            accountType="CONTRACT",
-            coin="USDT")
-        logging.debug("Response get_wallet_balance: {}".format(response))
+        try:
+            response = self.pybit_client.get_wallet_balance(
+                accountType="CONTRACT",
+                coin="USDT")
 
+        except Exception as e:
+            logging.error("Failed call method get_wallet_balance on pybit client. {}".format(str(e)))
+            sys.exit(-1)
+
+        logging.debug("Response get_wallet_balance: {}".format(response))
         total_balance = float(response["result"]["list"][0]["coin"][0]["walletBalance"])
         free_balance = float(response["result"]["list"][0]["coin"][0]["availableToWithdraw"])
 

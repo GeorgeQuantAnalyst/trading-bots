@@ -9,3 +9,6 @@ class BybitBot(Bot):
         self.pybit_client = HTTP(testnet=config["bybitApi"]["testnet"],
                                  api_key=config["bybitApi"]["apiKey"],
                                  api_secret=config["bybitApi"]["secretKey"])
+
+    def run(self) -> None:
+        pass
