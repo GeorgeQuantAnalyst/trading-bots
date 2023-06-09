@@ -18,7 +18,7 @@ class BybitExampleBotHelper:
                 symbol="BTCUSDT"
             )
         except Exception as e:
-            logging.error("Failed call method get_orderBook on exchange api: {}".format(str(e)))
+            logging.error("Failed call method get_orderbook on exchange api: {}".format(str(e)))
             sys.exit(-1)
 
         logging.debug("Response get_orderbook: {}".format(response))

@@ -22,7 +22,7 @@ class CheckFuturesMarginLevelBotBybitHelper:
                 coin="USDT")
 
         except Exception as e:
-            logging.error("Failed call method get_wallet_balance on pybit client. {}".format(str(e)))
+            logging.error("Failed call method get_wallet_balance on pybit client: {}".format(str(e)))
             sys.exit(-1)
 
         logging.debug("Response get_wallet_balance: {}".format(response))
@@ -36,7 +36,12 @@ class CheckFuturesMarginLevelBotBybitHelper:
         return total_balance
 
     def is_open_positions(self) -> bool:
-        response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
+        try:
+            response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY, settleCoin="USDT")
+        except Exception as e:
+            logging.error("Failed call method get_positions on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
         logging.debug("Response get_positions: {}".format(response))
         return len(response["result"]["list"]) > 0
 
