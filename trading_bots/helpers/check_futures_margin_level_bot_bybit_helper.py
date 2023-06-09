@@ -55,7 +55,12 @@ class CheckFuturesMarginLevelBotBybitHelper:
         return last_funding_date.year == now.year and last_funding_date.month == now.month and last_funding_date.day == now.day
 
     def get_last_position_close_date(self) -> datetime:
-        response = self.pybit_client.get_closed_pnl(category=constants.BYBIT_LINEAR_CATEGORY, limit=1)
+        try:
+            response = self.pybit_client.get_closed_pnl(category=constants.BYBIT_LINEAR_CATEGORY, limit=1)
+        except Exception as e:
+            logging.error("Failed call method get_closed_pnl on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
         logging.debug("Response get_closed_pnl: {}".format(response))
 
         last_position_closed_unix_time = float(response["result"]["list"][0]["updatedTime"])
@@ -66,13 +71,18 @@ class CheckFuturesMarginLevelBotBybitHelper:
     def funding_futures_account(self, margin_level: float, available_balance: float) -> None:
         funding_amount = round(margin_level - available_balance, 2) + 0.1
         logging.info("Start funding futures account from spot with amount: {} USDT".format(funding_amount))
-        response = self.pybit_client.create_internal_transfer(transferId=str(uuid.uuid4()),
-                                                              coin="USDT",
-                                                              amount=str(funding_amount),
-                                                              fromAccountType="SPOT",
-                                                              toAccountType="CONTRACT")
-        self.funding_dates.append(datetime.now())
-        self.save_funding_dates_list(self.funding_dates)
+        try:
+            response = self.pybit_client.create_internal_transfer(transferId=str(uuid.uuid4()),
+                                                                  coin="USDT",
+                                                                  amount=str(funding_amount),
+                                                                  fromAccountType="SPOT",
+                                                                  toAccountType="CONTRACT")
+            self.funding_dates.append(datetime.now())
+            self.save_funding_dates_list(self.funding_dates)
+        except Exception as e:
+            logging.error("Failed call method create_internal_transfer on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
         logging.debug("Response create_internal_transfer: {}".format(response))
 
         if response["retMsg"] == 'success':

@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import pandas as pd
 
@@ -13,7 +14,11 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
         self.category = constants.BYBIT_LINEAR_CATEGORY
 
     def get_available_tickers(self) -> list:
-        response = self.pybit_client.get_instruments_info(category=self.category)
+        try:
+            response = self.pybit_client.get_instruments_info(category=self.category)
+        except Exception as e:
+            logging.error("Failed call method get_instruments_info on pybit client: {}".format(str(e)))
+            sys.exit(-1)
 
         logging.debug("Response get_instruments_info: {}".format(response))
 
@@ -21,7 +26,12 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
                 response["result"]["list"] if "USDT" in x["symbol"]]
 
     def get_ohlc(self, ticker: str, time_frame: str) -> pd.DataFrame:
-        response = self.pybit_client.get_kline(category=self.category, symbol=ticker, interval=time_frame)
+        try:
+            response = self.pybit_client.get_kline(category=self.category, symbol=ticker, interval=time_frame)
+        except Exception as e:
+            logging.error("Failed call method get_kline on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
         ohlc = pd.DataFrame(response["result"]["list"],
                             columns=["startTime", "open", "high", "low", "close", "volume", "turnover"])
 
