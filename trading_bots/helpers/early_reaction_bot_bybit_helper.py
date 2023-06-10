@@ -10,6 +10,7 @@ class EarlyReactionBotBybitHelper:
 
     def __init__(self, pybit_client, before_entry_ids_json_path):
         self.pybit_client = pybit_client
+        # TODO: @Lucka handle exception
         self.instruments_info = pybit_client.get_instruments_info(category=constants.BYBIT_LINEAR_CATEGORY)["result"][
             "list"]
         self.before_entry_ids_json_path = before_entry_ids_json_path

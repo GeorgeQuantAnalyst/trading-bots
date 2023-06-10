@@ -11,6 +11,8 @@ class PlaceTrailingStopsBotBybitHelper:
 
     def __init__(self, pybit_client):
         self.pybit_client = pybit_client
+
+        # TODO: @Lucka handle exception
         self.instruments_info = pybit_client.get_instruments_info(category=constants.BYBIT_LINEAR_CATEGORY)["result"][
             "list"]
 
