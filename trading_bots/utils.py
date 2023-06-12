@@ -1,9 +1,11 @@
+import pandas as pd
 import yaml
 
 from trading_bots.bybit_example_bot import BybitExampleBot
 from trading_bots.close_trades_at_time_bot_bybit import CloseTradesAtTimeBotBybit
 from trading_bots.crypto_trend_screener_bot import CryptoTrendScreenerBot
 from trading_bots.early_reaction_bot_bybit import EarlyReactionBotBybit
+from trading_bots.equity_trend_screener_bot import EquityTrendScreenerBot
 from trading_bots.place_trailing_stops_bot_bybit import PlaceTrailingStopsBotBybit
 from trading_bots.check_futures_margin_level_bot_bybit import CheckFuturesMarginLevelBotBybit
 
@@ -48,5 +50,7 @@ def create_bot(bot_name: str, config: dict) -> Bot:
             return CloseTradesAtTimeBotBybit(config)
         case "CheckFuturesMarginLevelBotBybitIntraday":
             return CheckFuturesMarginLevelBotBybit(config)
+        case "EquityTrendScreenerBot":
+            return EquityTrendScreenerBot(config)
         case _:
             raise ValueError("Not supported bot_name: {}".format(bot_name))
