@@ -10,9 +10,14 @@ class EarlyReactionBotBybitHelper:
 
     def __init__(self, pybit_client, before_entry_ids_json_path):
         self.pybit_client = pybit_client
-        # TODO: @Lucka handle exception
-        self.instruments_info = pybit_client.get_instruments_info(category=constants.BYBIT_LINEAR_CATEGORY)["result"][
-            "list"]
+        try:
+            response = pybit_client.get_instruments_info(category=constants.BYBIT_LINEAR_CATEGORY)
+        except Exception as e:
+            logging.error("Failed call method get_instruments_info on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
+        logging.debug("Response get_instruments_info: {}".format(response))
+        self.instruments_info = response["result"]["list"]
         self.before_entry_ids_json_path = before_entry_ids_json_path
 
     def get_pending_orders(self) -> list:
@@ -57,7 +62,7 @@ class EarlyReactionBotBybitHelper:
         logging.info("Cancel pending order with early reaction")
         try:
             response = self.pybit_client.cancel_order(category=constants.BYBIT_LINEAR_CATEGORY,
-                                                  symbol=symbol, orderId=order_id)
+                                                      symbol=symbol, orderId=order_id)
         except Exception as e:
             logging.error("Failed call method cancel_order on pybit client: {}".format(str(e)))
             sys.exit(-1)

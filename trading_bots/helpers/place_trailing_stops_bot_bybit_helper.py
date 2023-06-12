@@ -12,9 +12,14 @@ class PlaceTrailingStopsBotBybitHelper:
     def __init__(self, pybit_client):
         self.pybit_client = pybit_client
 
-        # TODO: @Lucka handle exception
-        self.instruments_info = pybit_client.get_instruments_info(category=constants.BYBIT_LINEAR_CATEGORY)["result"][
-            "list"]
+        try:
+            response = pybit_client.get_instruments_info(category=constants.BYBIT_LINEAR_CATEGORY)
+        except Exception as e:
+            logging.error("Failed call method get_instruments_info on pybit client: {}".format(str(e)))
+            sys.exit(-1)
+
+        logging.debug("Response get_instruments_info: {}".format(response))
+        self.instruments_info = response["result"]["list"]
 
     def get_open_positions(self) -> pd.DataFrame:
         try:
