@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 
+## [1.0.1] - 2023-06-10
+### Fixed
+- Missing exception handling for pybit client
+
 ## [1.0.0] - 2023-06-09
 ### Added
 - BybitExampleBot
