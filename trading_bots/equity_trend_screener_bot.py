@@ -1,7 +1,6 @@
 import logging
 
 import pandas as pd
-from alpha_vantage.timeseries import TimeSeries
 
 from trading_bots.helpers.equity_trend_screener_bot_helper import EquityTrendScreenerBotHelper
 from trading_bots.templates.bot import Bot
@@ -13,8 +12,7 @@ class EquityTrendScreenerBot(Bot):
 
     def __init__(self, config):
         super().__init__(config)
-        exchange = TimeSeries(key=config["alphaVantage"]["apiKey"], output_format="pandas")
-        self.helper = EquityTrendScreenerBotHelper(config, exchange)
+        self.helper = EquityTrendScreenerBotHelper()
 
     def run(self) -> None:
         logging.info("Start EquityTrendScreenerBot")
@@ -30,8 +28,8 @@ class EquityTrendScreenerBot(Bot):
         logging.info("Loading tickers")
         logging.info(self.SEPARATOR)
 
-        tickers_sp_500 = self.helper.get_tickers(self.config["base"]["tickersSp500FilePath"])[0:10]
-        tickers_russell_2k = self.helper.get_tickers(self.config["base"]["tickersRussell2kFilePath"])[0:10]
+        tickers_sp_500 = self.helper.get_tickers(self.config["base"]["tickersSp500FilePath"])
+        tickers_russell_2k = self.helper.get_tickers(self.config["base"]["tickersRussell2kFilePath"])
 
         logging.info("Loaded {} tickers for index S&P 500".format(len(tickers_sp_500)))
         logging.info("Loaded {} tickers for index Russell 2000".format(len(tickers_russell_2k)))
@@ -51,7 +49,7 @@ class EquityTrendScreenerBot(Bot):
         sp_500_yearly_trends = []
         for ticker in tickers["tickers_sp_500"]:
             logging.info("Process {} ticker".format(ticker))
-            daily_ohlc = self.helper.get_daily_adjusted_ohlc(ticker)
+            daily_ohlc = self.helper.get_daily_ohlc(ticker)
             quarterly_ohlc = convert_ohlc(daily_ohlc, "Q")
             yearly_ohlc = convert_ohlc(daily_ohlc, "Y")
 
@@ -80,7 +78,7 @@ class EquityTrendScreenerBot(Bot):
         russell_2k_yearly_trends = []
         for ticker in tickers["tickers_russell_2k"]:
             logging.info("Process {} ticker".format(ticker))
-            daily_ohlc = self.helper.get_daily_adjusted_ohlc(ticker)
+            daily_ohlc = self.helper.get_daily_ohlc(ticker)
             quarterly_ohlc = convert_ohlc(daily_ohlc, "Q")
             yearly_ohlc = convert_ohlc(daily_ohlc, "Y")
 
