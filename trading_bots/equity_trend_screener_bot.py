@@ -55,7 +55,7 @@ class EquityTrendScreenerBot(Bot):
             quarterly_ohlc = convert_ohlc(daily_ohlc, "Q")
             yearly_ohlc = convert_ohlc(daily_ohlc, "Y")
 
-            logging.debug("Monthly ohlc (last 10 candles): \n {}".format(daily_ohlc))
+            logging.debug("Daily ohlc (last 10 candles): \n {}".format(daily_ohlc))
             logging.debug("Quarterly ohlc (last 10 candles): \n {}".format(quarterly_ohlc))
             logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
 

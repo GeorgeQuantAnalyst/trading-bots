@@ -24,21 +24,6 @@ class EquityTrendScreenerBotHelper:
             logging.error("Failed read tickers from file {}: {}".format(file_path, str(e)))
             sys.exit(-1)
 
-    # def get_monthly_ohlc(self, ticker: str) -> pd.DataFrame:
-    #     try:
-    #         data, meta_data = self.exchange.get_monthly(symbol=ticker)
-    #         data = data.reset_index()
-    #         data.columns = ['startTime', 'open', 'high', 'low', 'close', "volume"]
-    #         return data
-    #     except ValueError as e:
-    #         if self.API_CALL_LIMIT_EXCEPTION_MSG in str(e):
-    #             logging.warning(self.API_CALL_LIMIT_WARNING_MSG)
-    #             time.sleep(self.API_CALL_LIMIT_SLEEP_INTERVAL_SECONDS)
-    #             return self.get_monthly_ohlc(ticker)
-    #         else:
-    #             logging.error("Failed call method get_monthly on AlphaVantage client: {}".format(str(e)))
-    #             sys.exit(-1)
-
     def get_daily_adjusted_ohlc(self, ticker: str) -> pd.DataFrame:
         try:
             data, meta_data = self.exchange.get_daily_adjusted(symbol=ticker, outputsize="full")
@@ -59,7 +44,7 @@ class EquityTrendScreenerBotHelper:
                 time.sleep(self.API_CALL_LIMIT_SLEEP_INTERVAL_SECONDS)
                 return self.get_daily_adjusted_ohlc(ticker)
             else:
-                logging.error("Failed call method get_monthly on AlphaVantage client: {}".format(str(e)))
+                logging.error("Failed call method get_daily_adjusted on AlphaVantage client: {}".format(str(e)))
                 sys.exit(-1)
 
     @staticmethod
