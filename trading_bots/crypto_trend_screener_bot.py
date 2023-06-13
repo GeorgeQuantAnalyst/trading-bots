@@ -44,8 +44,11 @@ class CryptoTrendScreenerBot(Bot):
         logging.info(self.SEPARATOR)
 
         logging.info("Find trends in Bybit futures tickers")
+        bybit_futures_weekly_trends = []
+        bybit_futures_monthly_trends = []
         bybit_futures_quarterly_trends = []
         bybit_futures_yearly_trends = []
+
         for ticker in tickers["tickers_pybit_futures"]:
             logging.info("Process {} ticker".format(ticker))
 
@@ -60,11 +63,25 @@ class CryptoTrendScreenerBot(Bot):
             logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
 
             # TODO: @Lucka compute W and M context
+            weekly_context = calculate_context(weekly_ohlc)
+            monthly_context = calculate_context(monthly_ohlc)
             quarterly_context = calculate_context(quarterly_ohlc)
             yearly_context = calculate_context(yearly_ohlc)
 
+            logging.debug("Weekly context: {}".format(weekly_context))
+            logging.debug("Monthly context: {}".format(monthly_context))
             logging.debug("Quarterly context: {}".format(quarterly_context))
             logging.debug("Yearly context: {}".format(yearly_context))
+
+            bybit_futures_weekly_trends.append({
+                "ticker": ticker,
+                "context": weekly_context
+            })
+
+            bybit_futures_monthly_trends.append({
+                "ticker": ticker,
+                "context": monthly_context
+            })
 
             bybit_futures_quarterly_trends.append({
                 "ticker": ticker,
@@ -77,6 +94,8 @@ class CryptoTrendScreenerBot(Bot):
             })
 
         return {
+            "bybit_futures_weekly_trends": pd.DataFrame(bybit_futures_weekly_trends),
+            "bybit_futures_monthly_trends": pd.DataFrame(bybit_futures_monthly_trends),
             "bybit_futures_quarterly_trends": pd.DataFrame(bybit_futures_quarterly_trends),
             "bybit_futures_yearly_trends": pd.DataFrame(bybit_futures_yearly_trends)
         }
@@ -85,21 +104,49 @@ class CryptoTrendScreenerBot(Bot):
         logging.info(self.SEPARATOR)
         logging.info("Create TradingView trends report")
         logging.info(self.SEPARATOR)
-
-        reports_folder = self.config["base"]["reportsFolder"]
-
+        #
+        # reports_folder = self.config["base"]["reportsFolder"]
+        self.create_and_save_bybit_futures_trend_reports(trends, "weekly", "W")
+        self.create_and_save_bybit_futures_trend_reports(trends, "monthly", "M")
+        self.create_and_save_bybit_futures_trend_reports(trends, "quarterly", "3M")
+        self.create_and_save_bybit_futures_trend_reports(trends, "yearly", "Y")
         # TODO: @Lucka create tw trends report for W and M trends
 
-        logging.info("Create Bybit futures 3M trends")
-        bybit_futures_quarterly_trends = trends["bybit_futures_quarterly_trends"]
-        bybit_futures_quarterly_trends["ticker"] = "BYBIT:" + bybit_futures_quarterly_trends["ticker"] + ".P"
-        bybit_futures_quarterly_trends_path = "{}/Bybit futures 3M trends.txt".format(reports_folder)
-        bybit_futures_quarterly_trends_report = self.helper.create_tw_report(bybit_futures_quarterly_trends)
-        self.helper.save_tw_report(bybit_futures_quarterly_trends_report, bybit_futures_quarterly_trends_path)
+        # logging.info("Create Bybit futures W trends")
+        # bybit_futures_weekly_trends = trends["bybit_futures_weekly_trends"]
+        # bybit_futures_weekly_trends["ticker"] = "BYBIT:" + bybit_futures_weekly_trends["ticker"] + ".P"
+        # bybit_futures_weekly_trends_path = "{}/Bybit futures W trends.txt".format(reports_folder)
+        # bybit_futures_weekly_trends_report = self.helper.create_tw_report(bybit_futures_weekly_trends)
+        # self.helper.save_tw_report(bybit_futures_weekly_trends_report, bybit_futures_weekly_trends_path)
+        #
+        # logging.info("Create Bybit futures M trends")
+        # bybit_futures_monthly_trends = trends["bybit_futures_monthly_trends"]
+        # bybit_futures_monthly_trends["ticker"] = "BYBIT:" + bybit_futures_monthly_trends["ticker"] + ".P"
+        # bybit_futures_monthly_trends_path = "{}/Bybit futures M trends.txt".format(reports_folder)
+        # bybit_futures_monthly_trends_report = self.helper.create_tw_report(bybit_futures_monthly_trends)
+        # self.helper.save_tw_report(bybit_futures_monthly_trends_report, bybit_futures_monthly_trends_path)
+        #
+        # logging.info("Create Bybit futures 3M trends")
+        # bybit_futures_quarterly_trends = trends["bybit_futures_quarterly_trends"]
+        # bybit_futures_quarterly_trends["ticker"] = "BYBIT:" + bybit_futures_quarterly_trends["ticker"] + ".P"
+        # bybit_futures_quarterly_trends_path = "{}/Bybit futures 3M trends.txt".format(reports_folder)
+        # bybit_futures_quarterly_trends_report = self.helper.create_tw_report(bybit_futures_quarterly_trends)
+        # self.helper.save_tw_report(bybit_futures_quarterly_trends_report, bybit_futures_quarterly_trends_path)
+        #
+        # logging.info("Create Bybit futures Y trends")
+        # bybit_futures_yearly_trends = trends["bybit_futures_yearly_trends"]
+        # bybit_futures_yearly_trends["ticker"] = "BYBIT:" + bybit_futures_yearly_trends["ticker"] + ".P"
+        # bybit_futures_yearly_trends_path = "{}/Bybit futures Y trends.txt".format(reports_folder)
+        # bybit_futures_yearly_trends_report = self.helper.create_tw_report(bybit_futures_yearly_trends)
+        # self.helper.save_tw_report(bybit_futures_yearly_trends_report, bybit_futures_yearly_trends_path)
 
-        logging.info("Create Bybit futures Y trends")
-        bybit_futures_yearly_trends = trends["bybit_futures_yearly_trends"]
-        bybit_futures_yearly_trends["ticker"] = "BYBIT:" + bybit_futures_yearly_trends["ticker"] + ".P"
-        bybit_futures_yearly_trends_path = "{}/Bybit futures Y trends.txt".format(reports_folder)
-        bybit_futures_yearly_trends_report = self.helper.create_tw_report(bybit_futures_yearly_trends)
-        self.helper.save_tw_report(bybit_futures_yearly_trends_report, bybit_futures_yearly_trends_path)
+    def create_and_save_bybit_futures_trend_reports(self, trends, name_of_timeframe, time_frame):
+        reports_folder = self.config["base"]["reportsFolder"]
+        trends_timeframe_id = "bybit_futures_" + name_of_timeframe + "_trends"
+
+        logging.info("Create Bybit futures " + time_frame + " trends")
+        bybit_futures_trends = trends[trends_timeframe_id]
+        bybit_futures_trends["ticker"] = "BYBIT:" + bybit_futures_trends["ticker"] + ".P"
+        bybit_futures_trends_path = "{}/Bybit futures {} trends.txt".format(reports_folder, time_frame)
+        bybit_futures_trends_report = self.helper.create_tw_report(bybit_futures_trends)
+        self.helper.save_tw_report(bybit_futures_trends_report, bybit_futures_trends_path)
