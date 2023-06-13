@@ -132,7 +132,7 @@ class EquityTrendScreenerBot(Bot):
         russell_2k_quarterly_trends = trends["russell_2k_quarterly_trends"]
         if russell_2k_quarterly_trends.shape[0] > 1000:
             russell_2k_quarterly_trends_path_part1 = "{}/Russell 2000 3M trends part1.txt".format(reports_folder)
-            russell_2k_quarterly_trends_path_part2 = "{}/Russell 2000 3M trends part1.txt".format(reports_folder)
+            russell_2k_quarterly_trends_path_part2 = "{}/Russell 2000 3M trends part2.txt".format(reports_folder)
 
             n = russell_2k_quarterly_trends.shape[0]
             russell_2k_quarterly_trends_part1 = russell_2k_quarterly_trends.head(n // 2)
