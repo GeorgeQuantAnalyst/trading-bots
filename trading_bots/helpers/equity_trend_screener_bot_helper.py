@@ -59,3 +59,9 @@ class EquityTrendScreenerBotHelper:
         except Exception as e:
             logging.error("Failed save tw report: {}".format(str(e)))
             sys.exit(-1)
+
+    @staticmethod
+    def count_items_without_rotation(trends: pd.DataFrame) -> int:
+        trends_without_rotations = trends[~(trends["context"] == "Rotation") | (trends["context"] == "N/A")]
+        return trends_without_rotations.shape[0]
+
