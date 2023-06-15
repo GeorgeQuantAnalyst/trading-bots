@@ -130,7 +130,7 @@ class EquityTrendScreenerBot(Bot):
 
         logging.info("Create Russell 2000 3M trends")
         russell_2k_quarterly_trends = trends["russell_2k_quarterly_trends"]
-        if russell_2k_quarterly_trends.shape[0] > 1000:
+        if self.helper.count_items_without_rotation(russell_2k_quarterly_trends) > 1000:
             russell_2k_quarterly_trends_path_part1 = "{}/Russell 2000 3M trends part1.txt".format(reports_folder)
             russell_2k_quarterly_trends_path_part2 = "{}/Russell 2000 3M trends part2.txt".format(reports_folder)
 
@@ -150,7 +150,7 @@ class EquityTrendScreenerBot(Bot):
 
         logging.info("Create Russell 2000 Y trends")
         russell_2k_yearly_trends = trends["russell_2k_yearly_trends"]
-        if russell_2k_yearly_trends.shape[0] > 1000:
+        if self.helper.count_items_without_rotation(russell_2k_yearly_trends) > 1000:
             russell_2k_yearly_trends_path_part1 = "{}/Russell 2000 Y trends part1.txt".format(reports_folder)
             russell_2k_yearly_trends_path_part2 = "{}/Russell 2000 Y trends part2.txt".format(reports_folder)
 
