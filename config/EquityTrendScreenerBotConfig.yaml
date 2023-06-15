@@ -1,0 +1,4 @@
+base:
+  tickersSp500FilePath: trading_bots/data/S&P_500.csv
+  tickersRussell2kFilePath: trading_bots/data/russell_2000.csv
+  reportsFolder: reports/equityTrendScreener

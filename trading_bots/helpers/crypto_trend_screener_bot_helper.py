@@ -1,19 +1,19 @@
 import logging
+import os
 import sys
 
 import pandas as pd
 
 from trading_bots import constants
-from trading_bots.templates.trend_screener_bot_helper import TrendScreenerBotHelper
 
 
-class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
+class CryptoTrendScreenerBotHelper:
 
     def __init__(self, pybit_client):
         self.pybit_client = pybit_client
         self.category = constants.BYBIT_LINEAR_CATEGORY
 
-    def get_available_tickers(self) -> list:
+    def get_pybit_futures_tickers(self) -> list:
         try:
             response = self.pybit_client.get_instruments_info(category=self.category)
         except Exception as e:
@@ -62,111 +62,34 @@ class CryptoTrendScreenerBotHelper(TrendScreenerBotHelper):
 
         return filtered_tickers
 
-    def create_tw_trends_report(self, swing_weekly_trends: pd.DataFrame,
-                                swing_monthly_trends: pd.DataFrame,
-                                position_quarterly_trends: pd.DataFrame,
-                                reports_folder: str) -> None:
-        swing_weekly_trends["ticker"] = "BYBIT:" + swing_weekly_trends["ticker"] + ".P"
-        swing_monthly_trends["ticker"] = "BYBIT:" + swing_monthly_trends["ticker"] + ".P"
-        position_quarterly_trends["ticker"] = "BYBIT:" + position_quarterly_trends["ticker"] + ".P"
-
-        swing_weekly_trends_report_path = "{}/Crypto swing W trends.txt".format(reports_folder)
-        swing_weekly_trends_report = self.create_tw_report_weekly_trends(swing_weekly_trends)
-        self.save_tw_report(swing_weekly_trends_report, swing_weekly_trends_report_path)
-
-        swing_monthly_trends_report_path = "{}/Crypto swing M trends.txt".format(reports_folder)
-        swing_monthly_trends_report = self.create_tw_report_monthly_trends(swing_monthly_trends)
-        self.save_tw_report(swing_monthly_trends_report, swing_monthly_trends_report_path)
-
-        position_quarterly_trends_report_path = "{}/Crypto position 3M trends.txt".format(reports_folder)
-        position_quarterly_trends_report = self.create_tw_report_quarterly_trends(position_quarterly_trends)
-        self.save_tw_report(position_quarterly_trends_report, position_quarterly_trends_report_path)
-
     @staticmethod
-    def create_tw_report_weekly_trends(trends: pd.DataFrame) -> str:
+    def create_tw_report(trends: pd.DataFrame) -> str:
         report = []
 
-        report.append("###UP-TREND W")
-        uptrend_markets_df = trends[trends["Context W"] == "Up-trend"]
-        uptrend_markets_sorted_df = uptrend_markets_df.sort_values("Change 30 days, %", ascending=False)
-        report.extend(uptrend_markets_sorted_df["ticker"].tolist())
+        report.append("###UP-TREND")
+        uptrend_markets_df = trends[trends["context"] == "Up-trend"]
+        report.extend(uptrend_markets_df["ticker"].tolist())
 
-        report.append("###START ROTATION AFTER UP-TREND W")
-        start_rotation_markets_df = trends[trends["Context W"] == "Start rotation after up-trend"]
-        start_rotation_markets_sorted_df = start_rotation_markets_df.sort_values(
-            "Change 30 days, %", ascending=False)
-        report.extend(start_rotation_markets_sorted_df["ticker"].tolist())
+        report.append("###START ROTATION AFTER UP-TREND")
+        start_rotation_markets_df = trends[trends["context"] == "Start rotation after up-trend"]
+        report.extend(start_rotation_markets_df["ticker"].tolist())
 
-        report.append("###DOWN-TREND W")
-        downtrend_markets_df = trends[trends["Context W"] == "Down-trend"]
-        downtrend_markets_sorted_df = downtrend_markets_df.sort_values("Change 30 days, %", ascending=False)
-        report.extend(downtrend_markets_sorted_df["ticker"].tolist())
+        report.append("###DOWN-TREND")
+        downtrend_markets_df = trends[trends["context"] == "Down-trend"]
+        report.extend(downtrend_markets_df["ticker"].tolist())
 
-        report.append("###START ROTATION AFTER DOWN-TREND W")
-        start_rotation_markets_df = trends[trends["Context W"] == "Start rotation after down-trend"]
-        start_rotation_markets_sorted_df = start_rotation_markets_df.sort_values(
-            "Change 30 days, %", ascending=False)
-        report.extend(start_rotation_markets_sorted_df["ticker"].tolist())
-
-        return ",".join(report)
-
-    @staticmethod
-    def create_tw_report_monthly_trends(trends: pd.DataFrame) -> str:
-        report = []
-
-        report.append("###UP-TREND M")
-        uptrend_markets_df = trends[trends["Context M"] == "Up-trend"]
-        uptrend_markets_sorted_df = uptrend_markets_df.sort_values("Change 90 days, %", ascending=False)
-        report.extend(uptrend_markets_sorted_df["ticker"].tolist())
-
-        report.append("###START ROTATION AFTER UP-TREND M")
-        start_rotation_markets_df = trends[trends["Context M"] == "Start rotation after up-trend"]
-        start_rotation_markets_sorted_df = start_rotation_markets_df.sort_values(
-            "Change 90 days, %", ascending=False)
-        report.extend(start_rotation_markets_sorted_df["ticker"].tolist())
-
-        report.append("###DOWN-TREND M")
-        downtrend_markets_df = trends[trends["Context M"] == "Down-trend"]
-        downtrend_markets_sorted_df = downtrend_markets_df.sort_values("Change 90 days, %", ascending=False)
-        report.extend(downtrend_markets_sorted_df["ticker"].tolist())
-
-        report.append("###START ROTATION AFTER DOWN-TREND M")
-        start_rotation_markets_df = trends[trends["Context M"] == "Start rotation after down-trend"]
-        start_rotation_markets_sorted_df = start_rotation_markets_df.sort_values(
-            "Change 90 days, %", ascending=False)
-        report.extend(start_rotation_markets_sorted_df["ticker"].tolist())
-
-        return ",".join(report)
-
-    @staticmethod
-    def create_tw_report_quarterly_trends(trends: pd.DataFrame) -> str:
-        report = []
-
-        report.append("###UP-TREND 3M")
-        uptrend_markets_df = trends[trends["Context 3M"] == "Up-trend"]
-        uptrend_markets_sorted_df = uptrend_markets_df.sort_values("Change 90 days, %", ascending=False)
-        report.extend(uptrend_markets_sorted_df["ticker"].tolist())
-
-        report.append("###START ROTATION AFTER UP-TREND 3M")
-        start_rotation_markets_df = trends[trends["Context 3M"] == "Start rotation after up-trend"]
-        start_rotation_markets_sorted_df = start_rotation_markets_df.sort_values(
-            "Change 90 days, %", ascending=False)
-        report.extend(start_rotation_markets_sorted_df["ticker"].tolist())
-
-        report.append("###DOWN-TREND 3M")
-        downtrend_markets_df = trends[trends["Context 3M"] == "Down-trend"]
-        downtrend_markets_sorted_df = downtrend_markets_df.sort_values("Change 90 days, %", ascending=False)
-        report.extend(downtrend_markets_sorted_df["ticker"].tolist())
-
-        report.append("###START ROTATION AFTER DOWN-TREND 3M")
-        start_rotation_markets_df = trends[trends["Context 3M"] == "Start rotation after down-trend"]
-        start_rotation_markets_sorted_df = start_rotation_markets_df.sort_values(
-            "Change 90 days, %", ascending=False)
-        report.extend(start_rotation_markets_sorted_df["ticker"].tolist())
+        report.append("###START ROTATION AFTER DOWN-TREND")
+        start_rotation_markets_df = trends[trends["context"] == "Start rotation after down-trend"]
+        report.extend(start_rotation_markets_df["ticker"].tolist())
 
         return ",".join(report)
 
     @staticmethod
     def save_tw_report(report: str, file_path: str) -> None:
-        with open(file_path, "w") as file:
-            file.write(report)
+        try:
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, "w") as file:
+                file.write(report)
+        except Exception as e:
+            logging.error("Failed save tw report: {}".format(str(e)))
+            sys.exit(-1)
