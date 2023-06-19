@@ -7,10 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## Unreleased
 ### Added
+- EquityTrendScreenerBot
+
+### Deleted
+- ForexTrendScreenerBot
 
 ### Changed
+- CryptoTrendScreenerBotBybit: add support for find positions trends (3M, Y)
 
 ### Fixed
+- Precise compute context of market (up-trend, down-trend, start-rotation after up-trend, start rotation after downn-trend)
+- Better logging in CryptoTrendScreenerBotBybit and EquityTrendScreenerBot
 
 ## [1.0.1] - 2023-06-12
 ### Fixed
