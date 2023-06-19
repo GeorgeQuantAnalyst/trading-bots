@@ -12,6 +12,7 @@ class EquityTrendScreenerBotHelper:
     def get_tickers(file_path: str) -> list:
         try:
             df = pd.read_csv(file_path)
+            df["Ticker"] = df["Ticker"].str.replace(".", "-")
             return df["Ticker"].tolist()
         except Exception as e:
             logging.error("Failed read tickers from file {}: {}".format(file_path, str(e)))
@@ -64,4 +65,3 @@ class EquityTrendScreenerBotHelper:
     def count_items_without_rotation(trends: pd.DataFrame) -> int:
         trends_without_rotations = trends[~(trends["context"] == "Rotation") | (trends["context"] == "N/A")]
         return trends_without_rotations.shape[0]
-
