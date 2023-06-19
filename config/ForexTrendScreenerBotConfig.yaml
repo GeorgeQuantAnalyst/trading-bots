@@ -1,5 +1,0 @@
-base:
-  tickersFilePath: trading_bots/data/forexTickers.csv
-  reportsFolder: reports/forexTrendScreener
-alphaVantage:
-  apiKey:

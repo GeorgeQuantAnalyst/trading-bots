@@ -3,7 +3,7 @@
 APP_LOG_FOLDERS=("/home/prod1/log/close-trades-at-time-bot-bybit-swing/" \
 "/home/prod1/log/close-trades-at-time-bot-bybit-intraday/" \
 "/home/prod1/log/close-trades-at-time-bot-bybit-position/" \
-"/home/prod1/log/forex-trend-screener-bot/" \
+"/home/prod1/log/equity-trend-screener-bot/" \
 "/home/prod1/log/crypto-trend-screener-bot/" \
 "/home/prod1/log/place-trailing-stops-bot-bybit-swing/" \
 "/home/prod1/log/place-trailing-stops-bot-bybit-intraday/" \

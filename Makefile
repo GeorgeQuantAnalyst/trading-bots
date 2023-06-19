@@ -50,9 +50,9 @@ cryptoTrendScreenerBot:
 	@echo "Run bot..."
 	. venv/bin/activate && ${PYTHON} -m trading_bots CryptoTrendScreenerBot
 
-forexTrendScreenerBot:
+equityTrendScreenerBot:
 	@echo "Run bot..."
-	. venv/bin/activate && ${PYTHON} -m trading_bots ForexTrendScreenerBot
+	. venv/bin/activate && ${PYTHON} -m trading_bots EquityTrendScreenerBot
 
 placeTrailingStopsBotBybitIntraday:
 	@echo "Run bot..."
@@ -93,7 +93,3 @@ closeTradesAtTimeBotBybitPosition:
 checkFuturesMarginLevelBotBybitIntraday:
 	@echo "Run bot..."
 	. venv/bin/activate && ${PYTHON} -m trading_bots CheckFuturesMarginLevelBotBybitIntraday
-
-equityTrendScreenerBot:
-	@echo "Run bot..."
-	. venv/bin/activate && ${PYTHON} -m trading_bots EquityTrendScreenerBot

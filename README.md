@@ -5,7 +5,7 @@ and Risk management (Trading bots can incorporate risk management techniques, su
 
 ## Developed bots
 * **CryptoTrendScreenerBot**:  trading bot for searching the intraday, swing trends on the USDT perpetual futures markets of the Bybit exchange.
-* **ForexTrendScreenerBot**:  trading bot for searching the intraday, swing trends on the most traded forex pairs (majors, minors and cross).
+* **EquityTrendScreenerBot**:  trading bot looking for trends across small-cap U.S. stocks in index Russell 2000 and large-cap U.S. stocks in index S&P 500.
 * **PlaceTrailingStopsBotBybit**: trading bot for entering a trailing stop loss based on open futures positions on the Bybit exchange.
 * **EarlyReactionBotBybit**: trading bot for close early reaction trades (A trade where the price reaches 33% before entry and then the market turns to profit).
 * **CloseTradesAtTimeBotBybit**: trading bot closing pending orders and position at defined time.

@@ -8,7 +8,7 @@ BOT_NAMES=("early-reaction-bot-bybit-intraday" \
 "place-trailing-stops-bot-bybit-position" \
 "check-futures-margin-level-bot-bybit-intraday" \
 "crypto-trend-screener-bot" \
-"forex-trend-screener-bot")
+"equity-trend-screener-bot")
 
 LOG_PATHS=("${HOME}/log/early-reaction-bot-bybit-intraday/early_reaction_bot_bybit_intraday.log" \
 "${HOME}/log/early-reaction-bot-bybit-swing/early_reaction_bot_bybit_swing.log" \
@@ -18,7 +18,7 @@ LOG_PATHS=("${HOME}/log/early-reaction-bot-bybit-intraday/early_reaction_bot_byb
 "${HOME}/log/place-trailing-stops-bot-bybit-position/place_trailing_stops_bot_bybit_position.log" \
 "${HOME}/log/check-futures-margin-level-bot-bybit-intraday/check_futures_margin_level_bot_bybit_intraday.log" \
 "${HOME}/log/crypto-trend-screener-bot/crypto_trend_screener_bot.log" \
-"${HOME}/log/forex-trend-screener-bot/forex_trend_screener_bot.log")
+"${HOME}/log/equity-trend-screener-bot/equity_trend_screener_bot.log")
 
 
 echo "---------------------------------------------------"
