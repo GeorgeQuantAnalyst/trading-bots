@@ -15,8 +15,6 @@ class CryptoTrendScreenerBot(Bot):
         super().__init__(config)
         self.pybit_client = HTTP()
         self.helper = CryptoTrendScreenerBotHelper(self.pybit_client)
-        self.daily_volume_in_usd_above_filter_swing = self.config["base"]["dailyVolumeInUsdAboveFilterSwing"]
-        self.daily_volume_in_usd_above_filter_position = self.config["base"]["dailyVolumeInUsdAboveFilterPosition"]
 
     def run(self) -> None:
         logging.info("Start CryptoTrendScreenerBot")
