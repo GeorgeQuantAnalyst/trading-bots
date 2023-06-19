@@ -12,7 +12,6 @@ class EquityTrendScreenerBotHelper:
     def get_tickers(file_path: str) -> list:
         try:
             df = pd.read_csv(file_path)
-            df["Ticker"] = df["Ticker"].str.replace(".", "-")
             return df["Ticker"].tolist()
         except Exception as e:
             logging.error("Failed read tickers from file {}: {}".format(file_path, str(e)))
@@ -21,6 +20,7 @@ class EquityTrendScreenerBotHelper:
     @staticmethod
     def get_daily_ohlc(ticker: str) -> pd.DataFrame:
         try:
+            ticker = ticker.replace(".", "-")
             ohlc_raw = yf.Ticker(ticker).history(period="120mo", interval="1d")
             ohlc = ohlc_raw[["Open", "High", "Low", "Close"]][::-1].reset_index()
             ohlc.columns = ['startTime', 'open', 'high', 'low', 'close']
