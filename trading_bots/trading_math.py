@@ -62,6 +62,7 @@ def is_start_rotation_after_up_trend(ohlc: pd.DataFrame) -> bool:
         ohlc = ohlc[1:].reset_index(drop=True)
         two_green_candles = ohlc.loc[1]["candleColor"] == "Green" and ohlc.loc[2]["candleColor"] == "Green"
         break_high = ohlc.loc[0]["close"] > ohlc.loc[3]["high"]
+        # Note: Method not using confluence "higher_lows", because a deeper pull back may occur at the start of the rotation
         return two_green_candles and break_high
     else:
         return False
@@ -72,6 +73,7 @@ def is_start_rotation_after_down_trend(ohlc: pd.DataFrame) -> bool:
         ohlc = ohlc[1:].reset_index(drop=True)
         two_red_candles = ohlc.loc[1]["candleColor"] == "Red" and ohlc.loc[2]["candleColor"] == "Red"
         break_low = ohlc.loc[0]["close"] < ohlc.loc[3]["low"]
+        # Note: Method not using confluence "lower_highs", because a deeper pull back may occur at the start of the rotation
         return two_red_candles and break_low
     else:
         return False
