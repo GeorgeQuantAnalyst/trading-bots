@@ -3,12 +3,12 @@ base:
 
 mostTradedUsStocks:
   enable: true
-  tickersFilePath: trading_bots/data/most_traded_us_stocks.csv
+  tickersFilePath: data/most_traded_us_stocks.csv
 
 sp500:
   enable: false
-  tickersFilePath: trading_bots/data/S&P_500.csv
+  tickersFilePath: data/S&P_500.csv
 
 russell2k:
   enable: false
-  tickersFilePath: trading_bots/data/russell_2000.csv
+  tickersFilePath: data/russell_2000.csv
