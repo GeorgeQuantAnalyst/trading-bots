@@ -9,7 +9,7 @@ class CloseTradesAtTimeBotBybitHelper:
     def __init__(self, pybit_client):
         self.pybit_client = pybit_client
 
-    def close_all_pending_orders_and_open_positions(self) -> None:
+    def close_all_open_positions_and_pending_orders(self) -> None:
         logging.info("Get positions")
         try:
             response = self.pybit_client.get_positions(category=constants.BYBIT_LINEAR_CATEGORY,

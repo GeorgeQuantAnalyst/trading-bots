@@ -42,6 +42,6 @@ class CloseTradesAtTimeBotBybit(BybitBot):
         time.sleep(time_diff)
 
         logging.info("Close all pending orders and open positions")
-        self.helper.close_all_pending_orders_and_open_positions()
+        self.helper.close_all_open_positions_and_pending_orders()
 
         logging.info("Finished CloseTradesAtTimeBotBybit")
