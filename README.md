@@ -1,24 +1,100 @@
 # Trading bots
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-This repository contains trading bots for Automate trading (Trading bots can execute trades automatically based on predefined rules and strategies) 
-and Risk management (Trading bots can incorporate risk management techniques, such as setting stop-loss orders or position sizing, to manage potential losses) in crypto futures market. All trading bots are written in Python programming language.
+[![Build Status](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/downloads/)
+![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
 
-## Developed bots
-* **CryptoTrendScreenerBot**:  trading bot for searching the intraday, swing trends on the USDT perpetual futures markets of the Bybit exchange.
-* **EquityTrendScreenerBot**:  trading bot looking for trends across most US traded stocks (with week options), small-cap U.S. stocks in index Russell 2000 and large-cap U.S. stocks in index S&P 500.
-* **PlaceTrailingStopsBotBybit**: trading bot for entering a trailing stop loss based on open futures positions on the Bybit exchange.
-* **EarlyReactionBotBybit**: trading bot for close early reaction trades (A trade where the price reaches 33% before entry and then the market turns to profit).
-* **CloseTradesAtTimeBotBybit**: trading bot closing pending orders and position at defined time.
-* **CheckFuturesMarginLevelBotBybit**: trading bot checking sufficient margin on the futures exchange, if the margin is below the specified limit, then after the expiration of a defined time interval the bot fund futures account on defined level.
+Trading bots for automate trading and risk management in crypto futures market.
+
+## Table of Contents
+
+- [About](#about)
+- [Development](#development)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributors](#contributors)
+
+## About
+This repository contains trading bots designed for automated trading, allowing for the execution of trades based on predefined rules and strategies. Additionally, these bots incorporate risk management techniques, such as setting stop-loss orders and managing position sizes, to effectively mitigate potential losses. The bots are specifically tailored for the crypto futures market and are implemented using the Python programming language.
+
+**Developed trading bots:**
+* CryptoTrendScreenerBot
+* EquityTrendScreenerBot
+* PlaceTrailingStopsBotBybit
+* EarlyReactionBotBybit
+* CloseTradesAtTimeBotBybit
+* CheckFuturesMarginLevelBotBybit
+
+**Exchange api documentation:**
+* [Bybit rest api v5 documentation](https://bybit-exchange.github.io/docs/v5/intro)
+
 
 ## Development
-Application is actively maintenance and develop.
+Project is being actively develop and maintenance.
 
-## Prerequisites
-* Python 3.11 and higher
+## Installation
+Trading bots require Python 3.11 and higher, creating virtual environment venv and install dependencies.
 
-## Exchange api documentation
-* [Bybit rest api v5 documentation](https://bybit-exchange.github.io/docs/v5/intro)
+For creating venv and install dependencies type in terminal:
+
+```bash
+make prepare
+```
+
+## Usage
+
+### CryptoTrendScreenerBot
+A trading bot designed to identify swing and position trends on the USDT perpetual futures markets of the Bybit exchange.
+
+```bash
+make CryptoTrendScreenerBot
+```
+
+### EquityTrendScreenerBot
+A trading bot that scans for position trends across a wide range of US-traded stocks, including those with weekly options, small-cap stocks in the Russell 2000 index, and large-cap stocks in the S&P 500 index.
+
+```bash
+make EquityTrendScreenerBot
+```
+
+### PlaceTrailingStopsBotBybit
+A trading bot that automatically sets trailing stop-loss orders for open futures positions on the Bybit exchange.
+
+```bash
+make placeTrailingStopsBotBybitIntraday # Intraday bot
+make placeTrailingStopsBotBybitSwing # Swing bot
+make placeTrailingStopsBotBybitPosition # Position bot
+```
+
+### EarlyReactionBotBybit
+A trading bot that executes close early reaction trades, where the price reaches 33% before entry and then the market turns in favor of profit.
+
+```bash
+make EarlyReactionBotBybitIntraday
+make EarlyReactionBotBybitSwing
+make EarlyReactionBotBybitPosition
+```
+
+### CloseTradesAtTimeBotBybit
+A trading bot that closes pending orders and positions at a specific predefined time.
+
+```bash
+make CloseTradesAtTimeBotBybitIntraday # Intraday bot
+make CloseTradesAtTimeBotBybitSwing # Swing bot
+make CloseTradesAtTimeBotBybitPosition # Position bot
+```
+
+
+### CheckFuturesMarginLevelBotBybit
+A trading bot that regularly checks the margin level on the futures exchange. If the margin falls below the specified limit, the bot automatically funding the futures account to the defined level after a certain time interval expires.
+
+```bash
+make CheckFuturesMarginLevelBotBybitIntraday # Intraday bot
+make CheckFuturesMarginLevelBotBybitSwing # Swing bot
+make CheckFuturesMarginLevelBotBybitPosition # Position bot
+```
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->

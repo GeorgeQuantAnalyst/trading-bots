@@ -1,10 +1,9 @@
 # CryptoTrendScreenerBotDoc documentation
 
 ## About bot
+A trading bot designed to identify swing and position trends on the USDT perpetual futures markets of the Bybit exchange.
+The output of the program is report (list of markets divide to trends) for analyst platform TradingView.
 
-Trading bot looking for trends across the USDT perpetual futures market on the Bybit exchange. The application
-recognizes intraday trends based on the D chart, swing trends based on the W and M charts. 
-The output of the program is an report (list of coins divide to trends) for analyst platform TradingView.
 
 ## Configuration
 

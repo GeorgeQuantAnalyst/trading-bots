@@ -1,5 +1,5 @@
 # CloseTradesAtTimeBotBybit documentation
-Trading bot closing pending orders and position at defined time. 
+A trading bot that closes pending orders and positions at a specific predefined time.
 
 ## Configuration
 -- Intraday

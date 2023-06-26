@@ -1,7 +1,5 @@
 # CheckFuturesMarginLevelBotBybit documentation
-Trading bot checking sufficient margin on the futures exchange, if the margin is below the specified limit,
-then after the expiration of a defined time interval (2 hours intraday, 12 hours swing for example) the bot fund
-futures account on defined level.
+A trading bot that regularly checks the margin level on the futures exchange. If the margin falls below the specified limit, the bot automatically replenishes the futures account to the defined level after a certain time interval expires.
 
 ## Configuration
 -- Intraday

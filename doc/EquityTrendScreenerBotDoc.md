@@ -1,10 +1,8 @@
 # EquityTrendScreenerBotDoc documentation
 
 ## About bot
-
-Trading bot looking for trends across most US traded stocks (with week options), small-cap U.S. stocks in index Russell 2000 and large-cap U.S. stocks in index S&P 500.
-The application recognizes position trends based on the 3M and Y charts. 
-The output of the program is an report (list of coins divide to trends) for analyst platform TradingView.
+A trading bot that scans for position trends across a wide range of US-traded stocks, including those with weekly options, small-cap stocks in the Russell 2000 index, and large-cap stocks in the S&P 500 index.
+The output of the program is report (list of markets divide to trends) for analyst platform TradingView.
 
 ## Configuration
 

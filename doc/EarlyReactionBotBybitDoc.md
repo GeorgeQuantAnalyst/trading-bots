@@ -2,7 +2,7 @@
 
 ## About bot
 
-Bot checks whether there was a reaction to the trading level earlier, if so, it cancels the given trade.
+A trading bot that executes close early reaction trades, where the price reaches 33% before entry and then the market turns in favor of profit.
 
 ## Configuration
 

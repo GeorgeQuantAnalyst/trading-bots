@@ -1,6 +1,5 @@
 # PlaceTrailingStopsBot documentation
-Trading bot for entering a trailing stop loss based on open futures positions on the Bybit exchange. 
-Bot run in regular intervals defined in CRON table.
+A trading bot that automatically sets trailing stop-loss orders for open futures positions on the Bybit exchange. Bot run in regular intervals defined in CRON table.
 
 **Equation of trailing stop**
 ```
