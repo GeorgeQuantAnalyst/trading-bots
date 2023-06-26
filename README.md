@@ -32,7 +32,7 @@ This repository contains trading bots designed for automated trading, allowing f
 
 
 ## Development
-Project is being actively develop and maintenance.
+Project is being actively develop and maintained.
 
 ## Installation
 Trading bots require Python 3.11 and higher, creating virtual environment venv and install dependencies.
