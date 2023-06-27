@@ -1,8 +1,8 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
+
 import pandas as pd
 
-from trading_bots import constants
 from trading_bots.helpers.place_trailing_stops_bot_bybit_helper import PlaceTrailingStopsBotBybitHelper
 
 
@@ -14,7 +14,6 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         self.helper = PlaceTrailingStopsBotBybitHelper(self.pybit_client)
 
     def test_calculate_trailing_stops(self):
-        # Example test for the calculate_trailing_stops method
         # Create a sample positions DataFrame
         positions_data = {
             "symbol": ["BTCUSDT", "ETHUSDT"],
@@ -37,15 +36,12 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         })
         pd.testing.assert_frame_equal(positions, expected_result)
 
-    #TODO: please repair me
-    @patch("builtins.print")
-    def test_place_trailing_stops(self, mock_print):
-        # Example test for the place_trailing_stops method
+    def test_place_trailing_stops(self):
         # Create a sample positions DataFrame
         positions_data = {
             "symbol": ["BTCUSDT", "ETHUSDT"],
             "side": ["Buy", "Sell"],
-            "isSetStopLoss": [True, False],
+            "isSetStopLoss": [True, True],
             "trailingStop": [0, 0],
             "computeTrailingStop": [1000, 100],
             "positionIdx": [0, 0]
@@ -55,12 +51,10 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         # Test the method
         self.helper.place_trailing_stops(positions)
 
-        # Verify the mock calls and messages
-        #self.assertEqual(mock_print.call_count, 1)
-        #self.assertIn("Successfull place trailing stop", mock_print.call_args[0][0])
+        # Verify the mock calls
+        self.pybit_client.set_trading_stop.assert_called()
 
     def test_get_price_scale(self):
-        # Example test for the _get_price_scale method
         # Mock the instruments_info data
         self.helper.instruments_info = [
             {"symbol": "BTCUSDT", "priceScale": 2},
@@ -78,7 +72,6 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         self.assertEqual(result3, 2)  # Default price scale
 
     def test_is_active_trailing_stop(self):
-        # Example test for the _is_active_trailing_stop method
         # Create a sample position Series
         position_data = {
             "trailingStop": "100"

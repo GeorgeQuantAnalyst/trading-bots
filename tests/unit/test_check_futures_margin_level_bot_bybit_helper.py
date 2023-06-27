@@ -19,7 +19,6 @@ class TestCheckFuturesMarginLevelBotBybitHelper(unittest.TestCase):
         self.helper = CheckFuturesMarginLevelBotBybitHelper(self.pybit_client, self.funding_dates_json_path)
 
     def test_get_available_balance_on_futures_account(self):
-        # Example test for the get_available_balance_on_futures_account method
         # Create a mock response from the pybit_client
         response = {
             "result": {
@@ -44,7 +43,6 @@ class TestCheckFuturesMarginLevelBotBybitHelper(unittest.TestCase):
         self.assertEqual(result, 1000.0)
 
     def test_is_open_positions(self):
-        # Example test for the is_open_positions method
         # Create a mock response from the pybit_client
         response = {
             "result": {
@@ -64,7 +62,6 @@ class TestCheckFuturesMarginLevelBotBybitHelper(unittest.TestCase):
         self.assertTrue(result)
 
     def test_was_funding_account_today(self):
-        # Example test for the was_funding_account_today method
         # Set the last funding date to today
         self.helper.funding_dates = [datetime.now()]
 
@@ -75,7 +72,6 @@ class TestCheckFuturesMarginLevelBotBybitHelper(unittest.TestCase):
         self.assertTrue(result)
 
     def test_get_last_position_close_date(self):
-        # Example test for the get_last_position_close_date method
         # Create a mock response from the pybit_client
         response = {
             "result": {
@@ -95,7 +91,6 @@ class TestCheckFuturesMarginLevelBotBybitHelper(unittest.TestCase):
         self.assertEqual(result.date(), datetime(2021, 6, 26).date())
 
     def test_funding_futures_account(self):
-        # Example test for the funding_futures_account method
         # Create a mock response from the pybit_client
         response = {
             "retMsg": "success"

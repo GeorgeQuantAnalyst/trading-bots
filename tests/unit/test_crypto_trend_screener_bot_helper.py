@@ -15,7 +15,6 @@ class TestCryptoTrendScreenerBotHelper(unittest.TestCase):
         self.helper = CryptoTrendScreenerBotHelper(self.pybit_client)
 
     def test_get_pybit_futures_tickers(self):
-        # Example test for the get_pybit_futures_tickers method
         # Create a mock response from the pybit_client for the get_instruments_info call
         response = {
             "result": {
@@ -39,7 +38,6 @@ class TestCryptoTrendScreenerBotHelper(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     def test_get_ohlc(self):
-        # Example test for the get_ohlc method
         # Create a mock response from the pybit_client for the get_kline call
         response = {
             "result": {
@@ -76,7 +74,6 @@ class TestCryptoTrendScreenerBotHelper(unittest.TestCase):
         pd.testing.assert_frame_equal(result, expected_result)
 
     def test_create_tw_report(self):
-        # Example test for the create_tw_report method
         trends = pd.DataFrame({
             "ticker": ["BTCUSDT", "ETHUSDT", "XRPUSDT"],
             "context": ["Up-trend", "Start rotation after up-trend", "Down-trend"]
@@ -91,7 +88,6 @@ class TestCryptoTrendScreenerBotHelper(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     def test_save_tw_report(self):
-        # Example test for the save_tw_report method
         report = "###UP-TREND,BTCUSDT,###START ROTATION AFTER UP-TREND,ETHUSDT,###DOWN-TREND,XRPUSDT"
         file_path = "reports/report.txt"
 
