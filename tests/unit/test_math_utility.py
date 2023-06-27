@@ -9,7 +9,6 @@ from trading_bots.trading_math import (
     is_start_rotation_after_down_trend,
 )
 
-# TODO: repair me please @Lucka
 class TestTradingMath(unittest.TestCase):
 
     def test_convert_ohlc(self):
