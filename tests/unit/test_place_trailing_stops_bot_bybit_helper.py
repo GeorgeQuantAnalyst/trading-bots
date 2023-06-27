@@ -37,7 +37,7 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         })
         pd.testing.assert_frame_equal(positions, expected_result)
 
-    #TODO: please repair me
+    #TODO: please repair me @Jirka
     @patch("builtins.print")
     def test_place_trailing_stops(self, mock_print):
         # Example test for the place_trailing_stops method
@@ -56,8 +56,8 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         self.helper.place_trailing_stops(positions)
 
         # Verify the mock calls and messages
-        #self.assertEqual(mock_print.call_count, 1)
-        #self.assertIn("Successfull place trailing stop", mock_print.call_args[0][0])
+        self.assertEqual(mock_print.call_count, 1)
+        self.assertIn("Successfull place trailing stop", mock_print.call_args[0][0])
 
     def test_get_price_scale(self):
         # Example test for the _get_price_scale method
