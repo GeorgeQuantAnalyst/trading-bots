@@ -13,7 +13,6 @@ from trading_bots.trading_math import (
 class TestTradingMath(unittest.TestCase):
 
     def test_convert_ohlc(self):
-        # Example test for convert_ohlc function
         ohlc_df = pd.read_csv("fixtures/AAPL_OHLC_D.csv")
 
         # Test the function
@@ -24,7 +23,6 @@ class TestTradingMath(unittest.TestCase):
         pd.testing.assert_frame_equal(result, expected_result)
 
     def test_calculate_context(self):
-        # Example test for calculate_context function
         ohlc_data = {
             'startTime': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05'],
             'open': [100, 150, 200, 250, 300],
@@ -42,7 +40,6 @@ class TestTradingMath(unittest.TestCase):
         self.assertEqual(result, 'Up-trend')
 
     def test_is_up_trend(self):
-        # Example test for is_up_trend function
         ohlc_data = {
             'startTime': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04'],
             'open': [100, 150, 200, 250],

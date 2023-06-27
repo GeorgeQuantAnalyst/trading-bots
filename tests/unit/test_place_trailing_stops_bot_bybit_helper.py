@@ -14,7 +14,6 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         self.helper = PlaceTrailingStopsBotBybitHelper(self.pybit_client)
 
     def test_calculate_trailing_stops(self):
-        # Example test for the calculate_trailing_stops method
         # Create a sample positions DataFrame
         positions_data = {
             "symbol": ["BTCUSDT", "ETHUSDT"],
@@ -56,7 +55,6 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         self.pybit_client.set_trading_stop.assert_called()
 
     def test_get_price_scale(self):
-        # Example test for the _get_price_scale method
         # Mock the instruments_info data
         self.helper.instruments_info = [
             {"symbol": "BTCUSDT", "priceScale": 2},
@@ -74,7 +72,6 @@ class TestPlaceTrailingStopsBotBybitHelper(unittest.TestCase):
         self.assertEqual(result3, 2)  # Default price scale
 
     def test_is_active_trailing_stop(self):
-        # Example test for the _is_active_trailing_stop method
         # Create a sample position Series
         position_data = {
             "trailingStop": "100"

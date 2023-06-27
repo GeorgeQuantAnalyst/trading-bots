@@ -27,7 +27,6 @@ class TestEarlyReactionBotBybitHelper(unittest.TestCase):
             pass
 
     def test_get_pending_orders(self):
-        # Example test for the get_pending_orders method
         # Create a mock response from the pybit_client for the get_open_orders call
         response = {
             "result": {
@@ -56,7 +55,6 @@ class TestEarlyReactionBotBybitHelper(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     def test_get_last_closed_bar(self):
-        # Example test for the get_last_closed_bar method
         # Create a mock response from the pybit_client for the get_kline call
         response = {
             "result": {
@@ -92,7 +90,6 @@ class TestEarlyReactionBotBybitHelper(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     def test_cancel_pending_order(self):
-        # Example test for the cancel_pending_order method
         order_id = "12345"
         symbol = "BTCUSDT"
 
@@ -107,7 +104,6 @@ class TestEarlyReactionBotBybitHelper(unittest.TestCase):
         )
 
     def test_remove_not_exists_ids(self):
-        # Example test for the remove_not_exists_ids method
         before_entry_ids = ["12345", "67890", "98765"]
         pending_orders = [
             {"orderId": "12345", "symbol": "BTCUSDT"},
@@ -123,7 +119,6 @@ class TestEarlyReactionBotBybitHelper(unittest.TestCase):
         self.assertEqual(before_entry_ids, expected_before_entry_ids)
 
     def test_load_before_entry_ids_list(self):
-        # Example test for the load_before_entry_ids_list method
         # Create a test file with mock content
         mock_content = '["12345", "67890", "98765"]'
         with open(self.before_entry_ids_json_path, "w") as f:
@@ -137,7 +132,6 @@ class TestEarlyReactionBotBybitHelper(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     def test_save_before_entry_ids_list(self):
-        # Example test for the save_before_entry_ids_list method
         before_entry_ids = ["12345", "67890", "98765"]
 
         # Test the method
