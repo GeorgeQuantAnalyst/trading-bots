@@ -23,15 +23,7 @@ class TestTradingMath(unittest.TestCase):
         pd.testing.assert_frame_equal(result, expected_result)
 
     def test_calculate_context_is_uptrend(self):
-        ohlc_data = {
-            'startTime': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05'],
-            'open': [100, 150, 200, 250, 300],
-            'high': [120, 160, 210, 260, 310],
-            'low': [80, 140, 190, 240, 290],
-            'close': [110, 155, 205, 255, 305],
-            'candleColor': ['Green', 'Green', 'Green', 'Green', 'Green']
-        }
-        ohlc_df = pd.DataFrame(ohlc_data)
+        ohlc_df = pd.read_csv("fixtures/AAPL_OHLC_M.csv")
 
         # Test the function
         result = calculate_context(ohlc_df)
@@ -39,7 +31,41 @@ class TestTradingMath(unittest.TestCase):
         # Verify the result
         self.assertEqual(result, 'Up-trend')
 
-    # TODO: next test_calculate_context_is_xxx
+    def test_calculate_context_is_start_rotation_after_uptrend(self):
+        ohlc_df = pd.read_csv("fixtures/LULU_OHLC_M.csv")
+
+        # Test the function
+        result = calculate_context(ohlc_df)
+
+        # Verify the result
+        self.assertEqual(result, 'Start rotation after up-trend')
+
+    def test_calculate_context_is_rotation(self):
+        ohlc_df = pd.read_csv("fixtures/SONY_OHLC_M.csv")
+
+        # Test the function
+        result = calculate_context(ohlc_df)
+
+        # Verify the result
+        self.assertEqual(result, 'Rotation')
+
+    def test_calculate_context_is_downtrend(self):
+        ohlc_df = pd.read_csv("fixtures/MRNA_OHLC_M.csv")
+
+        # Test the function
+        result = calculate_context(ohlc_df)
+
+        # Verify the result
+        self.assertEqual(result, 'Down-trend')
+
+    def test_calculate_context_is_start_rotation_after_downtrend(self):
+        ohlc_df = pd.read_csv("fixtures/CHPT_OHLC_M.csv")
+
+        # Test the function
+        result = calculate_context(ohlc_df)
+
+        # Verify the result
+        self.assertEqual(result, 'Start rotation after down-trend')
 
 
 if __name__ == '__main__':
