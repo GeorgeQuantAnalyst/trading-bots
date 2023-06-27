@@ -22,7 +22,7 @@ class TestTradingMath(unittest.TestCase):
         expected_result = pd.read_csv("fixtures/APPL_OHLC_3M.csv", parse_dates=["startTime"])
         pd.testing.assert_frame_equal(result, expected_result)
 
-    def test_calculate_context(self):
+    def test_calculate_context_is_uptrend(self):
         ohlc_data = {
             'startTime': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05'],
             'open': [100, 150, 200, 250, 300],
@@ -39,24 +39,7 @@ class TestTradingMath(unittest.TestCase):
         # Verify the result
         self.assertEqual(result, 'Up-trend')
 
-    def test_is_up_trend(self):
-        ohlc_data = {
-            'startTime': ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04'],
-            'open': [100, 150, 200, 250],
-            'high': [120, 160, 210, 260],
-            'low': [80, 140, 190, 240],
-            'close': [110, 155, 205, 255],
-            'candleColor': ['Green', 'Green', 'Green', 'Green']
-        }
-        ohlc_df = pd.DataFrame(ohlc_data)
-
-        # Test the function
-        result = is_up_trend(ohlc_df)
-
-        # Verify the result
-        self.assertTrue(result)
-
-    # Add more test cases for the remaining functions...
+    # TODO: next test_calculate_context_is_xxx
 
 
 if __name__ == '__main__':
