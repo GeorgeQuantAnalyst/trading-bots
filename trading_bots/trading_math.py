@@ -77,3 +77,8 @@ def is_start_rotation_after_down_trend(ohlc: pd.DataFrame) -> bool:
         return two_red_candles and break_low
     else:
         return False
+
+
+def calculate_break_out_sd_range(ohlc: pd.DataFrame, threshold: int = 1):
+    # TODO: @Lucka implement me (hint in test_breakout_screener)
+    return 0

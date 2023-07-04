@@ -19,7 +19,9 @@ class EquityTrendScreenerBot(Bot):
 
         tickers = self.loading_tickers()
         trends = self.find_trends(tickers)
+        breakouts = self.find_breakouts(tickers)
         self.create_tw_trends_report(trends)
+        self.create_tw_breakouts_report(breakouts)
 
         logging.info("Finished EquityTrendScreenerBot")
 
@@ -155,6 +157,26 @@ class EquityTrendScreenerBot(Bot):
             "russell_2k_yearly_trends": pd.DataFrame(russell_2k_yearly_trends)
         }
 
+    def find_breakouts(self, tickers: dict[str, list]) -> dict[str, pd.DataFrame]:
+
+        # TODO: @Lucka implement me please
+        most_traded_us_stocks_quarterly_breakouts = []
+        most_traded_us_stocks_yearly_breakouts = []
+        sp_500_quarterly_breakouts = []
+        sp_500_yearly_breakouts = []
+        russell_2k_quarterly_breakouts = []
+        russell_2k_yearly_breakouts = []
+
+        return {
+            "most_traded_us_stocks_quarterly_breakouts": pd.DataFrame(most_traded_us_stocks_quarterly_breakouts),
+            "most_traded_us_stocks_yearly_breakouts": pd.DataFrame(most_traded_us_stocks_yearly_breakouts),
+            "sp_500_quarterly_breakouts": pd.DataFrame(sp_500_quarterly_breakouts),
+            "sp_500_yearly_breakouts": pd.DataFrame(sp_500_yearly_breakouts),
+            "russell_2k_quarterly_breakouts": pd.DataFrame(russell_2k_quarterly_breakouts),
+            "russell_2k_yearly_breakouts": pd.DataFrame(russell_2k_yearly_breakouts)
+        }
+        pass
+
     def create_tw_trends_report(self, trends):
         logging.info(self.SEPARATOR)
         logging.info("Create TradingView trends report")
@@ -165,7 +187,8 @@ class EquityTrendScreenerBot(Bot):
         logging.info("Create Most traded US stocks 3M trends")
         most_traded_us_stocks_quarterly_trends = trends["most_traded_us_stocks_quarterly_trends"]
         if not most_traded_us_stocks_quarterly_trends.empty:
-            most_traded_us_stocks_quarterly_trends_path = "{}/Most traded US stocks 3M trends.txt".format(reports_folder)
+            most_traded_us_stocks_quarterly_trends_path = "{}/Most traded US stocks 3M trends.txt".format(
+                reports_folder)
             most_traded_us_stocks_quarterly_trends_report = self.helper.create_tw_report(
                 most_traded_us_stocks_quarterly_trends)
             self.helper.save_tw_report(most_traded_us_stocks_quarterly_trends_report,
@@ -239,3 +262,7 @@ class EquityTrendScreenerBot(Bot):
                 russell_2k_yearly_trends_path = "{}/Russell 2000 Y trends.txt".format(reports_folder)
                 russell_2k_yearly_trends_report = self.helper.create_tw_report(russell_2k_yearly_trends)
                 self.helper.save_tw_report(russell_2k_yearly_trends_report, russell_2k_yearly_trends_path)
+
+    def create_tw_breakouts_report(self, breakouts):
+        # TODO: @Lucka implement me please
+        pass
