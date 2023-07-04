@@ -1,10 +1,11 @@
 import logging
+from typing import Dict
 
 import pandas as pd
 
 from trading_bots.helpers.equity_trend_screener_bot_helper import EquityTrendScreenerBotHelper
 from trading_bots.templates.bot import Bot
-from trading_bots.trading_math import convert_ohlc, calculate_context
+from trading_bots.trading_math import convert_ohlc, calculate_context, calculate_break_out_sd_range
 
 
 class EquityTrendScreenerBot(Bot):
@@ -158,24 +159,130 @@ class EquityTrendScreenerBot(Bot):
         }
 
     def find_breakouts(self, tickers: dict[str, list]) -> dict[str, pd.DataFrame]:
+        logging.info(self.SEPARATOR)
+        logging.info("Find breakouts")
+        logging.info(self.SEPARATOR)
 
-        # TODO: @Lucka implement me please
+        logging.info("Find breakouts in Most traded US stocks tickers")
         most_traded_us_stocks_quarterly_breakouts = []
         most_traded_us_stocks_yearly_breakouts = []
+
+        for ticker in tickers["tickers_most_traded_us_stocks"]:
+            logging.info("Process {} ticker".format(ticker))
+            daily_ohlc = self.helper.get_daily_ohlc(ticker)
+            quarterly_ohlc = convert_ohlc(daily_ohlc, "Q")
+            yearly_ohlc = convert_ohlc(daily_ohlc, "Y")
+
+            logging.debug("Daily ohlc (last 10 candles): \n {}".format(daily_ohlc))
+            logging.debug("Quarterly ohlc (last 10 candles): \n {}".format(quarterly_ohlc))
+            logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
+
+            quarterly_breakouts = calculate_break_out_sd_range(quarterly_ohlc)
+            yearly_breakouts = calculate_break_out_sd_range(yearly_ohlc)
+
+            logging.debug("Quarterly breakouts: {}".format(quarterly_breakouts))
+            logging.debug("Yearly breakouts: {}".format(yearly_breakouts))
+
+            most_traded_us_stocks_quarterly_breakouts.append({
+                "ticker": ticker,
+                "breakouts from SD range": quarterly_breakouts
+            })
+
+            most_traded_us_stocks_quarterly_breakouts_df = pd.DataFrame(most_traded_us_stocks_quarterly_breakouts)
+            most_traded_us_stocks_quarterly_breakouts_df_sorted = most_traded_us_stocks_quarterly_breakouts_df.sort_values(
+                by="breakouts from SD range", ascending=False, inplace=True)
+
+            most_traded_us_stocks_yearly_breakouts.append({
+                "ticker": ticker,
+                "breakouts from SD range": yearly_breakouts
+            })
+
+            most_traded_us_stocks_yearly_breakouts_df = pd.DataFrame(most_traded_us_stocks_yearly_breakouts)
+            most_traded_us_stocks_yearly_breakouts_df_sorted = most_traded_us_stocks_yearly_breakouts_df.sort_values(
+                by="breakouts from SD range", ascending=False, inplace=True)
+
+        logging.info("Find breakouts in S&P 500 tickers")
         sp_500_quarterly_breakouts = []
         sp_500_yearly_breakouts = []
+        for ticker in tickers["tickers_sp_500"]:
+            logging.info("Process {} ticker".format(ticker))
+            daily_ohlc = self.helper.get_daily_ohlc(ticker)
+            quarterly_ohlc = convert_ohlc(daily_ohlc, "Q")
+            yearly_ohlc = convert_ohlc(daily_ohlc, "Y")
+
+            logging.debug("Daily ohlc (last 10 candles): \n {}".format(daily_ohlc))
+            logging.debug("Quarterly ohlc (last 10 candles): \n {}".format(quarterly_ohlc))
+            logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
+
+            quarterly_breakouts = calculate_break_out_sd_range(quarterly_ohlc)
+            yearly_breakouts = calculate_break_out_sd_range(yearly_ohlc)
+
+            logging.debug("Quarterly breakouts: {}".format(quarterly_breakouts))
+            logging.debug("Yearly breakouts: {}".format(yearly_breakouts))
+
+            sp_500_quarterly_breakouts.append({
+                "ticker": ticker,
+                "breakouts from SD range": quarterly_breakouts
+            })
+
+            sp_500_quarterly_breakouts_df = pd.DataFrame(sp_500_quarterly_breakouts)
+            sp_500_quarterly_breakouts_df_sorted = sp_500_quarterly_breakouts_df.sort_values(
+                by="breakouts from SD range", ascending=False, inplace=True)
+
+            sp_500_yearly_breakouts.append({
+                "ticker": ticker,
+                "breakouts from SD range": yearly_breakouts
+            })
+
+            sp_500_yearly_breakouts_df = pd.DataFrame(sp_500_yearly_breakouts)
+            sp_500_yearly_breakouts_df_sorted = sp_500_yearly_breakouts_df.sort_values(by="breakouts from SD range",
+                                                                                       ascending=False, inplace=True)
+
+        logging.info("Find breakouts in Russell 2000 tickers")
         russell_2k_quarterly_breakouts = []
         russell_2k_yearly_breakouts = []
+        for ticker in tickers["tickers_russell_2k"]:
+            logging.info("Process {} ticker".format(ticker))
+            daily_ohlc = self.helper.get_daily_ohlc(ticker)
+            quarterly_ohlc = convert_ohlc(daily_ohlc, "Q")
+            yearly_ohlc = convert_ohlc(daily_ohlc, "Y")
+
+            logging.debug("Daily ohlc (last 10 candles): \n {}".format(daily_ohlc))
+            logging.debug("Quarterly ohlc (last 10 candles): \n {}".format(quarterly_ohlc))
+            logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
+
+            quarterly_breakouts = calculate_break_out_sd_range(quarterly_ohlc)
+            yearly_breakouts = calculate_break_out_sd_range(yearly_ohlc)
+
+            logging.debug("Quarterly breakouts: {}".format(quarterly_breakouts))
+            logging.debug("Yearly breakouts: {}".format(yearly_breakouts))
+
+            russell_2k_quarterly_breakouts.append({
+                "ticker": ticker,
+                "breakouts from SD range": quarterly_breakouts
+            })
+
+            russell_2k_quarterly_breakouts_df = pd.DataFrame(russell_2k_quarterly_breakouts)
+            russell_2k_quarterly_breakouts_df_sorted = russell_2k_quarterly_breakouts_df.sort_values(
+                by="breakouts from SD range", ascending=False, inplace=True)
+
+            russell_2k_yearly_breakouts.append({
+                "ticker": ticker,
+                "breakouts from SD range": yearly_breakouts
+            })
+
+            russell_2k_yearly_breakouts_df = pd.DataFrame(russell_2k_yearly_breakouts)
+            russell_2k_yearly_breakouts_df_sorted = russell_2k_yearly_breakouts_df.sort_values(
+                by="breakouts from SD range", ascending=False, inplace=True)
 
         return {
-            "most_traded_us_stocks_quarterly_breakouts": pd.DataFrame(most_traded_us_stocks_quarterly_breakouts),
-            "most_traded_us_stocks_yearly_breakouts": pd.DataFrame(most_traded_us_stocks_yearly_breakouts),
-            "sp_500_quarterly_breakouts": pd.DataFrame(sp_500_quarterly_breakouts),
-            "sp_500_yearly_breakouts": pd.DataFrame(sp_500_yearly_breakouts),
-            "russell_2k_quarterly_breakouts": pd.DataFrame(russell_2k_quarterly_breakouts),
-            "russell_2k_yearly_breakouts": pd.DataFrame(russell_2k_yearly_breakouts)
+            "most_traded_us_stocks_quarterly_breakouts": most_traded_us_stocks_quarterly_breakouts_df_sorted,
+            "most_traded_us_stocks_yearly_breakouts": most_traded_us_stocks_yearly_breakouts_df_sorted,
+            "sp_500_quarterly_breakouts": sp_500_quarterly_breakouts_df_sorted,
+            "sp_500_yearly_breakouts_df": sp_500_yearly_breakouts_df_sorted,
+            "russell_2k_quarterly_breakouts": russell_2k_quarterly_breakouts_df_sorted,
+            "russell_2k_yearly_breakouts": russell_2k_yearly_breakouts_df_sorted
         }
-        pass
 
     def create_tw_trends_report(self, trends):
         logging.info(self.SEPARATOR)
@@ -264,5 +371,95 @@ class EquityTrendScreenerBot(Bot):
                 self.helper.save_tw_report(russell_2k_yearly_trends_report, russell_2k_yearly_trends_path)
 
     def create_tw_breakouts_report(self, breakouts):
-        # TODO: @Lucka implement me please
-        pass
+        logging.info(self.SEPARATOR)
+        logging.info("Create TradingView breakouts report")
+        logging.info(self.SEPARATOR)
+
+        reports_folder = self.config["base"]["reportsFolder"]
+
+        logging.info("Create Most traded US stocks 3M breakouts")
+        most_traded_us_stocks_quarterly_breakouts = breakouts["most_traded_us_stocks_quarterly_breakouts"]
+        if not most_traded_us_stocks_quarterly_breakouts.empty:
+            most_traded_us_stocks_quarterly_breakouts_path = "{}/Most traded US stocks 3M breakouts.txt".format(
+                reports_folder)
+            most_traded_us_stocks_quarterly_breakouts_report = self.helper.create_tw_breakouts_report(
+                most_traded_us_stocks_quarterly_breakouts)
+            self.helper.save_tw_report(most_traded_us_stocks_quarterly_breakouts_report,
+                                       most_traded_us_stocks_quarterly_breakouts_path)
+
+        logging.info("Create Most traded US stocks Y breakouts")
+        most_traded_us_stocks_yearly_breakouts = breakouts["most_traded_us_stocks_yearly_breakouts"]
+        if not most_traded_us_stocks_yearly_breakouts.empty:
+            most_traded_us_stocks_yearly_breakouts_path = "{}/Most traded US stocks Y breakouts.txt".format(
+                reports_folder)
+            most_traded_us_stocks_yearly_breakouts_report = self.helper.create_tw_breakouts_report(
+                most_traded_us_stocks_yearly_breakouts)
+            self.helper.save_tw_report(most_traded_us_stocks_yearly_breakouts_report,
+                                       most_traded_us_stocks_yearly_breakouts_path)
+
+        logging.info("Create S&P500 3M breakouts")
+        sp_500_quarterly_breakouts = breakouts["sp_500_quarterly_breakouts"]
+        if not sp_500_quarterly_breakouts.empty:
+            sp_500_quarterly_breakouts_path = "{}/S&P 500 3M breakouts.txt".format(reports_folder)
+            sp_500_quarterly_breakouts_report = self.helper.create_tw_breakouts_report(sp_500_quarterly_breakouts)
+            self.helper.save_tw_report(sp_500_quarterly_breakouts_report, sp_500_quarterly_breakouts_path)
+
+        logging.info("Create S&P500 Y breakouts")
+        sp_500_yearly_breakouts = breakouts["sp_500_yearly_breakouts"]
+        if not sp_500_yearly_breakouts.empty:
+            sp_500_yearly_breakouts_path = "{}/S&P 500 Y breakouts.txt".format(reports_folder)
+            sp_500_yearly_breakouts_report = self.helper.create_tw_breakouts_report(sp_500_yearly_breakouts)
+            self.helper.save_tw_report(sp_500_yearly_breakouts_report, sp_500_yearly_breakouts_path)
+
+        logging.info("Create Russell 2000 3M breakouts")
+        russell_2k_quarterly_breakouts = breakouts["russell_2k_quarterly_breakouts"]
+        if not russell_2k_quarterly_breakouts.empty:
+            if self.helper.count_items_without_rotation(russell_2k_quarterly_breakouts) > 1000:
+                russell_2k_quarterly_breakouts_path_part1 = "{}/Russell 2000 3M breakouts part1.txt".format(
+                    reports_folder)
+                russell_2k_quarterly_breakouts_path_part2 = "{}/Russell 2000 3M breakouts part2.txt".format(
+                    reports_folder)
+
+                n = russell_2k_quarterly_breakouts.shape[0]
+                russell_2k_quarterly_breakouts_part1 = russell_2k_quarterly_breakouts.head(n // 2)
+                russell_2k_quarterly_breakouts_part2 = russell_2k_quarterly_breakouts.tail(n // 2)
+
+                russell_2k_quarterly_breakouts_report_part1 = self.helper.create_tw_breakouts_report(
+                    russell_2k_quarterly_breakouts_part1)
+                russell_2k_quarterly_breakouts_report_part2 = self.helper.create_tw_breakouts_report(
+                    russell_2k_quarterly_breakouts_part2)
+
+                self.helper.save_tw_report(russell_2k_quarterly_breakouts_report_part1,
+                                           russell_2k_quarterly_breakouts_path_part1)
+                self.helper.save_tw_report(russell_2k_quarterly_breakouts_report_part2,
+                                           russell_2k_quarterly_breakouts_path_part2)
+            else:
+                russell_2k_quarterly_breakouts_path = "{}/Russell 2000 3M breakouts.txt".format(reports_folder)
+                russell_2k_quarterly_breakouts_report = self.helper.create_tw_breakouts_report(
+                    russell_2k_quarterly_breakouts)
+                self.helper.save_tw_report(russell_2k_quarterly_breakouts_report, russell_2k_quarterly_breakouts_path)
+
+        logging.info("Create Russell 2000 Y breakouts")
+        russell_2k_yearly_breakouts = breakouts["russell_2k_yearly_breakouts"]
+        if not russell_2k_yearly_breakouts.empty:
+            if self.helper.count_items_without_rotation(russell_2k_yearly_breakouts) > 1000:
+                russell_2k_yearly_breakouts_path_part1 = "{}/Russell 2000 Y breakouts part1.txt".format(reports_folder)
+                russell_2k_yearly_breakouts_path_part2 = "{}/Russell 2000 Y breakouts part2.txt".format(reports_folder)
+
+                n = russell_2k_yearly_breakouts.shape[0]
+                russell_2k_yearly_breakouts_part1 = russell_2k_yearly_breakouts.head(n // 2)
+                russell_2k_yearly_breakouts_part2 = russell_2k_yearly_breakouts.tail(n // 2)
+
+                russell_2k_yearly_breakouts_report_part1 = self.helper.create_tw_breakouts_report(
+                    russell_2k_yearly_breakouts_part1)
+                russell_2k_yearly_breakouts_report_part2 = self.helper.create_tw_breakouts_report(
+                    russell_2k_yearly_breakouts_part2)
+
+                self.helper.save_tw_report(russell_2k_yearly_breakouts_report_part1,
+                                           russell_2k_yearly_breakouts_path_part1)
+                self.helper.save_tw_report(russell_2k_yearly_breakouts_report_part2,
+                                           russell_2k_yearly_breakouts_path_part2)
+            else:
+                russell_2k_yearly_breakouts_path = "{}/Russell 2000 Y breakouts.txt".format(reports_folder)
+                russell_2k_yearly_breakouts_report = self.helper.create_tw_breakouts_report(russell_2k_yearly_breakouts)
+                self.helper.save_tw_report(russell_2k_yearly_breakouts_report, russell_2k_yearly_breakouts_path)

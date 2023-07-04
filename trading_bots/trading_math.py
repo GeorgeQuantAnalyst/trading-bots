@@ -81,4 +81,26 @@ def is_start_rotation_after_down_trend(ohlc: pd.DataFrame) -> bool:
 
 def calculate_break_out_sd_range(ohlc: pd.DataFrame, threshold: int = 1):
     # TODO: @Lucka implement me (hint in test_breakout_screener)
+    data = ohlc.sort_index(ascending=False)
+
+    data["range"] = data["high"] - data["low"]
+    data["5-day range support"] = data["low"].rolling(window=5).mean()
+    data["5-day range resistance"] = data["high"].rolling(window=5).mean()
+    data["5-day range"] = data["range"].rolling(window=5).mean()
+    data["5-day range SD"] = data["range"].rolling(window=5).std()
+    data["breakout resistance SDx"] = (data["close"] - data["5-day range resistance"]) / data["5-day range SD"]
+    data["breakout support SDx"] = (data["close"] - data["5-day range support"]) / data["5-day range SD"]
+
+    data["breakout support"] = data["close"] < data["5-day range support"] - (
+            data["5-day range SD"] * threshold)
+
+    data["breakout resistance"] = data["close"] > data["5-day range resistance"] + (
+            data["5-day range SD"] * threshold)
+
+    if data.tail(3)["breakout resistance"].any():
+        return data.tail(3)["breakout resistance SDx"].max()
+
+    if data.tail(3)["breakout support"].any():
+        return data.tail(3)["breakout support SDx"].min()
+
     return 0

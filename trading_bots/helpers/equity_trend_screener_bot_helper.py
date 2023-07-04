@@ -53,6 +53,36 @@ class EquityTrendScreenerBotHelper:
         return ",".join(report)
 
     @staticmethod
+    def create_tw_breakouts_report(breakouts: pd.DataFrame) -> str:
+        report = []
+
+        report.append("###BREAKOUTS ABOVE 5SD")
+        breakouts_above_five_sd_df = breakouts[breakouts["breakouts from SD range"] > 5]
+        report.extend(breakouts_above_five_sd_df["ticker"].tolist())
+
+        report.append("###BREAKOUTS BETWEEN 3SD AND 5SD")
+        breakouts_between_three_and_five_sd_df = breakouts[3 < breakouts["breakouts from SD range"] < 5]
+        report.extend(breakouts_between_three_and_five_sd_df["ticker"].tolist())
+
+        report.append("###BREAKOUTS BETWEEN 1SD AND 3SD")
+        breakouts_between_one_and_three_sd_df = breakouts[1 < breakouts["breakouts from SD range"] < 3]
+        report.extend(breakouts_between_one_and_three_sd_df["ticker"].tolist())
+
+        report.append("###BREAKOUTS BELOW -5SD")
+        breakouts_below_minus_five_sd_df = breakouts[breakouts["breakouts from SD range"] < -5]
+        report.extend(breakouts_below_minus_five_sd_df["ticker"].tolist())
+
+        report.append("###BREAKOUTS BETWEEN -3SD AND -5SD")
+        breakouts_between_minus_three_and_minus_five_sd_df = breakouts[-3 > breakouts["breakouts from SD range"] > -5]
+        report.extend(breakouts_between_minus_three_and_minus_five_sd_df["ticker"].tolist())
+
+        report.append("###BREAKOUTS BETWEEN -1SD AND -3SD")
+        breakouts_between_minus_one_and_minus_three_sd_df = breakouts[-1 > breakouts["breakouts from SD range"] > -3]
+        report.extend(breakouts_between_minus_one_and_minus_three_sd_df["ticker"].tolist())
+
+        return ",".join(report)
+
+    @staticmethod
     def save_tw_report(report: str, file_path: str) -> None:
         try:
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
