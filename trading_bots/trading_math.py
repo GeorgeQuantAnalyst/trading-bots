@@ -80,27 +80,23 @@ def is_start_rotation_after_down_trend(ohlc: pd.DataFrame) -> bool:
 
 
 def calculate_break_out_sd_range(ohlc: pd.DataFrame, threshold: int = 1):
-    # TODO: @Lucka implement me (hint in test_breakout_screener)
     data = ohlc.sort_index(ascending=False)
 
-    data["range"] = data["high"] - data["low"]
-    data["5-day range support"] = data["low"].rolling(window=5).mean()
-    data["5-day range resistance"] = data["high"].rolling(window=5).mean()
-    data["5-day range"] = data["range"].rolling(window=5).mean()
-    data["5-day range SD"] = data["range"].rolling(window=5).std()
-    data["breakout resistance SDx"] = (data["close"] - data["5-day range resistance"]) / data["5-day range SD"]
-    data["breakout support SDx"] = (data["close"] - data["5-day range support"]) / data["5-day range SD"]
+    data = data.assign(
+        range=data["high"] - data["low"],
+        five_day_range_support=data["low"].rolling(window=5).mean(),
+        five_day_range_resistance=data["high"].rolling(window=5).mean(),
+    )
 
-    data["breakout support"] = data["close"] < data["5-day range support"] - (
-            data["5-day range SD"] * threshold)
+    data["five_day_range"] = data["range"].rolling(window=5).mean()
+    data["five_day_range_SD"] = data["range"].rolling(window=5).std()
+    data["breakout_resistance_SDx"] = (data["close"] - data["five_day_range_resistance"]) / data["five_day_range_SD"]
+    data["breakout_support_SDx"] = (data["close"] - data["five_day_range_support"]) / data["five_day_range_SD"]
 
-    data["breakout resistance"] = data["close"] > data["5-day range resistance"] + (
-            data["5-day range SD"] * threshold)
-
-    if data.tail(3)["breakout resistance"].any():
-        return data.tail(3)["breakout resistance SDx"].max()
-
-    if data.tail(3)["breakout support"].any():
-        return data.tail(3)["breakout support SDx"].min()
+    last_row = data.iloc[-1]
+    if last_row["breakout_resistance_SDx"] > threshold:
+        return last_row["breakout_resistance_SDx"]
+    if last_row["breakout_support_SDx"] < threshold * -1:
+        return last_row["breakout_support_SDx"]
 
     return 0
