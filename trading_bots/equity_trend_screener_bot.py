@@ -65,6 +65,7 @@ class EquityTrendScreenerBot(Bot):
         logging.info("Find trends in Most traded US stocks tickers")
         most_traded_us_stocks_quarterly_trends = []
         most_traded_us_stocks_yearly_trends = []
+
         for ticker in tickers["tickers_most_traded_us_stocks"]:
             logging.info("Process {} ticker".format(ticker))
             daily_ohlc = self.helper.get_daily_ohlc(ticker)
@@ -94,6 +95,7 @@ class EquityTrendScreenerBot(Bot):
         logging.info("Find trends in S&P 500 tickers")
         sp_500_quarterly_trends = []
         sp_500_yearly_trends = []
+
         for ticker in tickers["tickers_sp_500"]:
             logging.info("Process {} ticker".format(ticker))
             daily_ohlc = self.helper.get_daily_ohlc(ticker)
@@ -123,6 +125,7 @@ class EquityTrendScreenerBot(Bot):
         logging.info("Find trends in Russell 2000 tickers")
         russell_2k_quarterly_trends = []
         russell_2k_yearly_trends = []
+
         for ticker in tickers["tickers_russell_2k"]:
             logging.info("Process {} ticker".format(ticker))
             daily_ohlc = self.helper.get_daily_ohlc(ticker)
@@ -177,33 +180,26 @@ class EquityTrendScreenerBot(Bot):
             logging.debug("Quarterly ohlc (last 10 candles): \n {}".format(quarterly_ohlc))
             logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
 
-            quarterly_breakouts = calculate_break_out_sd_range(quarterly_ohlc)
-            yearly_breakouts = calculate_break_out_sd_range(yearly_ohlc)
+            quarterly_breakout = calculate_break_out_sd_range(quarterly_ohlc)
+            yearly_breakout = calculate_break_out_sd_range(yearly_ohlc)
 
-            logging.debug("Quarterly breakouts: {}".format(quarterly_breakouts))
-            logging.debug("Yearly breakouts: {}".format(yearly_breakouts))
+            logging.debug("Quarterly breakout: {}".format(quarterly_breakout))
+            logging.debug("Yearly breakout: {}".format(yearly_breakout))
 
             most_traded_us_stocks_quarterly_breakouts.append({
                 "ticker": ticker,
-                "breakouts from SD range": quarterly_breakouts
+                "breakout from SD range": quarterly_breakout
             })
-
-            most_traded_us_stocks_quarterly_breakouts_df = pd.DataFrame(most_traded_us_stocks_quarterly_breakouts)
-            most_traded_us_stocks_quarterly_breakouts_df_sorted = most_traded_us_stocks_quarterly_breakouts_df.sort_values(
-                by="breakouts from SD range", ascending=False, inplace=True)
 
             most_traded_us_stocks_yearly_breakouts.append({
                 "ticker": ticker,
-                "breakouts from SD range": yearly_breakouts
+                "breakout from SD range": yearly_breakout
             })
-
-            most_traded_us_stocks_yearly_breakouts_df = pd.DataFrame(most_traded_us_stocks_yearly_breakouts)
-            most_traded_us_stocks_yearly_breakouts_df_sorted = most_traded_us_stocks_yearly_breakouts_df.sort_values(
-                by="breakouts from SD range", ascending=False, inplace=True)
 
         logging.info("Find breakouts in S&P 500 tickers")
         sp_500_quarterly_breakouts = []
         sp_500_yearly_breakouts = []
+
         for ticker in tickers["tickers_sp_500"]:
             logging.info("Process {} ticker".format(ticker))
             daily_ohlc = self.helper.get_daily_ohlc(ticker)
@@ -214,33 +210,26 @@ class EquityTrendScreenerBot(Bot):
             logging.debug("Quarterly ohlc (last 10 candles): \n {}".format(quarterly_ohlc))
             logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
 
-            quarterly_breakouts = calculate_break_out_sd_range(quarterly_ohlc)
-            yearly_breakouts = calculate_break_out_sd_range(yearly_ohlc)
+            quarterly_breakout = calculate_break_out_sd_range(quarterly_ohlc)
+            yearly_breakout = calculate_break_out_sd_range(yearly_ohlc)
 
-            logging.debug("Quarterly breakouts: {}".format(quarterly_breakouts))
-            logging.debug("Yearly breakouts: {}".format(yearly_breakouts))
+            logging.debug("Quarterly breakout: {}".format(quarterly_breakout))
+            logging.debug("Yearly breakout: {}".format(yearly_breakout))
 
             sp_500_quarterly_breakouts.append({
                 "ticker": ticker,
-                "breakouts from SD range": quarterly_breakouts
+                "breakout from SD range": quarterly_breakout
             })
-
-            sp_500_quarterly_breakouts_df = pd.DataFrame(sp_500_quarterly_breakouts)
-            sp_500_quarterly_breakouts_df_sorted = sp_500_quarterly_breakouts_df.sort_values(
-                by="breakouts from SD range", ascending=False, inplace=True)
 
             sp_500_yearly_breakouts.append({
                 "ticker": ticker,
-                "breakouts from SD range": yearly_breakouts
+                "breakout from SD range": yearly_breakout
             })
-
-            sp_500_yearly_breakouts_df = pd.DataFrame(sp_500_yearly_breakouts)
-            sp_500_yearly_breakouts_df_sorted = sp_500_yearly_breakouts_df.sort_values(by="breakouts from SD range",
-                                                                                       ascending=False, inplace=True)
 
         logging.info("Find breakouts in Russell 2000 tickers")
         russell_2k_quarterly_breakouts = []
         russell_2k_yearly_breakouts = []
+
         for ticker in tickers["tickers_russell_2k"]:
             logging.info("Process {} ticker".format(ticker))
             daily_ohlc = self.helper.get_daily_ohlc(ticker)
@@ -251,37 +240,29 @@ class EquityTrendScreenerBot(Bot):
             logging.debug("Quarterly ohlc (last 10 candles): \n {}".format(quarterly_ohlc))
             logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
 
-            quarterly_breakouts = calculate_break_out_sd_range(quarterly_ohlc)
-            yearly_breakouts = calculate_break_out_sd_range(yearly_ohlc)
+            quarterly_breakout = calculate_break_out_sd_range(quarterly_ohlc)
+            yearly_breakout = calculate_break_out_sd_range(yearly_ohlc)
 
-            logging.debug("Quarterly breakouts: {}".format(quarterly_breakouts))
-            logging.debug("Yearly breakouts: {}".format(yearly_breakouts))
+            logging.debug("Quarterly breakout: {}".format(quarterly_breakout))
+            logging.debug("Yearly breakout: {}".format(yearly_breakout))
 
             russell_2k_quarterly_breakouts.append({
                 "ticker": ticker,
-                "breakouts from SD range": quarterly_breakouts
+                "breakout from SD range": quarterly_breakout
             })
-
-            russell_2k_quarterly_breakouts_df = pd.DataFrame(russell_2k_quarterly_breakouts)
-            russell_2k_quarterly_breakouts_df_sorted = russell_2k_quarterly_breakouts_df.sort_values(
-                by="breakouts from SD range", ascending=False, inplace=True)
 
             russell_2k_yearly_breakouts.append({
                 "ticker": ticker,
-                "breakouts from SD range": yearly_breakouts
+                "breakout from SD range": yearly_breakout
             })
 
-            russell_2k_yearly_breakouts_df = pd.DataFrame(russell_2k_yearly_breakouts)
-            russell_2k_yearly_breakouts_df_sorted = russell_2k_yearly_breakouts_df.sort_values(
-                by="breakouts from SD range", ascending=False, inplace=True)
-
         return {
-            "most_traded_us_stocks_quarterly_breakouts": most_traded_us_stocks_quarterly_breakouts_df_sorted,
-            "most_traded_us_stocks_yearly_breakouts": most_traded_us_stocks_yearly_breakouts_df_sorted,
-            "sp_500_quarterly_breakouts": sp_500_quarterly_breakouts_df_sorted,
-            "sp_500_yearly_breakouts_df": sp_500_yearly_breakouts_df_sorted,
-            "russell_2k_quarterly_breakouts": russell_2k_quarterly_breakouts_df_sorted,
-            "russell_2k_yearly_breakouts": russell_2k_yearly_breakouts_df_sorted
+            "most_traded_us_stocks_quarterly_breakouts": pd.DataFrame(most_traded_us_stocks_quarterly_breakouts),
+            "most_traded_us_stocks_yearly_breakouts": pd.DataFrame(most_traded_us_stocks_yearly_breakouts),
+            "sp_500_quarterly_breakouts": pd.DataFrame(sp_500_quarterly_breakouts),
+            "sp_500_yearly_breakouts": pd.DataFrame(sp_500_yearly_breakouts),
+            "russell_2k_quarterly_breakouts": pd.DataFrame(russell_2k_quarterly_breakouts),
+            "russell_2k_yearly_breakouts": pd.DataFrame(russell_2k_yearly_breakouts)
         }
 
     def create_tw_trends_report(self, trends):
