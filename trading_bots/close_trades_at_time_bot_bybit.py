@@ -20,18 +20,18 @@ class CloseTradesAtTimeBotBybit(BybitBot):
         minutes = self.config["base"]["minutes"]
 
         if type(hours) is not int or type(minutes) is not int:
-            raise Exception(
+            raise TypeError(
                 "Config properties hours and minutes must be integer. [hours: {}, minutes: {}]".format(hours, minutes))
 
         if hours < 0 or minutes < 0:
-            raise Exception(
+            raise ValueError(
                 "Config properties hours and minutes must be greater than zero. [hours: {}, minutes: {}]".format(hours,
                                                                                                                  minutes))
 
         now = datetime.datetime.now()
 
         target_time = datetime.datetime(now.year, now.month, now.day, hours, minutes, 0)
-        logging.info("Target time is: {}".format(target_time))
+        logging.info(f"Target time is: {target_time}")
 
         time_diff = (target_time - now).total_seconds()
 
@@ -39,6 +39,7 @@ class CloseTradesAtTimeBotBybit(BybitBot):
         if time_diff < 0:
             time_diff += self._24_HOURS
 
+        logging.info(f"TimeDiff: {round(time_diff,2)} seconds")
         time.sleep(time_diff)
 
         logging.info("Close all pending orders and open positions")
