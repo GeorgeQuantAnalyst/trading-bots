@@ -20,7 +20,7 @@ class EquityTrendScreenerBotHelper:
     @staticmethod
     def get_daily_ohlc(ticker: str) -> pd.DataFrame:
         try:
-            ticker = ticker.replace(".", "-")
+            ticker = ticker.replace(".", "-").split(":")[1]
             # Download ohlc data without splits and dividend [auto_adjust=False]
             ohlc_raw = yf.Ticker(ticker).history(period="120mo", interval="1d", auto_adjust=False)
             ohlc = ohlc_raw[["Open", "High", "Low", "Close"]][::-1].reset_index()
