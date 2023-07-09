@@ -20,32 +20,30 @@ class CheckFuturesMarginLevelBotBybit(BybitBot):
         available_balance = self.helper.get_available_balance_on_futures_account()
 
         if available_balance < self.margin_level:
-            msg = "Available balance on futures account is under margin level. [availableBalance: {}, marginLevel: {}]"
-            logging.info(msg.format(available_balance, self.margin_level))
+            msg = f"Available balance on futures account is under margin level. [availableBalance: {available_balance}, marginLevel: {self.margin_level}]"
+            logging.warning(msg)
             self.funding_futures_account(available_balance)
         else:
-            msg = "Available balance on futures account is OK. [availableBalance: {}, marginLevel: {}]"
-            logging.info(msg.format(available_balance, self.margin_level))
+            msg = f"Available balance on futures account is OK. [availableBalance: {available_balance}, marginLevel: {self.margin_level}]"
+            logging.info(msg)
 
         logging.info("Finished CheckFuturesMarginLevelBotBybit")
 
     def funding_futures_account(self, available_balance: float) -> None:
         if self.helper.is_open_positions():
-            logging.info(
-                "Actually is open position[s] on futures account, Funding will only take place after the open positions was closed.")
+            logging.info("Actually there are open positions on the futures account. Funding will only take place after the open positions are closed.")
             return
 
         if self.helper.was_funding_account_today():
-            logging.warning(
-                "The futures account has already been funded, max allowed funding is only one time per day.")
+            logging.warning("The futures account has already been funded. Funding is only allowed once per day.")
             return
 
         last_trade_close_date = self.helper.get_last_position_close_date()
-        logging.info("LastTradeCloseDate: {}".format(last_trade_close_date))
+        logging.info(f"LastTradeCloseDate: {last_trade_close_date}")
         minutes_after_last_trade = (datetime.now() - last_trade_close_date).seconds / self.ONE_MINUTE_SECONDS
         if minutes_after_last_trade < self.funding_interval_in_minutes:
-            msg = "The futures account was funding after defined funding interval. [fundingIntervalInMinutes: {}, minutesAfterLastTrade: {}]"
-            logging.info(msg.format(self.funding_interval_in_minutes, round(minutes_after_last_trade, 2)))
+            msg = f"The futures account was funded within the defined funding interval. [fundingIntervalInMinutes: {self.funding_interval_in_minutes}, minutesAfterLastTrade: {round(minutes_after_last_trade, 2)}]"
+            logging.info(msg)
             return
 
         logging.info("Funding futures account to margin level")
