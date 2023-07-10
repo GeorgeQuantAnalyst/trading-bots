@@ -14,13 +14,13 @@ class PlaceTrailingStopsBotBybit(BybitBot):
         logging.info("Start PlaceTrailingStopsBotBybit")
 
         open_positions = self.helper.get_open_positions()
-        logging.info("Count open positions: {}".format(open_positions.shape[0]))
-        logging.debug("Open positions: {}".format(open_positions.to_json()))
+        logging.info(f"Count open positions: {open_positions.shape[0]}")
+        logging.debug(f"Open positions: {open_positions.to_json()}")
 
         if not open_positions.empty:
             logging.info("Place trailing stops")
             self.helper.calculate_trailing_stops(open_positions)
-            logging.debug("Prepared open positions: {}".format(open_positions.to_json()))
+            logging.debug(f"Prepared open positions: {open_positions.to_json()}")
             self.helper.place_trailing_stops(open_positions)
 
         logging.info("Finished PlaceTrailingStopsBotBybit")

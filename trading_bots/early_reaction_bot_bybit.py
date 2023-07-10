@@ -1,4 +1,5 @@
 import logging
+
 from trading_bots.helpers.early_reaction_bot_bybit_helper import EarlyReactionBotBybitHelper
 from trading_bots.templates.bybit_bot import BybitBot
 
@@ -32,32 +33,35 @@ class EarlyReactionBotBybit(BybitBot):
             last_closed_bar = self.helper.get_last_closed_bar(symbol)
 
             if take_profit == 0 or stop_loss == 0:
-                logging.warning("Order {} does not have bracked orders (profit target and stop loss), "
-                                "continue to next order.".format(order_id))
+                logging.warning(f"Order {order_id} does not have bracket orders (profit target and stop loss), "
+                                "continuing to the next order.")
                 continue
 
             before_entry_price = entry_price + ((entry_price - stop_loss) * percentage_before_entry)
-            logging.info("Before entry price: {}".format(before_entry_price))
+            logging.info(f"Before entry price: {before_entry_price}")
 
-            logging.info("Last closed bar: {}".format(last_closed_bar))
+            logging.info(f"Last closed bar: {last_closed_bar}")
 
             if order_id not in self.before_entry_ids:
                 if (order_side == "Buy" and before_entry_price >= last_closed_bar["lowPrice"]) or (
                         order_side == "Sell" and before_entry_price <= last_closed_bar["highPrice"]):
-                    logging.info("Price arrived before entry: [Order Id: {}, Before Entry Price: {}, "
-                                 "Last Bar Low: {}, last Bar High: {}]".format(order_id, before_entry_price,
-                                                                               last_closed_bar["lowPrice"],
-                                                                               last_closed_bar["highPrice"]))
+                    logging.info(
+                        f"""
+                        Price arrived before entry: [Order Id: {order_id}, Before Entry Price: {before_entry_price}, "
+                        Last Bar Low: {last_closed_bar["lowPrice"]}, last Bar High: {last_closed_bar["highPrice"]}]
+                        """
+                    )
                     self.before_entry_ids.append(order_id)
             else:
                 if (order_side == "Buy" and take_profit <= last_closed_bar["highPrice"]) or (
                         order_side == "Sell" and take_profit >= last_closed_bar["lowPrice"]):
                     logging.info(
-                        "Price arrived to TakeProfit before reaching EntryPrice and make EarlyReaction, "
-                        "pending order will be canceled.: [Order Id: {}, Take Profit: {}, Last Bar Low: {}, "
-                        "Last Bar High: {}]"
-                        .format(order_id, take_profit, last_closed_bar["lowPrice"], last_closed_bar["highPrice"]))
-
+                        f"""
+                        Price arrived to TakeProfit before reaching EntryPrice and make EarlyReaction,
+                        pending order will be canceled.: [Order Id: {order_id}, Take Profit: {take_profit},
+                        Last Bar Low: {last_closed_bar["lowPrice"],} Last Bar High: {last_closed_bar["highPrice"]}]
+                        """
+                    )
                     self.helper.cancel_pending_order(order_id, symbol)
                     self.before_entry_ids.remove(order_id)
 

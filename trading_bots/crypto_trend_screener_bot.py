@@ -48,27 +48,27 @@ class CryptoTrendScreenerBot(Bot):
         bybit_futures_yearly_trends = []
 
         for ticker in tickers["tickers_pybit_futures"]:
-            logging.info("Process {} ticker".format(ticker))
+            logging.info(f"Process {ticker} ticker")
 
             weekly_ohlc = self.helper.get_ohlc(ticker, "W")
             monthly_ohlc = self.helper.get_ohlc(ticker, "M")
             quarterly_ohlc = convert_ohlc(monthly_ohlc, "Q")
             yearly_ohlc = convert_ohlc(monthly_ohlc, "Y")
 
-            logging.debug("Weekly ohlc (last 10 candles): \n {}".format(weekly_ohlc))
-            logging.debug("Monthly ohlc (last 10 candles): \n {}".format(monthly_ohlc))
-            logging.debug("Quarterly ohlc (last 10 candles): \n {}".format(quarterly_ohlc))
-            logging.debug("Yearly ohlc (last 10 candles): \n {}".format(yearly_ohlc))
+            logging.debug(f"Weekly ohlc (last 10 candles): \n {weekly_ohlc}")
+            logging.debug(f"Monthly ohlc (last 10 candles): \n {monthly_ohlc}")
+            logging.debug(f"Quarterly ohlc (last 10 candles): \n {quarterly_ohlc}")
+            logging.debug(f"Yearly ohlc (last 10 candles): \n {yearly_ohlc}")
 
             weekly_context = calculate_context(weekly_ohlc)
             monthly_context = calculate_context(monthly_ohlc)
             quarterly_context = calculate_context(quarterly_ohlc)
             yearly_context = calculate_context(yearly_ohlc)
 
-            logging.debug("Weekly context: {}".format(weekly_context))
-            logging.debug("Monthly context: {}".format(monthly_context))
-            logging.debug("Quarterly context: {}".format(quarterly_context))
-            logging.debug("Yearly context: {}".format(yearly_context))
+            logging.debug(f"Weekly context: {weekly_context}")
+            logging.debug(f"Monthly context: {monthly_context}")
+            logging.debug(f"Quarterly context: {quarterly_context}")
+            logging.debug(f"Yearly context: {yearly_context}")
 
             bybit_futures_weekly_trends.append({
                 "ticker": ticker,
@@ -111,7 +111,7 @@ class CryptoTrendScreenerBot(Bot):
         reports_folder = self.config["base"]["reportsFolder"]
         trends_timeframe_id = "bybit_futures_{}_trends".format(name_of_timeframe)
 
-        logging.info("Create Bybit futures {} trends".format(time_frame))
+        logging.info(f"Create Bybit futures {time_frame} trends")
         bybit_futures_trends = trends[trends_timeframe_id]
         bybit_futures_trends["ticker"] = "BYBIT:" + bybit_futures_trends["ticker"] + ".P"
         bybit_futures_trends_path = "{}/Bybit futures {} trends.txt".format(reports_folder, time_frame)

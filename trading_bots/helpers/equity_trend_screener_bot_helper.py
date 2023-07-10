@@ -14,20 +14,20 @@ class EquityTrendScreenerBotHelper:
             df = pd.read_csv(file_path)
             return df["Ticker"].tolist()
         except Exception as e:
-            logging.error("Failed read tickers from file {}: {}".format(file_path, str(e)))
+            logging.error(f"Failed read tickers from file {file_path}: {str(e)}")
             sys.exit(-1)
 
     @staticmethod
     def get_daily_ohlc(ticker: str) -> pd.DataFrame:
         try:
-            ticker = ticker.replace(".", "-")
+            ticker = ticker.replace(".", "-").split(":")[1]
             # Download ohlc data without splits and dividend [auto_adjust=False]
             ohlc_raw = yf.Ticker(ticker).history(period="120mo", interval="1d", auto_adjust=False)
             ohlc = ohlc_raw[["Open", "High", "Low", "Close"]][::-1].reset_index()
             ohlc.columns = ['startTime', 'open', 'high', 'low', 'close']
             return ohlc
         except Exception as e:
-            logging.error("Failed get_daily_ohlc for ticker {}: {}".format(ticker, str(e)))
+            logging.error(f"Failed get_daily_ohlc for ticker {ticker}: {str(e)}")
             sys.exit(-1)
 
     @staticmethod
@@ -50,6 +50,10 @@ class EquityTrendScreenerBotHelper:
         start_rotation_markets_df = trends[trends["context"] == "Start rotation after down-trend"]
         report.extend(start_rotation_markets_df["ticker"].tolist())
 
+        report.append("###ROTATION")
+        rotation_markets_df = trends[trends["context"] == "Rotation"]
+        report.extend(rotation_markets_df["ticker"].tolist())
+
         return ",".join(report)
 
     @staticmethod
@@ -59,7 +63,7 @@ class EquityTrendScreenerBotHelper:
             with open(file_path, "w") as file:
                 file.write(report)
         except Exception as e:
-            logging.error("Failed save tw report: {}".format(str(e)))
+            logging.error(f"Failed save tw report: {str(e)}")
             sys.exit(-1)
 
     @staticmethod
