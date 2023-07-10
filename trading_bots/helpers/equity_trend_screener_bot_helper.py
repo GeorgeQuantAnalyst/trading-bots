@@ -14,7 +14,7 @@ class EquityTrendScreenerBotHelper:
             df = pd.read_csv(file_path)
             return df["Ticker"].tolist()
         except Exception as e:
-            logging.error("Failed read tickers from file {}: {}".format(file_path, str(e)))
+            logging.error(f"Failed read tickers from file {file_path}: {str(e)}")
             sys.exit(-1)
 
     @staticmethod
@@ -27,7 +27,7 @@ class EquityTrendScreenerBotHelper:
             ohlc.columns = ['startTime', 'open', 'high', 'low', 'close']
             return ohlc
         except Exception as e:
-            logging.error("Failed get_daily_ohlc for ticker {}: {}".format(ticker, str(e)))
+            logging.error(f"Failed get_daily_ohlc for ticker {ticker}: {str(e)}")
             sys.exit(-1)
 
     @staticmethod
@@ -59,7 +59,7 @@ class EquityTrendScreenerBotHelper:
             with open(file_path, "w") as file:
                 file.write(report)
         except Exception as e:
-            logging.error("Failed save tw report: {}".format(str(e)))
+            logging.error(f"Failed save tw report: {str(e)}")
             sys.exit(-1)
 
     @staticmethod
