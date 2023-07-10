@@ -16,6 +16,6 @@ class BybitExampleBot(BybitBot):
 
         logging.info("Get BTCUSDT current price from exchange")
         btc_current_price = self.helper.get_btc_current_price()
-        logging.info("Btc current price is: {} USD".format(btc_current_price))
+        logging.info(f"Btc current price is: {btc_current_price} USD")
 
         logging.info("Finished BybitExampleBot")
