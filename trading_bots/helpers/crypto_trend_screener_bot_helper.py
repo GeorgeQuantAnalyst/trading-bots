@@ -67,6 +67,10 @@ class CryptoTrendScreenerBotHelper:
         start_rotation_markets_df = trends[trends["context"] == "Start rotation after down-trend"]
         report.extend(start_rotation_markets_df["ticker"].tolist())
 
+        report.append("###ROTATION")
+        rotation_markets_df = trends[trends["context"] == "Rotation"]
+        report.extend(rotation_markets_df["ticker"].tolist())
+
         return ",".join(report)
 
     @staticmethod
