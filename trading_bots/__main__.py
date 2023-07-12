@@ -11,7 +11,8 @@ bot_names = ["BybitExampleBot", "CryptoTrendScreenerBot", "EquityTrendScreenerBo
              "EarlyReactionBotBybitSwing", "EarlyReactionBotBybitPosition",
              "PlaceTrailingStopsBotBybitPosition", "CloseTradesAtTimeBotBybitIntraday",
              "CloseTradesAtTimeBotBybitSwing", "CloseTradesAtTimeBotBybitPosition",
-             "CheckFuturesMarginLevelBotBybitIntraday"]
+             "CheckFuturesMarginLevelBotBybitIntraday", "EquityLevelTraderBotCapitalPositionLong",
+             "EquityLevelTraderBotCapitalPositionShort"]
 
 if __name__ == "__main__":
     bot_name = sys.argv[1]

@@ -1,0 +1,6 @@
+base:
+  ordersCsvPath: data/us_equity_position_portfolio_short.csv
+capitalApi:
+  username: x
+  password: x
+  apiKey: x
