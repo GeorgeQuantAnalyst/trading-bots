@@ -4,3 +4,5 @@ capitalApi:
   username: x
   password: x
   apiKey: x
+alphavantageApiKey:
+  apiKey: x
