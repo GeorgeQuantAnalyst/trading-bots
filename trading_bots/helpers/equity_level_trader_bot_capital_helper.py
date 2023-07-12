@@ -56,44 +56,62 @@ class EquityLevelTraderBotCapitalHelper:
         return False
 
     def was_yesterday_earnings(self, ticker) -> bool:
-        now = datetime.now().date()
-        yesterday = now - timedelta(days=1)
+        try:
+            now = datetime.now().date()
+            yesterday = now - timedelta(days=1)
 
-        url = f"https://www.alphavantage.co/query?function=EARNINGS&symbol={ticker}&apikey={self.alpha_vantage_api_key}"
-        response = requests.get(url)
-        data = response.json()
+            url = f"https://www.alphavantage.co/query?function=EARNINGS&symbol={ticker}&apikey={self.alpha_vantage_api_key}"
+            response = requests.get(url)
 
-        earnings_types = ["quarterlyEarnings", "annualEarnings"]
-        for earnings_type in earnings_types:
-            earnings = data.get(earnings_type, [])
-            if earnings and datetime.strptime(earnings[0]["reportedDate"], "%Y-%m-%d").date() == yesterday:
-                logging.debug(f"The last earnings result ({earnings_type}) was yesterday: {yesterday}")
-                return True
-            else:
-                return False
+            if response.status_code != 200:
+                raise Exception(f"HTTP Error {response.status_code}: {response.reason}")
+
+            data = response.json()
+
+            earnings_types = ["quarterlyEarnings", "annualEarnings"]
+            earnings_date_names = ["reportedDate", "fiscalDateEnding"]
+
+            for earnings_type, earnings_date_name in zip(earnings_types, earnings_date_names):
+                earnings = data.get(earnings_type, [])
+                if earnings and datetime.strptime(earnings[0][earnings_date_name], "%Y-%m-%d").date() == yesterday:
+                    logging.debug(f"The last earnings result ({earnings_type}) was yesterday: {yesterday}")
+                    return True
+
+            return False
+
+        except Exception as e:
+            logging.error(f"Failed call GET method /query?function=EARNINGS on www.alphavantage.co REST api: {str(e)}")
+            sys.exit(-1)
 
     def is_earnings_next_days(self, ticker: str, count_days: int = 10) -> bool:
-        now = datetime.now().date()
-        next_10_days = now + timedelta(days=count_days)
-        horizon = "12month"
+        try:
+            now = datetime.now().date()
+            next_10_days = now + timedelta(days=count_days)
+            horizon = "12month"
 
-        url = f"https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&symbol={ticker}&horizon={horizon}&apikey={self.alpha_vantage_api_key}"
-        response = requests.get(url)
+            url = f"https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&symbol={ticker}&horizon={horizon}&apikey={self.alpha_vantage_api_key}"
+            response = requests.get(url)
 
-        csv_data = response.text
+            if response.status_code != 200:
+                raise Exception(f"HTTP Error {response.status_code}: {response.reason}")
 
-        csv_reader = csv.DictReader(StringIO(csv_data))
-        data = list(csv_reader)
+            csv_data = response.text
 
-        for row in data:
-            report_date = row["reportDate"]
-            report_date = datetime.strptime(report_date, "%Y-%m-%d").date()
+            csv_reader = csv.DictReader(StringIO(csv_data))
+            data = list(csv_reader)
 
-            if report_date <= next_10_days:
-                logging.debug(f"The future earnings {report_date} is in less then 10 days.")
-                return True
-            else:
-                return False
+            for row in data:
+                report_date = row["reportDate"]
+                report_date = datetime.strptime(report_date, "%Y-%m-%d").date()
+
+                if report_date <= next_10_days:
+                    logging.debug(f"The future earnings {report_date} is in less then 10 days.")
+                    return True
+
+            return False
+        except Exception as e:
+            logging.error(f"Failed call GET method /query?function=EARNINGS_CALENDAR on www.alphavantage.co REST api: {str(e)}")
+            sys.exit(-1)
 
     @staticmethod
     def _is_work_day(date):
