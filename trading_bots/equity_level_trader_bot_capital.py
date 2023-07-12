@@ -1,5 +1,4 @@
 import logging
-import csv
 import sys
 
 import pandas as pd
@@ -25,7 +24,7 @@ class EquityLevelTraderBotCapital(Bot):
             logging.info(
                 "the application will not check the orders for entry, because there is an open trade on the exchange.")
 
-        logging.info("Loading orders from database")
+        logging.info("Loading orders from csv file")
         orders = self.helper.load_orders(self.trades_csv_path)
         logging.debug(f"Loaded orders: \n {orders}")
 
@@ -53,5 +52,9 @@ class EquityLevelTraderBotCapital(Bot):
 
             if self.helper.has_price_reached_entry(order):
                 self.helper.place_trade(order)
+                order["active"] = True
+
+        logging.info("Save orders to csv file")
+        pd.DataFrame(orders).to_csv(self.trades_csv_path, index=False)
 
         logging.info("Finished EquityLevelTraderCapital")
