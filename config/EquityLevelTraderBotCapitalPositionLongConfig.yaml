@@ -1,6 +1,7 @@
 base:
   ordersCsvPath: data/us_equity_position_portfolio_long.csv
 capitalApi:
+  url: api-capital.backend-capital.com
   username: x
   password: x
   apiKey: x

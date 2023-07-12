@@ -40,7 +40,7 @@ class EquityLevelTraderBotCapital(Bot):
                 logging.info(f"Skip early reaction order: [OrderId: {order['id']}]")
                 continue
 
-            if self.helper.is_price_arrive_to_order(order):
+            if self.helper.has_price_reached_entry(order):
                 self.helper.place_trade(order)
 
         # for index, order in orders.iterrows():
