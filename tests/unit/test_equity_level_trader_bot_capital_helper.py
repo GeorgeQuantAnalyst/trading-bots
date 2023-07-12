@@ -29,7 +29,7 @@ class TestEquityLevelTraderBotCapitalHelper(unittest.TestCase):
 
         # TODO: je treba opravit
 
-    def test_is_earnings_next_days:
+    def test_is_earnings_next_days(self):
         pass
 
     if __name__ == '__main__':
