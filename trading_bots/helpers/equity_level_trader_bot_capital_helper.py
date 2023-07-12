@@ -6,6 +6,8 @@ import http.client
 import logging
 import json
 
+from io import StringIO
+
 from datetime import datetime, time, timedelta
 
 import requests
@@ -69,11 +71,28 @@ class EquityLevelTraderBotCapitalHelper:
             else:
                 return False
 
-    @staticmethod
-    def is_earnings_next_days(ticker: str, count_days: int = 10) -> bool:
-        now = datetime.datetime.now().date()
-        # TODO: Lucka
-        return False
+    def is_earnings_next_days(self, ticker: str, count_days: int = 10) -> bool:
+        now = datetime.now().date()
+        next_10_days = now + timedelta(days=count_days)
+        horizon = "12month"
+
+        url = f"https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&symbol={ticker}&horizon={horizon}&apikey={self.alpha_vantage_api_key}"
+        response = requests.get(url)
+
+        csv_data = response.text
+
+        csv_reader = csv.DictReader(StringIO(csv_data))
+        data = list(csv_reader)
+
+        for row in data:
+            report_date = row["reportDate"]
+            report_date = datetime.strptime(report_date, "%Y-%m-%d").date()
+
+            if report_date <= next_10_days:
+                logging.debug(f"The future earnings {report_date} is in less then 10 days.")
+                return True
+            else:
+                return False
 
     @staticmethod
     def _is_work_day(date):
