@@ -15,7 +15,7 @@ class EquityLevelTraderBotCapitalHelper:
 
     def __init__(self, config: dict):
         self.capital_client = None
-        self.api_key = config["alphavantageApiKey"]["apiKey"]
+        self.alpha_vantage_api_key = config["alphavantageApiKey"]["apiKey"]
         self.capital_api_config = config["capitalApi"]
 
     @staticmethod
@@ -52,19 +52,18 @@ class EquityLevelTraderBotCapitalHelper:
 
         return False
 
-    @staticmethod
-    def was_yesterday_the_last_earnings(self, ticker) -> bool:
-        now = datetime.datetime.now().date()
-        yesterday = now - datetime.timedelta(days=1)
+    def was_yesterday_earnings(self, ticker) -> bool:
+        now = datetime.now().date()
+        yesterday = now - timedelta(days=1)
 
-        url = f"https://www.alphavantage.co/query?function=EARNINGS&symbol={ticker}&apikey={self.api_key}"
+        url = f"https://www.alphavantage.co/query?function=EARNINGS&symbol={ticker}&apikey={self.alpha_vantage_api_key}"
         response = requests.get(url)
         data = response.json()
 
         earnings_types = ["quarterlyEarnings", "annualEarnings"]
         for earnings_type in earnings_types:
             earnings = data.get(earnings_type, [])
-            if earnings and datetime.datetime.strptime(earnings[0]["reportedDate"], "%Y-%m-%d").date() == yesterday:
+            if earnings and datetime.strptime(earnings[0]["reportedDate"], "%Y-%m-%d").date() == yesterday:
                 logging.debug(f"The last earnings result ({earnings_type}) was yesterday: {yesterday}")
                 return True
             else:
