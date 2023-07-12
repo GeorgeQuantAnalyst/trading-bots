@@ -5,5 +5,7 @@ capitalApi:
   username: x
   password: x
   apiKey: x
+  subAccountName: PositionLongPortfolio
+  TokenExpireMinutes: 10
 alphavantageApiKey:
   apiKey: x
