@@ -32,8 +32,25 @@ class EquityLevelTraderBotCapital(Bot):
 
         logging.info("Start process orders")
         for order in orders:
-            # TODO: @Jirka
-            pass
+            logging.info(f"Proces order with id: {order['id']}")
+            if order["active"]:
+                logging.info(f"Skip active order: [OrderId: {order['id']}]")
+                continue
+
+            if order['early_reaction']:
+                logging.info(f"Skip early reaction order: [OrderId: {order['id']}]")
+                continue
+
+            if order["before_entry"]:
+                logging.info(f"Check price reach profit target: [OrderId: {order['id']}]")
+                if self.helper.check_price_reach_profit_target(order):
+                    logging.info("Price reach profit target, order will be mark as early reaction")
+                    order["early_reaction"] = True
+                continue
+
+            if self.helper.check_price_reach_before_entry_price(order):
+                logging.info("Price reach before entry price, set attribute before_entry")
+                order["before_entry"] = True
 
         logging.info("Finished check early reaction step")
 

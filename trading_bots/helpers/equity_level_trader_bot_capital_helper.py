@@ -3,11 +3,8 @@ import datetime
 import http.client
 import logging
 import sys
-import json
-
-from io import StringIO
-
 from datetime import datetime, time, timedelta
+from io import StringIO
 
 import pandas as pd
 import requests
@@ -20,6 +17,7 @@ class EquityLevelTraderBotCapitalHelper:
     def __init__(self, config: dict):
         self.alpha_vantage_api_key = config["alphavantageApiKey"]["apiKey"]
         self.capital_api_config = config["capitalApi"]
+        self.percentage_before_entry = config["base"]["percentageBeforeEntry"]
         self.auth_helper = EquityLevelTraderBotCapitalAuthHelper(config)
 
     @staticmethod
@@ -171,8 +169,38 @@ class EquityLevelTraderBotCapitalHelper:
 
             return False
         except Exception as e:
-            logging.error(f"Failed call GET method /query?function=EARNINGS_CALENDAR on www.alphavantage.co REST api: {str(e)}")
+            logging.error(
+                f"Failed call GET method /query?function=EARNINGS_CALENDAR on www.alphavantage.co REST api: {str(e)}")
             sys.exit(-1)
+
+    def check_price_reach_before_entry_price(self, order: dict) -> bool:
+        entry_price = float(order["entry_price"])
+        stop_loss = float(order["stop_loss_price"])
+        order_side = order["direction"]
+
+        before_entry_price = entry_price + ((entry_price - stop_loss) * self.percentage_before_entry)
+        logging.debug(f"Before entry price: {before_entry_price}")
+
+        last_closed_bar = self._get_last_closed_bar(order["ticker"])
+        logging.debug(f"Last closed bar: {last_closed_bar}")
+
+        return (order_side == "LONG" and before_entry_price >= last_closed_bar["lowPrice"]) or (
+                order_side == "SHORT" and before_entry_price <= last_closed_bar["highPrice"])
+
+    def check_price_reach_profit_target(self, order: dict) -> bool:
+        entry_price = float(order["entry_price"])
+        stop_loss = float(order["stop_loss_price"])
+        order_side = order["direction"]
+
+        move = entry_price - stop_loss
+        take_profit = entry_price + move
+        logging.debug(f"Take profit price: {take_profit}")
+
+        last_closed_bar = self._get_last_closed_bar(order["ticker"])
+        logging.debug(f"Last closed bar: {last_closed_bar}")
+
+        return (order_side == "LONG" and take_profit <= last_closed_bar["highPrice"]) or (
+                order_side == "SHORT" and take_profit >= last_closed_bar["lowPrice"])
 
     @staticmethod
     def _is_work_day(date):

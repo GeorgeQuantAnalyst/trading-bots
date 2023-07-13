@@ -1,6 +1,7 @@
 base:
   ordersCsvPath: data/us_equity_position_portfolio_long.csv
   riskPerTradeUsd: 100
+  percentageBeforeEntry: 0.33
 capitalApi:
   url: api-capital.backend-capital.com
   username: x
