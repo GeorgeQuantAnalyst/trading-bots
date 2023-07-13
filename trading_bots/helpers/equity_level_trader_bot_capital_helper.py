@@ -102,7 +102,7 @@ class EquityLevelTraderBotCapitalHelper:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
 
         except Exception as e:
-            logging.error(
+            raise Exception(
                 f"Failed call POST method /api/v1/positions on api-capital.backend-capital.com REST api: {str(e)}")
 
     def has_price_reached_entry(self, order: dict):
@@ -248,5 +248,4 @@ class EquityLevelTraderBotCapitalHelper:
             return last_bar
 
         except Exception as e:
-            logging.error(f"Failed call GET method /api/v1/prices on capital.com REST api: {str(e)}")
-            sys.exit(-1)
+            raise Exception(f"Failed call GET method /api/v1/prices on capital.com REST api: {str(e)}")

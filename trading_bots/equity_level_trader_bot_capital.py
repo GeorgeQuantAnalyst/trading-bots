@@ -32,25 +32,28 @@ class EquityLevelTraderBotCapital(Bot):
 
         logging.info("Start process orders")
         for order in orders:
-            logging.info(f"Proces order with id: {order['id']}")
-            if order["active"]:
-                logging.info(f"Skip active order: [OrderId: {order['id']}]")
-                continue
+            try:
+                logging.info(f"Proces order with id: {order['id']}")
+                if order["active"]:
+                    logging.info(f"Skip active order: [OrderId: {order['id']}]")
+                    continue
 
-            if order['early_reaction']:
-                logging.info(f"Skip early reaction order: [OrderId: {order['id']}]")
-                continue
+                if order['early_reaction']:
+                    logging.info(f"Skip early reaction order: [OrderId: {order['id']}]")
+                    continue
 
-            if order["before_entry"]:
-                logging.info(f"Check price reach profit target: [OrderId: {order['id']}]")
-                if self.helper.check_price_reach_profit_target(order):
-                    logging.info("Price reach profit target, order will be mark as early reaction")
-                    order["early_reaction"] = True
-                continue
+                if order["before_entry"]:
+                    logging.info(f"Check price reach profit target: [OrderId: {order['id']}]")
+                    if self.helper.check_price_reach_profit_target(order):
+                        logging.info("Price reach profit target, order will be mark as early reaction")
+                        order["early_reaction"] = True
+                    continue
 
-            if self.helper.check_price_reach_before_entry_price(order):
-                logging.info("Price reach before entry price, set attribute before_entry")
-                order["before_entry"] = True
+                if self.helper.check_price_reach_before_entry_price(order):
+                    logging.info("Price reach before entry price, set attribute before_entry")
+                    order["before_entry"] = True
+            except Exception as e:
+                logging.error(f"Failed proces order [OrderId: {order['id']}]: {str(e)}")
 
         logging.info("Finished check early reaction step")
 
@@ -64,30 +67,34 @@ class EquityLevelTraderBotCapital(Bot):
 
         logging.info("Start process orders")
         for order in orders:
-            logging.info(f"Process order with id: {order['id']}")
-            ticker = order["ticker"]
+            try:
+                logging.info(f"Process order with id: {order['id']}")
+                ticker = order["ticker"]
 
-            if order["active"]:
-                logging.info(f"Skip active order: [OrderId: {order['id']}]")
-                continue
+                if order["active"]:
+                    logging.info(f"Skip active order: [OrderId: {order['id']}]")
+                    continue
 
-            if order['early_reaction']:
-                logging.info(f"Skip early reaction order: [OrderId: {order['id']}]")
-                continue
+                if order['early_reaction']:
+                    logging.info(f"Skip early reaction order: [OrderId: {order['id']}]")
+                    continue
 
-            if self.helper.was_yesterday_earnings(ticker):
-                logging.info(f"Skip ticker {ticker}, because yesterday was earnings. [OrderId: {order['id']}]")
-                continue
+                if self.helper.was_yesterday_earnings(ticker):
+                    logging.info(f"Skip ticker {ticker}, because yesterday was earnings. [OrderId: {order['id']}]")
+                    continue
 
-            if self.helper.is_earnings_next_days(ticker, 10):
-                logging.info(
-                    f"Skip ticker {ticker}, because equity has earning in next 10 days. [OrderId: {order['id']}]")
-                continue
+                if self.helper.is_earnings_next_days(ticker, 10):
+                    logging.info(
+                        f"Skip ticker {ticker}, because equity has earning in next 10 days. [OrderId: {order['id']}]")
+                    continue
 
-            if self.helper.has_price_reached_entry(order):
-                logging.info("Price reach entry, order will be place on exchange.")
-                self.helper.place_trade(order)
-                order["active"] = True
+                if self.helper.has_price_reached_entry(order):
+                    logging.info("Price reach entry, order will be place on exchange.")
+                    self.helper.place_trade(order)
+                    order["active"] = True
+                    break
+            except Exception as e:
+                logging.error(f"Failed place trade [OrderId: {order['id']}]: {str(e)}")
 
         logging.info("Finished place trade step")
 
