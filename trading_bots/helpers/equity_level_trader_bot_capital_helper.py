@@ -49,32 +49,34 @@ class EquityLevelTraderBotCapitalHelper:
             }
             conn.request("GET", "/api/v1/positions", payload, headers)
             res = conn.getresponse()
+
+            # TODO: Lucka simplify me on one line (variable data)
             data = res.read()
             decoded_data = data.decode("utf-8")
             data_in_json = json.loads(decoded_data)
 
+            logging.debug(f"Response is_open_positions: {data_in_json}")
+
             if res.status != 200:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
 
-            if data_in_json["position"] > 0:
-                return True
-
+            return len(data_in_json["positions"]) > 0
         except Exception as e:
             logging.error(
                 f"Failed call GET method /api/v1/positions on api-capital.backend-capital.com REST api: {str(e)}")
             sys.exit(-1)
-
-        return False
 
     def place_trade(self, order: dict):
         try:
             logging.debug("Place trade")
             authorization_token = self.auth_helper.get_authorization_token()
             conn = http.client.HTTPSConnection(self.capital_api_config["url"])
+            logging.debug(order)
+            move = float(order["entry_price"]) - float(order["stop_loss_price"])
+            profit_target = float(order["entry_price"]) + move
 
-            move = order["entry_price"] - order["stop_loss_price"]
-            profit_target = order["entry_price"] + order["move"]
-            amount = order["position"] * order["entry_price"]
+            # TODO: @Lucka compute position round to 0 decimal place
+            amount = 1
 
             payload = json.dumps({
                 "epic": order["ticker"],
@@ -83,9 +85,11 @@ class EquityLevelTraderBotCapitalHelper:
                 "guaranteedStop": False,
                 "stopDistance": move,
                 "trailingStop": True,
-                "stopLevel": order["stop_loss_price"],
+                #"stopLevel": order["stop_loss_price"],
                 "profitLevel": profit_target
             })
+
+            logging.debug(f"Payload place_trade: {payload}")
             headers = {
                 'X-SECURITY-TOKEN': authorization_token["X-SECURITY-TOKEN"],
                 'CST': authorization_token["CST"],
@@ -95,17 +99,17 @@ class EquityLevelTraderBotCapitalHelper:
             conn.request("POST", "/api/v1/positions", payload, headers)
             res = conn.getresponse()
 
+            logging.debug(f"Response place_trade: {res.read().decode('utf-8')}")
             if res.status != 200:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
 
         except Exception as e:
             logging.error(
                 f"Failed call POST method /api/v1/positions on api-capital.backend-capital.com REST api: {str(e)}")
-            sys.exit(-1)
 
     def has_price_reached_entry(self, order: dict):
         last_bar = self._get_last_closed_bar(order["ticker"], "MINUTE")
-        entry_price = order["entry_price"]
+        entry_price = float(order["entry_price"])
 
         if order["direction"] == "LONG" and last_bar["lowPrice"] <= entry_price:
             return True
@@ -231,11 +235,22 @@ class EquityLevelTraderBotCapitalHelper:
             if res.status != 200:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
 
+            # TODO: Lucka simplify me on one line (variable data)
             data = res.read()
             decoded_data = data.decode("utf-8")
             data_in_json = json.loads(decoded_data)
 
-            return data_in_json["prices"][-1]
+            last_bar_raw = data_in_json["prices"][-1]
+
+            last_bar = {
+                "snapshotTime": last_bar_raw["snapshotTime"],
+                "openPrice": last_bar_raw["openPrice"]["bid"],
+                "highPrice": last_bar_raw["highPrice"]["bid"],
+                "lowPrice": last_bar_raw["lowPrice"]["bid"],
+                "closePrice": last_bar_raw["closePrice"]["bid"]
+            }
+
+            return last_bar
 
         except Exception as e:
             logging.error(f"Failed call GET method /api/v1/prices on capital.com REST api: {str(e)}")

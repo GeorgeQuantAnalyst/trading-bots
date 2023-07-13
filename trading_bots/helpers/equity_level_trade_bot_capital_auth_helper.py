@@ -39,8 +39,9 @@ class EquityLevelTraderBotCapitalAuthHelper:
             }
             conn.request("POST", "/api/v1/session", payload, headers)
             res = conn.getresponse()
-            data = res.read()
+            data = json.loads(res.read().decode("utf-8"))
 
+            logging.debug(f"Response get_new_authorization_token: {data}")
             if res.status != 200:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
 
@@ -70,7 +71,7 @@ class EquityLevelTraderBotCapitalAuthHelper:
             conn.request("PUT", "/api/v1/session", payload, headers)
             res = conn.getresponse()
             data = res.read()
-            logging.debug(f"Reponse: {data.decode('utf-8')}")
+            logging.debug(f"Response switch_to_sub_account: {data.decode('utf-8')}")
 
             if res.status != 200:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
