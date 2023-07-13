@@ -1,6 +1,7 @@
 import csv
 import datetime
 import http.client
+import json
 import logging
 import sys
 from datetime import datetime, time, timedelta
@@ -231,7 +232,11 @@ class EquityLevelTraderBotCapitalHelper:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
 
             data = res.read()
-            return data["prices"][-1]
+            decoded_data = data.decode("utf-8")
+            data_in_json = json.loads(decoded_data)
+
+            return data_in_json["prices"][-1]
+
         except Exception as e:
             logging.error(f"Failed call GET method /api/v1/prices on capital.com REST api: {str(e)}")
             sys.exit(-1)

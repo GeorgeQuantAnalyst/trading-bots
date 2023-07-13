@@ -55,7 +55,7 @@ class EquityLevelTraderBotCapital(Bot):
         logging.info("Finished check early reaction step")
 
     def place_trade(self, orders):
-        logging.info("Start place trade step step")
+        logging.info("Start place trade step")
 
         if not self.helper.is_open_positions():
             logging.info(
@@ -87,7 +87,7 @@ class EquityLevelTraderBotCapital(Bot):
                 self.helper.place_trade(order)
                 order["active"] = True
 
-        logging.info("Finished place trade step step")
+        logging.info("Finished place trade step")
 
     def save_orders(self, orders):
         logging.info("Save orders to csv file")
