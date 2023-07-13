@@ -1,2 +1,2 @@
-id,ticker,direction,entry_price,stop_loss_price,early_reaction,active,note
-1,AAPL,LONG,200,180,,,
+id,ticker,direction,entry_price,stop_loss_price,before_entry,early_reaction,active,note
+1,AAPL,LONG,200,180,,,,
