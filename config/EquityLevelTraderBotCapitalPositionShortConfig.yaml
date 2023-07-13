@@ -1,5 +1,6 @@
 base:
   ordersCsvPath: data/us_equity_position_portfolio_short.csv
+  riskPerTradeUsd: 100
 capitalApi:
   url: api-capital.backend-capital.com
   username: x
