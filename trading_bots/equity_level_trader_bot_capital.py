@@ -20,13 +20,29 @@ class EquityLevelTraderBotCapital(Bot):
             logging.info("The American stock exchange is currently not open, the bot will not continue working.")
             sys.exit(0)
 
+        orders = self.helper.load_orders(self.trades_csv_path)
+        self.check_early_reaction(orders)
+        self.place_trade(orders)
+        self.save_orders(orders)
+
+        logging.info("Finished EquityLevelTraderCapital")
+
+    def check_early_reaction(self, orders):
+        logging.info("Start check early reaction step")
+
+        logging.info("Start process orders")
+        for order in orders:
+            # TODO: @Jirka
+            pass
+
+        logging.info("Finished check early reaction step")
+
+    def place_trade(self, orders):
+        logging.info("Start place trade step step")
+
         if not self.helper.is_open_positions():
             logging.info(
-                "the application will not check the orders for entry, because there is an open trade on the exchange.")
-
-        logging.info("Loading orders from csv file")
-        orders = self.helper.load_orders(self.trades_csv_path)
-        logging.debug(f"Loaded orders: \n {orders}")
+                "The application will not check the orders for entry, because there is an open trade on the exchange.")
 
         logging.info("Start process orders")
         for order in orders:
@@ -54,7 +70,8 @@ class EquityLevelTraderBotCapital(Bot):
                 self.helper.place_trade(order)
                 order["active"] = True
 
+        logging.info("Finished place trade step step")
+
+    def save_orders(self, orders):
         logging.info("Save orders to csv file")
         pd.DataFrame(orders).to_csv(self.trades_csv_path, index=False)
-
-        logging.info("Finished EquityLevelTraderCapital")

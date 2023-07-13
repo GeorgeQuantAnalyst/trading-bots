@@ -23,11 +23,14 @@ class EquityLevelTraderBotCapitalHelper:
 
     @staticmethod
     def load_orders(file_path):
+        logging.info("Loading orders from csv file")
         result = []
         with open(file_path, 'r') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 result.append(row)
+
+        logging.debug(f"Loaded orders: \n {result}")
         return result
 
     def is_open_exchange(self) -> bool:
@@ -38,8 +41,7 @@ class EquityLevelTraderBotCapitalHelper:
         # TODO: @Lucka
         return False
 
-    @staticmethod
-    def place_trade(order: dict):
+    def place_trade(self, order: dict):
         # TODO: @Lucka
         pass
 
