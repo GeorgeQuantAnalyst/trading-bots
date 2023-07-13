@@ -9,6 +9,7 @@ from io import StringIO
 
 from datetime import datetime, time, timedelta
 
+import pandas as pd
 import requests
 
 from trading_bots.helpers.equity_level_trade_bot_capital_auth_helper import EquityLevelTraderBotCapitalAuthHelper
@@ -38,12 +39,70 @@ class EquityLevelTraderBotCapitalHelper:
         return self._is_work_day(now) and self._is_time_between_range(now.time(), time(15, 30), time(22, 00))
 
     def is_open_positions(self) -> bool:
-        # TODO: @Lucka
+        try:
+            logging.debug("Place trade")
+            authorization_token = self.auth_helper.get_authorization_token()
+            conn = http.client.HTTPSConnection(self.capital_api_config["url"])
+            payload = ''
+            headers = {
+                'X-SECURITY-TOKEN': authorization_token["X-SECURITY-TOKEN"],
+                'CST': authorization_token["CST"]
+            }
+            conn.request("GET", "/api/v1/positions", payload, headers)
+            res = conn.getresponse()
+            data = res.read()
+            decoded_data = data.decode("utf-8")
+            data_in_json = json.loads(decoded_data)
+
+            if res.status != 200:
+                raise Exception(f"HTTP Error {res.status}: {res.reason}")
+
+            if data_in_json["position"] > 0:
+                return True
+
+        except Exception as e:
+            logging.error(
+                f"Failed call GET method /api/v1/positions on api-capital.backend-capital.com REST api: {str(e)}")
+            sys.exit(-1)
+
         return False
 
     def place_trade(self, order: dict):
-        # TODO: @Lucka
-        pass
+        try:
+            logging.debug("Place trade")
+            authorization_token = self.auth_helper.get_authorization_token()
+            conn = http.client.HTTPSConnection(self.capital_api_config["url"])
+
+            move = order["entry_price"] - order["stop_loss_price"]
+            profit_target = order["entry_price"] + order["move"]
+            amount = order["position"] * order["entry_price"]
+
+            payload = json.dumps({
+                "epic": order["ticker"],
+                "direction": "BUY" if order["direction"] == "LONG" else "SELL",
+                "size": amount,
+                "guaranteedStop": False,
+                "stopDistance": move,
+                "trailingStop": True,
+                "stopLevel": order["stop_loss_price"],
+                "profitLevel": profit_target
+            })
+            headers = {
+                'X-SECURITY-TOKEN': authorization_token["X-SECURITY-TOKEN"],
+                'CST': authorization_token["CST"],
+                'Content-Type': 'application/json'
+            }
+
+            conn.request("POST", "/api/v1/positions", payload, headers)
+            res = conn.getresponse()
+
+            if res.status != 200:
+                raise Exception(f"HTTP Error {res.status}: {res.reason}")
+
+        except Exception as e:
+            logging.error(
+                f"Failed call POST method /api/v1/positions on api-capital.backend-capital.com REST api: {str(e)}")
+            sys.exit(-1)
 
     def has_price_reached_entry(self, order: dict):
         last_bar = self._get_last_closed_bar(order["ticker"], "MINUTE")
