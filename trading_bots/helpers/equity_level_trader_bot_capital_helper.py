@@ -19,6 +19,7 @@ class EquityLevelTraderBotCapitalHelper:
         self.alpha_vantage_api_key = config["alphavantageApiKey"]["apiKey"]
         self.capital_api_config = config["capitalApi"]
         self.percentage_before_entry = config["base"]["percentageBeforeEntry"]
+        self.risk_per_trade_usd = config["base"]["riskPerTradeUsd"]
         self.auth_helper = EquityLevelTraderBotCapitalAuthHelper(config)
 
     @staticmethod
@@ -50,17 +51,14 @@ class EquityLevelTraderBotCapitalHelper:
             conn.request("GET", "/api/v1/positions", payload, headers)
             res = conn.getresponse()
 
-            # TODO: Lucka simplify me on one line (variable data)
-            data = res.read()
-            decoded_data = data.decode("utf-8")
-            data_in_json = json.loads(decoded_data)
+            data = json.loads(res.read().decode("utf-8"))
 
-            logging.debug(f"Response is_open_positions: {data_in_json}")
+            logging.debug(f"Response is_open_positions: {data}")
 
             if res.status != 200:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
 
-            return len(data_in_json["positions"]) > 0
+            return len(data["positions"]) > 0
         except Exception as e:
             logging.error(
                 f"Failed call GET method /api/v1/positions on api-capital.backend-capital.com REST api: {str(e)}")
@@ -72,11 +70,11 @@ class EquityLevelTraderBotCapitalHelper:
             authorization_token = self.auth_helper.get_authorization_token()
             conn = http.client.HTTPSConnection(self.capital_api_config["url"])
             logging.debug(order)
+
             move = float(order["entry_price"]) - float(order["stop_loss_price"])
             profit_target = float(order["entry_price"]) + move
 
-            # TODO: @Lucka compute position round to 0 decimal place
-            amount = 1
+            amount = round(abs(self.risk_per_trade_usd / move), 0)
 
             payload = json.dumps({
                 "epic": order["ticker"],
@@ -85,7 +83,7 @@ class EquityLevelTraderBotCapitalHelper:
                 "guaranteedStop": False,
                 "stopDistance": move,
                 "trailingStop": True,
-                #"stopLevel": order["stop_loss_price"],
+                # "stopLevel": order["stop_loss_price"],
                 "profitLevel": profit_target
             })
 
@@ -235,12 +233,9 @@ class EquityLevelTraderBotCapitalHelper:
             if res.status != 200:
                 raise Exception(f"HTTP Error {res.status}: {res.reason}")
 
-            # TODO: Lucka simplify me on one line (variable data)
-            data = res.read()
-            decoded_data = data.decode("utf-8")
-            data_in_json = json.loads(decoded_data)
+            data = json.loads(res.read().decode("utf-8"))
 
-            last_bar_raw = data_in_json["prices"][-1]
+            last_bar_raw = data["prices"][-1]
 
             last_bar = {
                 "snapshotTime": last_bar_raw["snapshotTime"],
