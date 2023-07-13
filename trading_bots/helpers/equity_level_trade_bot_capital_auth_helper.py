@@ -59,6 +59,7 @@ class EquityLevelTraderBotCapitalAuthHelper:
 
     def _switch_to_sub_account(self, account_id: int, authorization_token: dict):
         try:
+            logging.debug(f"Switch to account: {account_id}")
             conn = http.client.HTTPSConnection(self.capital_api_config["url"])
             payload = json.dumps({
                 "accountId": account_id

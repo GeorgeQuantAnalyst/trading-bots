@@ -81,9 +81,8 @@ class EquityLevelTraderBotCapitalHelper:
                 "direction": "BUY" if order["direction"] == "LONG" else "SELL",
                 "size": amount,
                 "guaranteedStop": False,
-                "stopDistance": move,
+                "stopDistance": abs(move),
                 "trailingStop": True,
-                # "stopLevel": order["stop_loss_price"],
                 "profitLevel": profit_target
             })
 
@@ -135,7 +134,9 @@ class EquityLevelTraderBotCapitalHelper:
 
             for earnings_type, earnings_date_name in zip(earnings_types, earnings_date_names):
                 earnings = data.get(earnings_type, [])
-                if earnings and datetime.strptime(earnings[0][earnings_date_name], "%Y-%m-%d").date() == yesterday:
+                last_earnings_date = datetime.strptime(earnings[0][earnings_date_name], "%Y-%m-%d").date()
+                logging.debug(f"Last earnings date: {last_earnings_date}")
+                if earnings and last_earnings_date == yesterday:
                     logging.debug(f"The last earnings result ({earnings_type}) was yesterday: {yesterday}")
                     return True
 
@@ -165,7 +166,7 @@ class EquityLevelTraderBotCapitalHelper:
             for row in data:
                 report_date = row["reportDate"]
                 report_date = datetime.strptime(report_date, "%Y-%m-%d").date()
-
+                logging.debug(f"Next earnings date: {report_date}")
                 if report_date <= next_10_days:
                     logging.debug(f"The future earnings {report_date} is in less then 10 days.")
                     return True
