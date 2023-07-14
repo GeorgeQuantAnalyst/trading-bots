@@ -16,7 +16,7 @@ class EquityLevelTraderBotCapital(Bot):
     def run(self):
         logging.info("Start EquityLevelTraderCapital")
 
-        if False and not self.helper.is_open_exchange():
+        if not self.helper.is_open_exchange():
             logging.info("The American stock exchange is currently not open, the bot will not continue working.")
             sys.exit(0)
 
@@ -88,8 +88,8 @@ class EquityLevelTraderBotCapital(Bot):
                         f"Skip ticker {ticker}, because equity has earning in next 10 days. [OrderId: {order['id']}]")
                     continue
 
-                if self.helper.has_price_reached_entry(order):
-                    logging.info("Price reach entry, order will be place on exchange.")
+                if self.helper.is_price_at_entry_price(order):
+                    logging.info("Price is on entry price, order will be place on exchange.")
                     self.helper.place_trade(order)
                     order["active"] = True
                     break

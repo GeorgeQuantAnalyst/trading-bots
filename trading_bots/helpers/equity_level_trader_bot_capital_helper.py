@@ -73,8 +73,7 @@ class EquityLevelTraderBotCapitalHelper:
 
             move = float(order["entry_price"]) - float(order["stop_loss_price"])
             profit_target = float(order["entry_price"]) + move
-
-            amount = round(abs(self.risk_per_trade_usd / move), 0)
+            amount = round(abs(self.risk_per_trade_usd / move), self._get_round_rule(order["ticker"]))
 
             payload = json.dumps({
                 "epic": order["ticker"],
@@ -103,18 +102,6 @@ class EquityLevelTraderBotCapitalHelper:
         except Exception as e:
             raise Exception(
                 f"Failed call POST method /api/v1/positions on api-capital.backend-capital.com REST api: {str(e)}")
-
-    def has_price_reached_entry(self, order: dict):
-        last_bar = self._get_last_closed_bar(order["ticker"], "MINUTE")
-        entry_price = float(order["entry_price"])
-
-        if order["direction"] == "LONG" and last_bar["lowPrice"] <= entry_price:
-            return True
-
-        if order["direction"] == "SHORT" and last_bar["highPrice"] >= entry_price:
-            return True
-
-        return False
 
     def was_yesterday_earnings(self, ticker) -> bool:
         try:
@@ -191,6 +178,19 @@ class EquityLevelTraderBotCapitalHelper:
         return (order_side == "LONG" and before_entry_price >= last_closed_bar["lowPrice"]) or (
                 order_side == "SHORT" and before_entry_price <= last_closed_bar["highPrice"])
 
+    def is_price_at_entry_price(self, order: dict):
+        entry_price = float(order["entry_price"])
+        order_side = order["direction"]
+
+        market_info = self._get_market_info(order["ticker"])
+
+        bid = market_info["snapshot"]["bid"]
+        ask = market_info["snapshot"]["offer"]
+
+        return (order_side == "LONG" and ask < entry_price) or (
+                order_side == "SHORT" and bid > entry_price
+        )
+
     def check_price_reach_profit_target(self, order: dict) -> bool:
         entry_price = float(order["entry_price"])
         stop_loss = float(order["stop_loss_price"])
@@ -250,3 +250,33 @@ class EquityLevelTraderBotCapitalHelper:
 
         except Exception as e:
             raise Exception(f"Failed call GET method /api/v1/prices on capital.com REST api: {str(e)}")
+
+    def _get_market_info(self, ticker: str):
+        try:
+            authorization_token = self.auth_helper.get_authorization_token()
+
+            conn = http.client.HTTPSConnection(self.capital_api_config["url"])
+            payload = ''
+            headers = {
+                'X-SECURITY-TOKEN': authorization_token["X-SECURITY-TOKEN"],
+                'CST': authorization_token["CST"]
+            }
+            conn.request("GET", f"/api/v1/markets?&epics={ticker}", payload, headers)
+            res = conn.getresponse()
+
+            if res.status != 200:
+                raise Exception(f"HTTP Error {res.status}: {res.reason}")
+
+            response = res.read().decode("utf-8")
+
+            logging.debug(f"Response _get_market_info: {response}")
+
+            market_details = json.loads(response)["marketDetails"]
+
+            return market_details[0]
+        except Exception as e:
+            raise Exception(f"Failed call GET method /api/v1/markets on capital.com REST api: {str(e)}")
+
+    def _get_round_rule(self, ticker):
+        market_info = self._get_market_info(ticker)
+        return 1 if market_info["dealingRules"]["minDealSize"]["value"] == 0.1 else 0
